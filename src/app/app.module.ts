@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 // import { ContactUsComponent } from './Components/contact-us/contact-us.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { DetailsComponent } from './Components/details/details.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 // import { CategoryComponent } from './Components/category/category.component';
 // import { CatDetailsComponent } from './Components/cat-details/cat-details.component';
 // import { UserAuthComponent } from './Components/user-auth/user-auth.component';
@@ -89,102 +89,86 @@ const firebaseConfig = {
 };
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    UpdateProductFormComponent,
-    LoginComponent,
-    HeaderComponent,
-    // ProductsComponent,
-    // FooterComponent,
-    SideMenuComponent,
-    // NavigationBarComponent,
-    // ProductCardDirective,
-    // CreditCardPipe,
-    // ParentCComponent,
-    // AboutComponent,
-    // ContactUsComponent,
-    NotFoundComponent,
-    DetailsComponent,
-    // CategoryComponent,
-    // CatDetailsComponent,
-    // UserAuthComponent,
-    // ReactiveFormComponent,
-    // UserTemplateDrivenFormComponent,
-    // UserRactiveFormComponent,
-    DashboardComponent,
-    StatisticsComponent,
-    // SubproductsComponent,
-    PagesComponent,
-    MediaComponent,
-    BodyComponent,
-    SubmenuComponent,
-    HeaderComponent,
-    ProductUploadFormComponent,
-    DialogComponent,
-    Dialog2Component,
-    BestSellerComponent,
-    UpdateUserFormComponent,
-    AddUserFormComponent,
-    KakComponent,
-  ],
-  imports: [
-    MatSelectModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }),
-    MatTableModule,
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    provideAuth(() => getAuth()),
-
-
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
-
-    OverlayModule,
-    CdkMenuModule,
-    CanvasJSAngularChartsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatBadgeModule,
-    MatProgressBarModule,
-/* --------------------------------------------------------- */
-
-    CarouselModule,
-    ButtonModule,
-    TagModule,
-/* --------------------------------------------------------- */
-ToastrModule.forRoot( {
-  timeOut:1100,
-  progressBar:true,
-  progressAnimation:'increasing',
-  positionClass: 'toast-top-center',
-  closeButton:true,
-  maxOpened:2,
-
-
-  preventDuplicates: true
-
-}),
-
-
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        UpdateProductFormComponent,
+        LoginComponent,
+        HeaderComponent,
+        // ProductsComponent,
+        // FooterComponent,
+        SideMenuComponent,
+        // NavigationBarComponent,
+        // ProductCardDirective,
+        // CreditCardPipe,
+        // ParentCComponent,
+        // AboutComponent,
+        // ContactUsComponent,
+        NotFoundComponent,
+        DetailsComponent,
+        // CategoryComponent,
+        // CatDetailsComponent,
+        // UserAuthComponent,
+        // ReactiveFormComponent,
+        // UserTemplateDrivenFormComponent,
+        // UserRactiveFormComponent,
+        DashboardComponent,
+        StatisticsComponent,
+        // SubproductsComponent,
+        PagesComponent,
+        MediaComponent,
+        BodyComponent,
+        SubmenuComponent,
+        HeaderComponent,
+        ProductUploadFormComponent,
+        DialogComponent,
+        Dialog2Component,
+        BestSellerComponent,
+        UpdateUserFormComponent,
+        AddUserFormComponent,
+        KakComponent,
+    ],
+    bootstrap: [AppComponent], imports: [MatSelectModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }),
+        MatTableModule,
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        provideFirebaseApp(() => initializeApp(firebaseConfig)),
+        provideFirestore(() => getFirestore()),
+        provideStorage(() => getStorage()),
+        provideAuth(() => getAuth()),
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFireAuthModule,
+        OverlayModule,
+        CdkMenuModule,
+        CanvasJSAngularChartsModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        MatBadgeModule,
+        MatProgressBarModule,
+        /* --------------------------------------------------------- */
+        CarouselModule,
+        ButtonModule,
+        TagModule,
+        /* --------------------------------------------------------- */
+        ToastrModule.forRoot({
+            timeOut: 1100,
+            progressBar: true,
+            progressAnimation: 'increasing',
+            positionClass: 'toast-top-center',
+            closeButton: true,
+            maxOpened: 2,
+            preventDuplicates: true
+        })], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
