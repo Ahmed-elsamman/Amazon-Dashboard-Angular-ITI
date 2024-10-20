@@ -1,0 +1,50 @@
+
+/*
+h2 {
+text-align: center;
+
+}
+.best-sellers-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+.best-seller-card {
+  flex: 0 0 auto;
+  width: 30%;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+.product-image {
+  width: 70%;
+  height: auto;
+}
+
+.product-details {
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .best-seller-card {
+    width: 100%;
+    margin-right: 0;
+  }
+} */
+
+.image-container {
+  position: relative;
+}
+
+.special-offer-label {
+  position: absolute;
+  top: 0px; /* Adjust top position as needed */
+  right: 0px; /* Adjust right position as needed */
+  background-color: red; /* Adjust background color as needed */
+  color: white; /* Adjust text color as needed */
+  padding: 5px 10px;
+  border-radius: 5px; /* Adjust border radius as needed */
+  font-weight: bold;
+  font-size: 14px;
+}

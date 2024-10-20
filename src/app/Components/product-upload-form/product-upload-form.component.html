@@ -1,0 +1,550 @@
+<div>
+  <h2>Add a New Product</h2>
+  <form
+    (submit)="addProduct()"
+    #addProductForm="ngForm"
+    enctype="multipart/form-data"
+    class="card shadow-2-strong card-registration"
+    style="border-radius: 15px"
+  >
+    <div class="card-body p-4 p-md-5">
+      <h3 class="mb-4 pb-2 pb-md-0">Add Product</h3>
+      
+      <div class="col-md-12 mb-4">
+        <!-- title    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            [(ngModel)]="prdToAdd.title"
+            required
+            [ngClass]="{
+              'is-invalid':
+                (ProductNameInput.dirty || ProductNameInput.touched) &&
+                !ProductNameInput.valid
+            }"
+            #ProductNameInput="ngModel"
+            minlength="3"
+            pattern="^[A-Za-z0-9_\\-\\.\s]{1,255}$"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="ProductNameInput.errors?.['required']"
+              >Product name is required</span
+            >
+            <span *ngIf="ProductNameInput.errors?.['minlength']"
+              >Product name must be at least 3 chars</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- title    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="slug">Slug:</label>
+          <input
+            type="text"
+            id="slug"
+            name="slug"
+            [(ngModel)]="prdToAdd.slug"
+            required
+            [ngClass]="{
+              'is-invalid':
+                (ProductSlugInput.dirty || ProductSlugInput.touched) &&
+                !ProductSlugInput.valid
+            }"
+            #ProductSlugInput="ngModel"
+            minlength="3"
+            pattern="^[A-Za-z0-9_\\-\\.\s]{1,255}$"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="ProductNameInput.errors?.['required']"
+              >Product slug is required</span
+            >
+            <span *ngIf="ProductNameInput.errors?.['minlength']"
+              >Product slug must be at least 3 chars</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- description    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="description"
+            >Description:</label
+          >
+          <textarea
+            [ngClass]="{
+              'is-invalid':
+                (ProductDescriptionInput.dirty ||
+                  ProductDescriptionInput.touched) &&
+                !ProductDescriptionInput.valid
+            }"
+            id="description"
+            name="description"
+            [(ngModel)]="prdToAdd.description"
+            required
+            #ProductDescriptionInput="ngModel"
+            class="form-control form-control-lg"
+          ></textarea>
+          <span class="invalid-feedback">
+            <span *ngIf="ProductDescriptionInput.errors?.['required']"
+              >Product description is required
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-12 mb-4">  <!-- brand    -->
+        <div class="form-outline">
+          <label for="brandNameSelct" class="form-label ms-3 ">Brand</label>
+          <select id="brandNameSelct" class="form-select form-select-lg" [(ngModel)]="prdToAdd.brand" name="brandName">
+            <option value="" selected disabled>Brands</option>
+            <option *ngFor="let brand of brands" [ngValue]="{ _id: brand._id, name: brand.name }">
+              {{ brand.name }}
+            </option>
+          </select>
+          
+          </div>
+      </div>
+      <div class="col-md-12 mb-4"> <!-- brand slug
+            -->
+        <div class="form-outline">
+          <label for="brandSlugSelect" class="form-label ms-3 ">Brand slug</label>
+          <select id="brandSlugSelect" class="form-select form-select-lg " aria-label="brandSlug selection" [(ngModel)]="prdToAdd.brand.slug" name="brandSlug">
+            <option value="" selected disabled> Brand Slug</option>
+            <option *ngFor="let brand of brands" [value]="brand.slug" name="brandSlug">{{brand.slug}}</option>
+          </select>
+          
+          </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- brand image    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="brandImage"
+            >Brand Image:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (ProductBrandImageInput.dirty ||
+                  ProductBrandImageInput.touched) &&
+                !ProductBrandImageInput.valid
+            }"
+            type="file"
+            #ProductBrandImageInput="ngModel"
+            id="brandImage"
+            name="brandImage"
+            [(ngModel)]="prdToAdd.brand.image"
+            required
+            (change)="uploadBrandImage($event)"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="ProductBrandImageInput.errors?.['required']">
+              product brand image is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- price -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="price">Price:</label>
+          <input
+            type="text"
+            id="price"
+            name="price"
+            #productPriceInput="ngModel"
+            pattern="^\d+(\.\d{2})?$"
+            minlength="1"
+            [(ngModel)]="prdToAdd.price"
+            required
+            [ngClass]="{
+              'is-invalid': productPriceInput.dirty && !productPriceInput.valid
+            }"
+            (change)="uploadImageCover($event)"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productPriceInput.errors?.['required']"
+              >Price is required</span
+            >
+            <span *ngIf="productPriceInput.errors?.['pattern']"
+              >Price must be a numeric value</span
+            >
+            <span *ngIf="productPriceInput.errors?.['minlength']"
+              >Price must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-12 mb-4">
+        <!-- price after discount -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="priceAfterDiscount"
+            >Price after discount:</label
+          >
+          <input
+            type="text"
+            id="priceAfterDiscount"
+            name="priceAfterDiscount"
+            [(ngModel)]="prdToAdd.priceAfterDiscount"
+            #productPriceAfterDiscountInput="ngModel"
+            required
+            minlength="1"
+            pattern="^\d+(\.\d{2})?$"
+            [ngClass]="{
+              'is-invalid':
+                productPriceAfterDiscountInput.dirty &&
+                !productPriceAfterDiscountInput.valid
+            }"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productPriceAfterDiscountInput.errors?.['required']"
+              >Price after discount is required</span
+            >
+            <span *ngIf="productPriceAfterDiscountInput.errors?.['pattern']"
+              >Price after discount must be a numeric value</span
+            >
+            <span *ngIf="productPriceAfterDiscountInput.errors?.['minlength']"
+              >Price after discount must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- quantity -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="quantity">Quantity:</label>
+          <input
+            type="text"
+            id="quantity"
+            name="quantity"
+            [(ngModel)]="prdToAdd.quantity"
+            #productQuantityInput="ngModel"
+            minlength="1"
+            pattern="^\d+$"
+            required
+            [ngClass]="{
+              'is-invalid':
+                productQuantityInput.dirty && !productQuantityInput.valid
+            }"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productQuantityInput.errors?.['required']"
+              >Quantity is required</span
+            >
+            <span *ngIf="productQuantityInput.errors?.['pattern']"
+              >Quantity must be a numeric value</span
+            >
+            <span *ngIf="productQuantityInput.errors?.['minlength']"
+              >Quantity must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!--image cover-->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="imageCover"
+            >Image Cover:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (productImageCoverInput.dirty ||
+                  productImageCoverInput.touched) &&
+                !productImageCoverInput.valid
+            }"
+            type="file"
+            id="imageCover"
+            name="imageCover"
+            required
+            #productImageCoverInput="ngModel"
+            [(ngModel)]="prdToAdd.imageCover"
+            (change)="uploadImageCover($event)"
+
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productImageCoverInput.errors?.['required']">
+              Image Cover is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!--images-->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="images">Images:</label>
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (productImagesInput.dirty || productImagesInput.touched) &&
+                !productImagesInput.valid
+            }"
+            type="file"
+            id="images"
+            name="images"
+            multiple
+            #productImagesInput="ngModel"
+            [(ngModel)]="prdToAdd.images"
+            required
+            (change)="uploadProductImages($event)"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productImagesInput.errors?.['required']">
+              Images is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <div class="form-outline">
+          <label for="categorySelect" class="form-label ms-3 ">Category</label>
+          <select id="brandNameSelct" class="form-select form-select-lg" [(ngModel)]="prdToAdd.category" name="categoryName">
+            <option value="" selected disabled>category</option>
+            <option *ngFor="let cat of categories" [ngValue]="{ _id: cat._id, name: cat.name }">
+              {{ cat.name }}
+            </option>
+          </select>
+          </div>
+      </div>
+      
+      <div class="col-md-12 mb-4">
+        <div class="form-outline">
+          <label for="categorySelect" class="form-label ms-3 ">Category</label>
+          <select id="brandNameSelct" class="form-select form-select-lg" [(ngModel)]="prdToAdd.category" name="categoryName">
+            <option value="" selected disabled>category</option>
+            <option *ngFor="let cat of categories" [ngValue]="{ _id: cat._id, name: cat.name }">
+              {{ cat.name }}
+            </option>
+          </select>
+          </div>
+      </div>
+      
+      <div class="col-md-12 mb-4">
+        <div class="form-outline">
+          <label for="categorySlugSelect" class="form-label ms-3 ">Category Slug</label>
+          <select id="categorySlugSelect" name="categorySlug" [(ngModel)]="prdToAdd.category.slug" class="form-select form-select-lg" aria-label="categories selection" required>
+            <option value="" selected disabled>Select a category slug</option>
+            <option *ngFor="let cat of categories" [value]="cat.slug">{{cat.slug}}</option>
+          </select>
+          </div>
+      </div>
+
+      <div class="col-md-12 mb-4">
+        <div class="form-outline">
+          <label for="subCategorySelect" class="form-label ms-3 ">subCategory</label>
+          <select multiple id="subCategorySelect" name="categorySlug" [(ngModel)]="prdToAdd.subcategory" class="form-select form-select-lg" aria-label="subCategories selection" required>
+            <option value="" selected disabled>Select a category slug</option>
+            <option *ngFor="let subCat of subCategories" [value]="subCat.name">{{subCat.name}}</option>
+          </select>
+          </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- category image    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="categoryImage"
+            >Category Image:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (ProductCategoryImageInput.dirty ||
+                  ProductCategoryImageInput.touched) &&
+                !ProductCategoryImageInput.valid
+            }"
+            type="file"
+            #ProductCategoryImageInput="ngModel"
+            id="categoryImage"
+            name="categoryImage"
+            [(ngModel)]="prdToAdd.category.image"
+            required
+            (change)="uploadCategoryImage($event)"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="ProductCategoryImageInput.errors?.['required']">
+              product category image is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- ratings average -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="ratingsAverage"
+            >Ratings Average:</label
+          >
+          <input
+            type="text"
+            id="ratingsAverage"
+            name="ratingsAverage"
+            #productRatingsAverageInput="ngModel"
+            [(ngModel)]="prdToAdd.ratingsAverage"
+            required
+            minlength="1"
+            pattern="^\d+(\.\d{2})?$"
+            [ngClass]="{
+              'is-invalid':
+                productRatingsAverageInput.dirty &&
+                !productRatingsAverageInput.valid
+            }"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productRatingsAverageInput.errors?.['required']"
+              >Ratings Average is required</span
+            >
+            <span *ngIf="productRatingsAverageInput.errors?.['pattern']"
+              >Ratings Average must be a numeric value</span
+            >
+            <span *ngIf="productRatingsAverageInput.errors?.['minlength']"
+              >Ratings Average must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- ratings quantity -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="ratingsQuantity"
+            >Ratings Quantity:</label
+          >
+          <input
+            type="text"
+            id="ratingsQuantity"
+            name="ratingsQuantity"
+            [(ngModel)]="prdToAdd.ratingsQuantity"
+            #productRatingsQuantityInput="ngModel"
+            required
+            minlength="1"
+            pattern="^\d+$"
+            [ngClass]="{
+              'is-invalid':
+                productRatingsQuantityInput.dirty &&
+                !productRatingsQuantityInput.valid
+            }"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productRatingsQuantityInput.errors?.['required']"
+              >Ratings Quantity is required</span
+            >
+            <span *ngIf="productRatingsQuantityInput.errors?.['pattern']"
+              >Ratings Quantity must be a numeric value</span
+            >
+            <span *ngIf="productRatingsQuantityInput.errors?.['minlength']"
+              >Ratings Quantity must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- updateTime    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="updatedAt"
+            >Update Time:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (productUpdatedAtInput.dirty ||
+                  productUpdatedAtInput.touched) &&
+                !productUpdatedAtInput.valid
+            }"
+            type="datetime-local"
+            id="updatedAt"
+            name="updatedAt"
+            #productUpdatedAtInput="ngModel"
+            [(ngModel)]="prdToAdd.updatedAt"
+            required
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productUpdatedAtInput.errors?.['required']">
+              Updated Time is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- createTime    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="createdAt"
+            >Create Time:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (productCreatedAtInput.dirty ||
+                  productCreatedAtInput.touched) &&
+                !productCreatedAtInput.valid
+            }"
+            type="datetime-local"
+            id="createdAt"
+            name="createdAt"
+            #productCreatedAtInput="ngModel"
+            [(ngModel)]="prdToAdd.createdAt"
+            required
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productCreatedAtInput.errors?.['required']">
+              Create Time is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- sold -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="sold">Sold Quantity:</label>
+          <input
+            type="text"
+            id="sold"
+            name="sold"
+            [(ngModel)]="prdToAdd.sold"
+            required
+            minlength="1"
+            #productSoldInput="ngModel"
+            pattern="^\d+$"
+            [ngClass]="{
+              'is-invalid': productSoldInput.dirty && !productSoldInput.valid
+            }"
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="productSoldInput.errors?.['required']"
+              >Sold Quantity is required</span
+            >
+            <span *ngIf="productSoldInput.errors?.['pattern']"
+              >Sold Quantity must be a numeric value</span
+            >
+            <span *ngIf="productSoldInput.errors?.['minlength']"
+              >Sold Quantity must be at least 1 character</span
+            >
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-2 d-flex justify-content-center">
+        <button
+          [disabled]="addProductForm.invalid"
+          class="btn btn-primary btn-lg"
+        >
+          Add Product
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

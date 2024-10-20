@@ -1,0 +1,33 @@
+<div class="container d-flex">
+  <div class="row align-items-center">
+    <div class="col-1 text-start">
+      <button (click)="prevFunc()" class="btn btn-dark"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+    <div class="mb-3 row col-10">
+      <div class="col-sm-4">
+        <h3>
+          <ng-container [ngSwitch]="product?.quantity">
+            <ng-container *ngSwitchCase="0">Out OF Stock</ng-container>
+            <ng-container *ngSwitchCase="1">Last One Item</ng-container>
+            <ng-container *ngSwitchCase="2">Last 2 Item</ng-container>
+            <ng-container *ngSwitchCase="3">Last 3 Item</ng-container>
+            <ng-container *ngSwitchDefault>In Stock</ng-container>
+          </ng-container>
+        </h3>
+        <img [src]="product?.PrdimgURL" alt="" class="img-fluid">
+      </div>
+      <div class="col-sm-4">
+        <h1 class="text-primary">{{product?.name}}</h1>
+        <h3>{{product?.details}}</h3>
+        <h3 class="text-danger">Price: {{product?.price | currency}}</h3>
+        <h5>Material: {{product?.Material}}</h5>
+      </div>
+      <a [routerLink]="['/edit-product', product?.id]">Edit</a>
+      <button (click)="product && deleteProduct(product.id)">Delete</button>
+    </div>
+    <div class="col-1 text-end">
+      <button (click)="nextFunc()" class="btn btn-dark"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <button (click)="goBackFunc()" class="btn btn-primary col-1">Back</button>
+  </div>
+</div>

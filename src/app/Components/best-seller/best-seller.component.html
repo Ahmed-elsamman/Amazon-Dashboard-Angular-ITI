@@ -1,0 +1,144 @@
+<!-- best-seller/best-seller.component.html
+<div class="best-sellers-container">
+  <h2>Best Sellers</h2>
+  <div class="best-seller-card" *ngFor="let product of bestSellers">
+    <img [src]="product.imageCover" alt="{{ product.title }}" class="product-image">
+    <div class="product-details">
+      <h3>{{ product.title }}</h3>
+      <p>{{ product.description }}</p>
+      <p>Price: ${{ product.price }}</p>
+      <p>Sold: {{ product.sold }}</p>
+    </div>
+  </div>
+</div> -->
+
+<!-- best-seller/best-seller.component.html -->
+<!-- <div class="best-sellers-card">
+  <h2>Best Sellers</h2>
+  <div class="best-sellers-container">
+    <div class="best-seller-card" *ngFor="let product of bestSellers">
+      <img [src]="product.imageCover" alt="{{ product.title }}" class="product-image">
+      <div class="product-details">
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Price: ${{ product.price }}</p>
+        <p>Sold: {{ product.sold }}</p>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="best-seller-card">
+  <p-carousel
+    [value]="bestSellers"
+    [numVisible]="3"
+    [numScroll]="1"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-product pTemplate="item">
+      <div
+        class="border-1 surface-border border-round m-2 text-center py-5 px-3"
+      >
+        <div class="mb-3">
+          <img
+
+            [src]="product.imageCover"
+            [alt]="product.name"
+            class="w-100 h-auto shadow-2"
+          />
+
+          <div class="mb-3"></div>
+        </div>
+        <div>
+          <h4 class="mt-0 mb-3">{{ "Price: " + "$" + product.price }}</h4>
+          <!-- <h3 class="mb-1">{{ "Quantity:" + product.quantity }}</h3> -->
+          <h3 class="mb-1">{{ "Sold:" + product.sold }}</h3>
+          <h4 class="mt-0 mb-3">{{ "Rating:" + product.ratingsAverage }}</h4>
+          <!-- <p-tag [value]="product.title"></p-tag> -->
+          <div class="car-buttons mt-5">
+            <!-- <p-button
+              type="button"
+              styleClass="p-button p-button-rounded mr-2"
+              icon="pi pi-search"
+            ></p-button>
+            <p-button
+              type="button"
+              styleClass="p-button-success p-button-rounded mr-2"
+              icon="pi pi-star-fill"
+            ></p-button> -->
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>
+<!-- --------------------------------------------------------- -->
+ <div class="best-seller-card">
+  <p-carousel
+    [value]="discount"
+    [numVisible]="3"
+    [numScroll]="1"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-discount pTemplate="item">
+      <div
+        class="border-1 surface-border border-round m-2 text-center py-5 px-3"
+      >
+      <div class="mb-3">
+        <!-- <span class="discount-label">
+          {{ "Discount: " + "25 %" }}
+        </span> -->
+        <div class="image-container position-relative">
+          <img
+            [src]="discount.imageCover"
+            [alt]="discount.name"
+            class="w-100 h-auto shadow-2"
+          />
+
+          <!-- Special offer label or icon -->
+          <div class="special-offer-label">
+            Special Offer
+          </div>
+        </div>
+
+        <!-- <div class="discount-bar">
+          <span class="discount-text">
+            {{ "Save $" + discount.discountAmount + " - Special Offer" }}
+          </span>
+
+
+        </div> -->
+          <div class="mb-3"></div>
+        </div>
+        <div>
+          <h4 class="mt-0 mb-3">
+            <del>{{ "Price: $" + discount.price }}</del>
+            <span style="margin-left: 10px;">
+              {{ "Special Offer: $" + discount.priceAfterDiscount }}
+            </span>
+
+          </h4>
+          <h3 class="mb-1">{{ "Quantity:" + discount.quantity }}</h3>
+          <h4 class="mt-0 mb-3">{{ "Rating:" + discount.ratingsAverage }}</h4>
+           <!-- <p-tag [value]="product.title"></p-tag>
+           <div class="car-buttons mt-5">
+             <p-button
+              type="button"
+              styleClass="p-button p-button-rounded mr-2"
+              icon="pi pi-search"
+            ></p-button>
+            <p-button
+              type="button"
+              styleClass="p-button-success p-button-rounded mr-2"
+              icon="pi pi-star-fill"
+            ></p-button>
+           </div> -->
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>
+
+
+
+<!-- --------------------------------------------------- -->

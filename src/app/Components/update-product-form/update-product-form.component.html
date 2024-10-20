@@ -1,0 +1,112 @@
+<div mat-dialog-title>Update this product</div>
+<form class="form-control" [formGroup]="productForm" (ngSubmit)="updatePeoduct()">
+  <div class="p-3 m-3">
+  
+    <div mat-dialog-content>
+      <div class="container-fluid">
+        <div class="d-flex gap-3 p-3 flex-column">
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline" class="col-sm-10">
+              <mat-label>Product ID</mat-label>
+              <input matInput type="text" [readonly]="true" formControlName="id">
+            </mat-form-field>
+          </div>
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Title</mat-label>
+              <input matInput type="text" placeholder="Enter product title" formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <textarea matInput placeholder="Enter product description" cols="0" rows="1" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+          
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Brand</mat-label>
+              <mat-select formControlName="brands" value=""  name="brand">
+                <mat-option *ngFor="let brand of brands" [value]="brand.name">{{brand.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Brand Slug</mat-label>
+              <mat-select formControlName="brandSlug" value=""  name="brandSlug">
+                <mat-option *ngFor="let brand of brands" [value]="brand.slug">{{brand.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Price</mat-label>
+              <input formControlName="price" matInput type="text" placeholder="Enter product price">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Price after discount</mat-label>
+              <input formControlName="priceAfterDiscount" matInput type="text" placeholder="Enter product price after discount"/>
+            </mat-form-field>
+          </div>
+  
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline" class="col-sm-10">
+              <mat-label>Quantity</mat-label>
+              <input formControlName="quantity" matInput type="text" placeholder="Enter product quantity">
+            </mat-form-field>
+            
+          </div>
+          
+          <div class="d-flex gap-3">
+            <div class="d-flex gap-3 h-25">
+              <mat-form-field appearance="outline">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categories">
+                  <mat-option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Category Slug</mat-label>
+                <mat-select formControlName="categorySlug">
+                  <mat-option *ngFor="let cat of categories" [value]="cat.slug">{{cat.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="d-flex gap-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Ratings Avarage</mat-label>
+              <input formControlName="ratingsAverage" matInput type="text">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Ratings Quantity</mat-label>
+              <input formControlName="ratingsQuantity" matInput type="text"/>
+            </mat-form-field>
+          </div>
+  
+          <div class="row">
+            <mat-form-field appearance="outline" class="mb-4">
+              <mat-label>Created in</mat-label>
+              <input formControlName="createTime" matInput [matDatepicker]="createDatePicker">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="createDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #createDatePicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Updated in</mat-label>
+              <input formControlName="updateTime" matInput [matDatepicker]="updateDatePicker">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="updateDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #updateDatePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div mat-dialog-actions>
+      <button type="submit" mat-raised-button color="primary"[mat-dialog-close]="false" >Update</button>
+      <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
+    </div>
+  </div>
+</form>

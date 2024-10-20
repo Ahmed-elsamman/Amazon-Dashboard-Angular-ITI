@@ -1,0 +1,112 @@
+<div>
+  <h2>Add New User</h2>
+  <form
+    (submit)="addUser()"
+    #addNewUserForm="ngForm"
+    class="card shadow-2-strong card-registration"
+    style="border-radius: 15px"
+  >
+    <div class="card-body p-4p -md-5">
+      <h3>Add User</h3>
+      <!-- <div class="form-outline">
+        <label class="form-label ms-3" for="id">user's ID:</label>
+        <input
+          type="text"
+          id="id"
+          name="id"
+          readonly
+          [(ngModel)]="userToAdd._id"
+          class="form-control form-control-lg"
+        />
+      </div> -->
+      <div class="form-outline">
+        <label class="form-label ms-3" for="name">name:</label>
+        <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="userToAdd.name"
+        required
+        minlength="3"
+        pattern="^[a-zA-Z]{3,15}$"
+        class="form-control form-control-lg"
+        #userNameInput="ngModel"
+      />
+      
+        <span class="invalid-feedback">
+          <span *ngIf="userNameInput.errors?.['required']"
+            >user name is required</span
+          >
+          <span *ngIf="userNameInput.errors?.['minlength']"
+            >user name must be at least 3 chars</span
+          >
+          <span *ngIf="userNameInput.errors?.['pattern']"
+            >user name mustn't has special chars</span
+          >
+        </span>
+      </div>
+      <div class="form-outline">
+        <label class="form-label ms-3" for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="userToAdd.email"
+          required
+          [ngClass]="{
+            'is-invalid':
+              (userEmailInput.dirty || userEmailInput.touched) &&
+              !userEmailInput.valid
+          }"
+          #userEmailInput="ngModel"
+          pattern="^[a-zA-Z0-9]+@(yahoo|gmail).com$"
+          class="form-control form-control-lg"
+        />
+        <span class="invalid-feedback">
+          <span *ngIf="userEmailInput.errors?.['required']"
+            >user name is required</span
+          >
+          <span *ngIf="userEmailInput.errors?.['pattern']"
+            >user email must be like xxxxx@(gmail,yahoo).com</span
+          >
+        </span>
+      </div>
+      <div class="col-md-12 mb-4">
+        <!-- createTime    -->
+        <div class="form-outline">
+          <label class="form-label ms-3" for="createdAt"
+            >Create Time:</label
+          >
+          <input
+            [ngClass]="{
+              'is-invalid':
+                (userCreatedAtInput.dirty ||
+                  userCreatedAtInput.touched) &&
+                !userCreatedAtInput.valid
+            }"
+            type="datetime-local"
+            id="createdAt"
+            name="createdAt"
+            #userCreatedAtInput="ngModel"
+            [(ngModel)]="userToAdd.createdAt"
+            required
+            class="form-control form-control-lg"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="userCreatedAtInput.errors?.['required']">
+              Create Time is required
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="mt-4 pt-2 d-flex justify-content-center">
+        <button
+          [disabled]="addNewUserForm.invalid"
+          class="btn btn-primary btn-lg"
+        >
+          Add User
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

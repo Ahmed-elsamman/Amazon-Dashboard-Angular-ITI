@@ -1,0 +1,116 @@
+<div class="head" [ngClass]="getHeadClass()">
+  <div class="head-content">
+    <div class="head-content-left">
+      <div class="search-container">
+        <div *ngIf="!canShowSearchAsOverlay" class="normal-search">
+          <input type="search" placeholder="Search..." name="search" class="search" [(ngModel)]="listFilter">
+          <i class="fa-solid fa-magnifying-glass search-icon "></i>
+        </div>
+
+
+        <div *ngIf="canShowSearchAsOverlay" class="overlay-search">
+          <button [cdkMenuTriggerFor]="searchOverLay" class="search-menu-btn ripple">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="head-content-right">
+      <div class="head-menu">
+        <div class="head-menu-item">
+          <button class="head-menu-item-btn ripple" [cdkMenuTriggerFor]="languageOverlay">
+            <img [src]="'assets/'+ selectedLanguage.flag +'.jpg'" class="flag" alt="flag">
+          </button>
+        </div>
+        <div class="head-menu-item">
+          <button class="head-menu-item-btn ripple">
+            <i class="fa-solid fa-expand menu-icon"></i>
+          </button>
+        </div>
+        <div class="head-menu-item demo-section">
+          <button class="head-menu-item-btn ripple" [cdkMenuTriggerFor]="notificationOverlay">
+            <i class="far fa-bell menu-icon" mat-raised-button matBadge="3" matBadgeColor="warn" [matBadgeHidden]="hidden" (click)="toggleBadgeVisibility()"></i>
+          </button>
+        </div>
+        <div class="head-menu-item">
+          <button class="head-menu-item-btn ripple" mat-button [matMenuTriggerFor]="menu" #menuTrigger>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openDialog2()">view messege</button>
+            </mat-menu>
+            <i class="far fa-comment-alt menu-icon"></i>
+          </button>
+        </div>
+      </div>
+      <div class="head-user-avatar-container">
+        <div class="head-user-avatar" [cdkMenuTriggerFor]="userOverlay">
+          <img [src]="'assets/img/avatar3.png'" class="user-avatar" alt="avatar">
+          <div class="circle-indicator pulse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #searchOverLay>
+  <div class="overlay overlay-search overlay-fall" cdkMenu>
+    <input type="search" class="search" name="search" id="" placeholder="Search...">
+    <button class="search-btn">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </button>
+  </div>
+</ng-template>
+
+
+<ng-template #languageOverlay>
+  <div class="overlay overlay-language overlay-fall" cdkMenu>
+    <ul>
+      <li *ngFor="let lang of languages" cdkMenuItem (click)="onLanguageClick(lang)">
+        <img [src]="'assets/'+ lang.flag +'.jpg'" alt="flag">
+        <span>{{lang.language}}</span>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #notificationOverlay>
+  <div class="overlay overlay-notification overlay-fall" cdkMenu>
+    <ul>
+      <li class="notification-head-container">
+        <div class="notification-head">Notification</div>
+        <span class="view-all-link">
+          <a>View All</a>
+        </span>
+      </li>
+      <li class="notification-messege-container" *ngFor="let notification of notifications" cdkMenuItem
+      mat-button (click)="openDialog()"
+      >
+        <i [class]="notification.icon"></i>
+        <div>
+          <div class="notification-subject">
+            {{notification.subject}}
+          </div>
+          <p class="notification-desc">
+            {{notification.description}}
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+
+<ng-template #userOverlay>
+  <div class="overlay overlay-user overlay-fall" cdkMenu>
+    <ul>
+      <li *ngFor="let item of userItem" cdkMenuItem (click)="onUserItemClick(item)">
+        <a>
+          <i [class]="item.icon" class="icon"></i>
+          <span>{{item.lable}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+
