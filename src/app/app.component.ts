@@ -10,25 +10,23 @@ interface SideNavToggle {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'Amazon';
 
   showHeader = true;
 
-  constructor(private  router:Router, private spinner: NgxSpinnerService){
-    router.events.subscribe(
-      (val) => {
-        if(val instanceof NavigationEnd){
-          if(val.url == '/login'){
-            this.showHeader=false
-          }else{
-            this.showHeader=true
-          }
+  constructor(private router: Router, private spinner: NgxSpinnerService) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        if (val.url == '/login') {
+          this.showHeader = false;
+        } else {
+          this.showHeader = true;
         }
       }
-    )
+    });
   }
 
   ngOnInit() {
@@ -39,10 +37,9 @@ export class AppComponent implements OnInit {
     }, 3000);
   }
 
-
   isSidenav = false;
   screenWidth = 0;
-  onToggleSideNav(data: SideNavToggle): void {
+  onToggleSideNav(data: SideNavToggle) {
     this.screenWidth = data.screenWidth;
     this.isSidenav = data.collapsed;
   }
