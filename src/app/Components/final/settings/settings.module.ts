@@ -11,12 +11,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
 import { CustomizeComponent } from './customize/customize.component';
 
-
 @NgModule({
-  declarations: [
-    SettingsComponent,
-    CustomizeComponent
-  ],
+  declarations: [SettingsComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -26,6 +22,7 @@ import { CustomizeComponent } from './customize/customize.component';
     MatInputModule,
     MatProgressBarModule,
     SettingsRoutingModule,
-  ]
+    CustomizeComponent, // إضافة المكون كاستيراد
+  ],
 })
-export class SettingsModule { }
+export class SettingsModule {}

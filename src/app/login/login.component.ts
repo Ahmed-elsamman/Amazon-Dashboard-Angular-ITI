@@ -1,70 +1,55 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { UserAuthenServiceService } from 'src/app/Services/user-authen-service.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../Services/aut-service.service';
-
-
-
-
-// {with localstorge }
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
 })
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
-  isUserLogged: boolean=false;
-  user:boolean = true
+  isUserLogged: boolean = false;
+  user: boolean = true;
 
-  constructor(private authService: AuthService,private Router: Router,private Toster:ToastrService) {
-    Router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        this.user = this.authService.isUserLogged;
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
 
-        if (this.user && val.url === '/login') {
-          this.Router.navigate(['/dashboard']);
-        } else if (!this.user && val.url !== '/login') {
-        }
-      }
-    });
+  ngOnInit(): void {
+    this.isUserLogged = this.authService.isUserLogged;
   }
 
   login(): void {
-    this.authService.signInWithEmailAndPassword(this.email, this.password)
+    this.authService
+      .signInWithEmailAndPassword(this.email, this.password)
       .then(() => {
-        // Handle successful login, maybe redirect or update UI
-        this.Toster.success("Success", "Login Success")
-        this.Router.navigate(['dashboard']);
+        this.toastr.success('نجاح', 'تم تسجيل الدخول بنجاح');
+        this.router.navigate(['dashboard']);
       })
-      .catch(error => {
-        // Handle error, show error message
-        console.error('Login error:', error);
+      .catch((error) => {
+        console.error('خطأ في تسجيل الدخول:', error);
+        this.toastr.error('فشل', 'فشل تسجيل الدخول');
       });
-      this.isUserLogged=this.authService.isUserLogged
-}
-logout(): void {
-  this.authService.signOut()
-  .then(() => {
-    // Handle successful logout, maybe redirect or update UI
-  })
-  .catch(error => {
-    // Handle error, show error message
-    console.error('Logout error:', error);
-    });
+    this.isUserLogged = this.authService.isUserLogged;
+  }
 
-    this.isUserLogged=this.authService.isUserLogged
-}
-
-
-
-
-ngOnInit(): void {
-  this.isUserLogged=this.authService.isUserLogged
-}
+  logout(): void {
+    this.authService
+      .signOut()
+      .then(() => {
+        this.toastr.success('نجاح', 'تم تسجيل الخروج بنجاح');
+        this.router.navigate(['login']);
+      })
+      .catch((error) => {
+        console.error('خطأ في تسجيل الخروج:', error);
+      });
+    this.isUserLogged = this.authService.isUserLogged;
+  }
 }

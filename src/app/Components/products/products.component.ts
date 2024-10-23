@@ -1,88 +1,140 @@
 import { Observable } from 'rxjs';
-import { Component, EventEmitter, Input, OnInit, Output ,inject, AfterViewInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
 import { Storage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { FirebasePrdService } from 'src/app/Services/fire-base-prd.service';
 import { IfireBseProduct } from 'src/app/Models/ifire-base-prd';
-import {MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { DocumentData } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateProductFormComponent } from '../update-product-form/update-product-form.component';
-
-
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UpdateProductFormComponent,
+    MatProgressBarModule,
+  ],
 })
 export class ProductsComponent implements OnInit {
-
   // private readonly storage: Storage = inject(Storage);
-  displayedColumns: string[] = ['id','imageCover', 'title', 'price', 'quantity','inStock','update','delete'];
-  dataSource: MatTableDataSource<IfireBseProduct> = new MatTableDataSource<IfireBseProduct>([]);
+  displayedColumns: string[] = [
+    'id',
+    'imageCover',
+    'title',
+    'price',
+    'quantity',
+    'inStock',
+    'update',
+    'delete',
+  ];
+  dataSource: MatTableDataSource<IfireBseProduct> =
+    new MatTableDataSource<IfireBseProduct>([]);
   clickedRows = new Set<IfireBseProduct>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   date = new Date();
-  prds:IfireBseProduct[]=[];
-  quantityAvalable:number=0;
+  prds: IfireBseProduct[] = [];
+  quantityAvalable: number = 0;
   prdToAdd: IfireBseProduct = {} as IfireBseProduct;
-  isUpdate:boolean=false;
+  isUpdate: boolean = false;
   coverImageFileName: string = '';
   prodductImageFileName: string = '';
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private storage: Storage,
-    private FirebasePrdService:FirebasePrdService,
-    private _dialog:MatDialog) {
-    
-      this.prdToAdd = {
-        brand: {
-          name: '',
-          slug: '',
-          image: '',
-          _id: ''
-        },
-        category: {
-          slug: '',
-          name: '',
-          image: '',
-          _id: ''
-        },
-        createdAt: '',
-        description: '',
-        id: '',
-        imageCover: '',
-        images: [],
-        price: 0,
-        priceAfterDiscount: 0,
-        quantity: 0,
-        ratingsAverage: 0,
-        ratingsQuantity: 0,
+    private FirebasePrdService: FirebasePrdService,
+    private _dialog: MatDialog
+  ) {
+    this.prdToAdd = {
+      brand: {
+        name: '',
         slug: '',
-        sold: 0,
-        subcategory: [],
-        title: '',
-        updatedAt: '',
-      };
+        image: '',
+        _id: '',
+      },
+      category: {
+        slug: '',
+        name: '',
+        image: '',
+        _id: '',
+      },
+      createdAt: '',
+      description: '',
+      id: '',
+      imageCover: '',
+      images: [],
+      price: 0,
+      priceAfterDiscount: 0,
+      quantity: 0,
+      ratingsAverage: 0,
+      ratingsQuantity: 0,
+      slug: '',
+      sold: 0,
+      subcategory: [],
+      title: '',
+      updatedAt: '',
+    };
   }
 
-  openEditproductForm(data:IfireBseProduct){
-    const dialogRef=this._dialog.open(UpdateProductFormComponent,{data})
+  openEditproductForm(data: IfireBseProduct) {
+    const dialogRef = this._dialog.open(UpdateProductFormComponent, { data });
     dialogRef.afterClosed().subscribe({
-      next:(val)=>{
-        if(val){
+      next: (val) => {
+        if (val) {
           this.getProducts();
         }
-      }
-    })
+      },
+    });
   }
-  getProducts(){
+  getProducts() {
     this.FirebasePrdService.getProducts().subscribe({
-      next: (product: (DocumentData | (DocumentData & { id: string; }))[]) => {
+      next: (product: (DocumentData | (DocumentData & { id: string }))[]) => {
         const products: IfireBseProduct[] = product.map((prdData) => {
           if ('id' in prdData) {
             const { id, ...rest } = prdData;
@@ -91,9 +143,9 @@ export class ProductsComponent implements OnInit {
           return prdData as IfireBseProduct;
         });
 
-        console.log('Recieved Products:',  products);
+        console.log('Recieved Products:', products);
 
-        this.dataSource.data =  products;
+        this.dataSource.data = products;
       },
       error: (err) => {
         console.log('Error fetching products:', err);
@@ -106,7 +158,7 @@ export class ProductsComponent implements OnInit {
   deleteProduct(id: string) {
     console.log('Deleting product...');
     console.log(id);
-    
+
     this.FirebasePrdService.deleteProduct(id)
       .then(() => {
         console.log(`Product with ID ${id} deleted successfully.`);
@@ -116,10 +168,10 @@ export class ProductsComponent implements OnInit {
         console.error(`Error deleting product with ID ${id}:`, error);
       });
   }
-  goToForm(){
+  goToForm() {
     this.router.navigate(['/product-upload-form']);
   }
-  
+
   onRowClick(row: IfireBseProduct): void {
     if (this.clickedRows.has(row)) {
       this.clickedRows.delete(row);
@@ -141,30 +193,29 @@ export class ProductsComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     console.log(this.dataSource.filter);
-    
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-  addProduct(){
+  addProduct() {
     this.FirebasePrdService.addProduct(this.prdToAdd);
     this.getProducts();
   }
 
-//   onImageCoverSelected(event: any) {
-//     if (!event.files) return
+  //   onImageCoverSelected(event: any) {
+  //     if (!event.files) return
 
-//     const files: FileList = event.files;
+  //     const files: FileList = event.files;
 
-//     for (let i = 0; i < files.length; i++) {
-//         const file = files.item(i);
-//         if (file) {
-//             const storageRef = ref(this.storage, file.name);
-//             uploadBytesResumable(storageRef, file);
-//         }
-//     }
-// }
+  //     for (let i = 0; i < files.length; i++) {
+  //         const file = files.item(i);
+  //         if (file) {
+  //             const storageRef = ref(this.storage, file.name);
+  //             uploadBytesResumable(storageRef, file);
+  //         }
+  //     }
+  // }
 
   // onImageCoverSelected(event: Event) {
   //   const inputElement = event.target as HTMLInputElement;
@@ -183,5 +234,4 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
   }
-
 }

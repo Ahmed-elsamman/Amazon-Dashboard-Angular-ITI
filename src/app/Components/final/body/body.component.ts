@@ -1,9 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-body',
   templateUrl: './body.component.html',
-  styleUrls: ['./body.component.css']
+  styleUrls: ['./body.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
 })
 export class BodyComponent {
   @Input() collapsed = false;
@@ -12,7 +16,11 @@ export class BodyComponent {
     let styleClass = '';
     if (this.collapsed && this.screenWidth > 768) {
       styleClass = 'body-trimmed';
-    } else if (this.collapsed && this.screenWidth <= 768 && this.screenWidth > 0) {
+    } else if (
+      this.collapsed &&
+      this.screenWidth <= 768 &&
+      this.screenWidth > 0
+    ) {
       styleClass = 'body-md-screen';
     }
     return styleClass;
