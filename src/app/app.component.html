@@ -1,16 +1,21 @@
-<ng-container *ngIf="showHeader">
-  <app-header [collapsed]="isSidenav" [screenWidth]="screenWidth"></app-header>
-</ng-container>
-<!-- <app-navigation-bar></app-navigation-bar> -->
-<router-outlet></router-outlet>
-<!-- <app-footer></app-footer> -->
+@if (showHeader) {
+<app-header [collapsed]="isSidenav" [screenWidth]="screenWidth"></app-header>
+}
 
-<ng-container *ngIf="showHeader">
-  <app-side-menu (onToggleSideNav)="onToggleSideNav($event)"></app-side-menu>
-</ng-container>
+<router-outlet></router-outlet>
+
+@if (showHeader) {
+<app-side-menu (onToggleSideNav)="onToggleSideNav($event)"></app-side-menu>
+}
 
 <app-body [collapsed]="isSidenav" [screenWidth]="screenWidth"></app-body>
 
-<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#ff9900" type="square-jelly-box" [fullScreen]="true">
-<img src="../assets/logo.png" alt="" style="width: 100px;">
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="large"
+  color="#ff9900"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <img src="../assets/logo.png" alt="" style="width: 100px" />
 </ngx-spinner>

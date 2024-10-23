@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SettingsComponent } from './settings.component';
 import { CustomizeComponent } from './customize/customize.component';
 
-const routes: Routes = [
+const SETTINGS_ROUTES: Routes = [
   {
     path: 'profile',
     component: SettingsComponent,
@@ -16,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forChild(SETTINGS_ROUTES)],
+  exports: [RouterModule],
 })
-export class SettingsRoutingModule { }
+export class SettingsRoutingModule {}

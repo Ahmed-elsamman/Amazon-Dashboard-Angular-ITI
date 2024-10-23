@@ -6,15 +6,34 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebasePrdService } from 'src/app/Services/fire-base-prd.service';
 import { DocumentData } from '@angular/fire/firestore';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-update-user-form',
   templateUrl: './update-user-form.component.html',
-  styleUrls: ['./update-user-form.component.css']
+  styleUrls: ['./update-user-form.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
 })
 export class UpdateUserFormComponent implements OnInit {
   editedUser: IfirebaseUsers;
@@ -49,7 +68,7 @@ export class UpdateUserFormComponent implements OnInit {
 
   getUsers(): void {
     this.firebase.getUsers().subscribe({
-      next: (users: (DocumentData | (DocumentData & { id: string; }))[]) => {
+      next: (users: (DocumentData | (DocumentData & { id: string }))[]) => {
         const mappedUsers: IfirebaseUsers[] = users.map((userData) => {
           if ('id' in userData) {
             const { id, ...rest } = userData;
@@ -59,7 +78,9 @@ export class UpdateUserFormComponent implements OnInit {
         });
 
         const userIdToUpdate = this.editedUser?.id;
-        this.userToUpdate = mappedUsers.find(user => user.id === userIdToUpdate) || {} as IfirebaseUsers;
+        this.userToUpdate =
+          mappedUsers.find((user) => user.id === userIdToUpdate) ||
+          ({} as IfirebaseUsers);
       },
       error: (err) => {
         console.log('Error fetching users:', err);
@@ -73,17 +94,16 @@ export class UpdateUserFormComponent implements OnInit {
   updateUser(): void {
     if (this.userForm.valid) {
       const updatedUserData: IfirebaseUsers = this.userForm.value;
-      this.firebase.updateUser(updatedUserData).then(
-        (val: any) => {
+      this.firebase
+        .updateUser(updatedUserData)
+        .then((val: any) => {
           alert('User Updated Successfully');
           console.log('User Updated Successfully');
           this.dialogRef.close(updatedUserData);
-        }
-      ).catch(
-        (err) => {
+        })
+        .catch((err) => {
           console.log(err);
-        }
-      );
+        });
     } else {
       console.log('Form is invalid. Cannot update user.');
     }

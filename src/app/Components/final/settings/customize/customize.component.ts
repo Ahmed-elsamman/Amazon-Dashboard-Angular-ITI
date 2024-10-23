@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-customize',
   templateUrl: './customize.component.html',
-  styleUrls: ['./customize.component.css']
+  styleUrls: ['./customize.component.css'],
+  standalone: true,
 })
-export class CustomizeComponent {
-
-}
+export class CustomizeComponent {}

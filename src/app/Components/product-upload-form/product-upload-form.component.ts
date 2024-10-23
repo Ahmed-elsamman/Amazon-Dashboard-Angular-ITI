@@ -1,5 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Storage, ref, uploadBytesResumable, getDownloadURL  } from '@angular/fire/storage';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { IfireBseProduct } from 'src/app/Models/ifire-base-prd';
 import { FirebasePrdService } from 'src/app/Services/fire-base-prd.service';
@@ -7,33 +17,46 @@ import { FirebasePrdService } from 'src/app/Services/fire-base-prd.service';
 @Component({
   selector: 'app-product-upload-form',
   templateUrl: './product-upload-form.component.html',
-  styleUrls: ['./product-upload-form.component.css']
+  styleUrls: ['./product-upload-form.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+  ],
 })
 export class ProductUploadFormComponent {
   prdToAdd: IfireBseProduct = {} as IfireBseProduct;
-  prds:IfireBseProduct[]=[];
+  prds: IfireBseProduct[] = [];
   brands: any[] = [];
   categories: any[] = [];
   isUpdate: boolean = false;
-  brandImageUrl:string ='';
-  categoryImageUrl:string ='';
-  coverImageUrl:string ='';
-  ImagesUrls:string[] =[];
+  brandImageUrl: string = '';
+  categoryImageUrl: string = '';
+  coverImageUrl: string = '';
+  ImagesUrls: string[] = [];
   subCategories: any[] = [];
-  
-  constructor(private fireBase:FirebasePrdService, private router: Router, private storage:Storage ) { 
+
+  constructor(
+    private fireBase: FirebasePrdService,
+    private router: Router,
+    private storage: Storage
+  ) {
     this.prdToAdd = {
       brand: {
         name: '',
         slug: '',
         image: '',
-        _id: ''
+        _id: '',
       },
       category: {
         slug: '',
         name: '',
         image: '',
-        _id: ''
+        _id: '',
       },
       createdAt: '',
       description: '',
@@ -53,24 +76,24 @@ export class ProductUploadFormComponent {
     };
   }
 
-  getSubCategories(){
+  getSubCategories() {
     this.fireBase.getSubCategories().subscribe({
-      next:(data)=>{
-        this.subCategories=data.map((documentData:any)=>{
-          return{
-            name:documentData.name,
-            slug:documentData.slug,
-            image:documentData.image,
-            _id:documentData._id,
-            createdAt:documentData.createdAt,
-            updatedAt:documentData.updatedAt,
-          }
-        })
-      } 
-    })
-  };
+      next: (data) => {
+        this.subCategories = data.map((documentData: any) => {
+          return {
+            name: documentData.name,
+            slug: documentData.slug,
+            image: documentData.image,
+            _id: documentData._id,
+            createdAt: documentData.createdAt,
+            updatedAt: documentData.updatedAt,
+          };
+        });
+      },
+    });
+  }
 
-  getProducts(){
+  getProducts() {
     this.fireBase.getProducts().subscribe({
       next: (data) => {
         // console.log(data);
@@ -100,42 +123,42 @@ export class ProductUploadFormComponent {
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
-  getBrands(){
+  getBrands() {
     this.fireBase.getBrands().subscribe({
       next: (data) => {
         console.log(data);
-        
+
         this.brands = data.map((documentData: any) => {
           return {
             name: documentData.name,
             slug: documentData.slug,
             image: documentData.image,
-            _id: documentData._id
+            _id: documentData._id,
           };
         });
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
-  getCtaegories(){
+  getCtaegories() {
     this.fireBase.getCtaegories().subscribe({
-      next:(data)=>{
-        this.categories=data.map((documentData:any)=>{
-          return{
-            name:documentData.name,
-            slug:documentData.slug,
-            image:documentData.image,
-            _id:documentData._id
-          }
-        })
-      }
-    })
-  };
+      next: (data) => {
+        this.categories = data.map((documentData: any) => {
+          return {
+            name: documentData.name,
+            slug: documentData.slug,
+            image: documentData.image,
+            _id: documentData._id,
+          };
+        });
+      },
+    });
+  }
 
   async uploadImageCover(event: any) {
     const input = event.target as HTMLInputElement;
@@ -222,16 +245,15 @@ export class ProductUploadFormComponent {
         const downloadURL = await getDownloadURL(snapshot.ref);
 
         // Store the download URL of the brand image
-        this.ImagesUrls.push(downloadURL) ;
+        this.ImagesUrls.push(downloadURL);
 
         // Track filenames for future use
         filenames.push(file.name);
       }
     }
   }
-  
 
-  addProduct(){
+  addProduct() {
     this.prdToAdd.imageCover = this.coverImageUrl;
     this.prdToAdd.brand.image = this.brandImageUrl;
     this.prdToAdd.category.image = this.categoryImageUrl;
@@ -241,14 +263,13 @@ export class ProductUploadFormComponent {
     this.router.navigate(['/products/level1.1']);
     this.getProducts();
   }
-  updateProduct(){
+  updateProduct() {
     this.fireBase.updateProduct(this.prdToAdd);
   }
   ngOnInit(): void {
     this.getProducts();
     this.getBrands();
-    this.getCtaegories()
+    this.getCtaegories();
     this.getSubCategories();
   }
 }
-

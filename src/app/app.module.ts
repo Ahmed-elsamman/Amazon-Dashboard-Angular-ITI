@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 // استيراد المكونات والخدمات
-import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+
 // ... (استيراد باقي المكونات)
 
 // استيراد وحدات Angular Material
@@ -27,20 +25,17 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-// import { firebaseConfig } from './firebase.config';
+// import {  } from './firebase.config';
 import { importProvidersFrom } from '@angular/core';
 import { HeaderComponent } from './Components/header/header.component';
-import { SideMenuComponent } from './path-to-side-menu/side-menu.component';
+import { SideMenuComponent } from './Components/final/side-menu/side-menu.component';
+
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    HeaderComponent,
-    SideMenuComponent,
-
-    // ... (إعلان باقي المكونات)
-  ],
+  declarations: [],
   imports: [
     BrowserModule,
     AppRoutingModule,

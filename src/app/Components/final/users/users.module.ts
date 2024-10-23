@@ -16,10 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
-  declarations: [
-    UsersComponent,
-    CoupensListComponent
-  ],
+  declarations: [CoupensListComponent],
   imports: [
     MatIconModule,
     FormsModule,
@@ -31,10 +28,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-  ]
+    UsersComponent, // إضافة المكون كاستيراد
+  ],
 })
-export class UsersModule { }
+export class UsersModule {}

@@ -10,53 +10,78 @@ import {
 } from '@angular/forms';
 import { IfireBseProduct } from 'src/app/Models/ifire-base-prd';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-update-product-form',
   templateUrl: './update-product-form.component.html',
   styleUrls: ['./update-product-form.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
 })
 export class UpdateProductFormComponent implements OnInit {
   brands: any[] = [];
   categories: any[] = [];
-  prds:IfireBseProduct[]=[];
-prdToUpdate: IfireBseProduct = {} as IfireBseProduct;
-productForm:FormGroup;
-  constructor(private firebase: FirebasePrdService,private router:Router, private dialogRf:MatDialogRef<UpdateProductFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data :IfireBseProduct,
-    private fb: FormBuilder,
-    ) {
-      this.productForm = this.fb.group({
-        id: ['', [Validators.required]],
-        title: ['', [Validators.required]],
-        description: ['', [Validators.required]],
-        brands: ['', [Validators.required]],
-        brandSlug: ['', [Validators.required]],
-        price: ['', [Validators.required]],
-        priceAfterDiscount: [''],
-        quantity: ['', [Validators.required]],
-        categories: ['', [Validators.required]],
-        categorySlug: ['', [Validators.required]],
-        ratingsAverage: ['', [Validators.required]],
-        ratingsQuantity: ['', [Validators.required]],
-        createTime: ['', [Validators.required]],
-        updateTime: ['', [Validators.required]],
-      });
-      
-    
+  prds: IfireBseProduct[] = [];
+  prdToUpdate: IfireBseProduct = {} as IfireBseProduct;
+  productForm: FormGroup;
+  constructor(
+    private firebase: FirebasePrdService,
+    private router: Router,
+    private dialogRf: MatDialogRef<UpdateProductFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IfireBseProduct,
+    private fb: FormBuilder
+  ) {
+    this.productForm = this.fb.group({
+      id: ['', [Validators.required]],
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      brands: ['', [Validators.required]],
+      brandSlug: ['', [Validators.required]],
+      price: ['', [Validators.required]],
+      priceAfterDiscount: [''],
+      quantity: ['', [Validators.required]],
+      categories: ['', [Validators.required]],
+      categorySlug: ['', [Validators.required]],
+      ratingsAverage: ['', [Validators.required]],
+      ratingsQuantity: ['', [Validators.required]],
+      createTime: ['', [Validators.required]],
+      updateTime: ['', [Validators.required]],
+    });
+
     this.prdToUpdate = {
       brand: {
         name: '',
         slug: '',
         image: '',
-        _id: ''
+        _id: '',
       },
       category: {
         slug: '',
         name: '',
         image: '',
-        _id: ''
+        _id: '',
       },
       createdAt: '',
       description: '',
@@ -74,9 +99,8 @@ productForm:FormGroup;
       title: '',
       updatedAt: '',
     };
-  
   }
-  getProducts(){
+  getProducts() {
     this.firebase.getProducts().subscribe({
       next: (data) => {
         // Map Firestore documents to IfireBseProduct interface
@@ -104,24 +128,22 @@ productForm:FormGroup;
       },
       error: (err) => {
         console.log(err);
-      }
+      },
     });
   }
 
-  updatePeoduct(){
-    this.firebase.updateProduct(this.productForm.value).then(
-      (val:any)=>{
+  updatePeoduct() {
+    this.firebase
+      .updateProduct(this.productForm.value)
+      .then((val: any) => {
         this.router.navigate(['/products/level1.1']);
-        this.dialogRf.close(true)
-      }
-    ).catch(
-      (err=>{
-        console.log(err);
-        
+        this.dialogRf.close(true);
       })
-    )
+      .catch((err) => {
+        console.log(err);
+      });
   }
-  
+
   getBrands() {
     this.firebase.getBrands().subscribe({
       next: (data) => {
@@ -160,16 +182,15 @@ productForm:FormGroup;
   ngOnInit(): void {
     this.getBrands();
     this.getCategories();
-  
+
     // Convert date strings to Date objects
     const createdAt = new Date(this.data.createdAt);
     const updatedAt = new Date(this.data.updatedAt);
-  
+
     this.productForm.patchValue({
       ...this.data,
       createTime: createdAt,
       updateTime: updatedAt,
     });
   }
-  
 }
