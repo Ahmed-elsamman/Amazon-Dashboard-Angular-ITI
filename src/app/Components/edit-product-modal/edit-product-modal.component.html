@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Edit Product</h2>
+<mat-dialog-content>
+  <form>
+    <mat-form-field appearance="fill">
+      <mat-label>Product Name</mat-label>
+      <input matInput [(ngModel)]="product.name.en" name="name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Price</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="product.price"
+        name="price"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Image URL</mat-label>
+      <input matInput [(ngModel)]="product.imageUrls[0]" name="imageUrl" />
+    </mat-form-field>
+
+    <!-- Add more fields as needed -->
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="updateProduct()" cdkFocusInitial>Save</button>
+</mat-dialog-actions>
