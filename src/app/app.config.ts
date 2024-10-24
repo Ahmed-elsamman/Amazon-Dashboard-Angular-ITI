@@ -4,7 +4,8 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './interceptors/token.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,10 @@ export const appConfig: ApplicationConfig = {
         preventDuplicates: true,
       })
     ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+    },
   ],
 };
