@@ -33,18 +33,18 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (!this.email || !this.password) {
-      this.toastr.error('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
+      this.toastr.error('Please enter your email and password');
       return;
     }
 
     this.isLoading = true;
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        this.toastr.success('تم تسجيل الدخول بنجاح');
+        this.toastr.success('Login successful');
         this.router.navigate(['/dashboard']);
       },
       error: (error: any) => {
-        this.toastr.error(error.error.message || 'فشل تسجيل الدخول');
+        this.toastr.error(error.error.message || 'Login failed');
         this.isLoading = false;
       },
       complete: () => {

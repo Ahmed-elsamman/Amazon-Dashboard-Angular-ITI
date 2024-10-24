@@ -22,6 +22,8 @@ import { MatListModule } from '@angular/material/list';
 import { SubMenuComponent } from './sub-menu/sub-menu.component';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ThemeService } from 'src/app/Services/theme.service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -42,6 +44,7 @@ interface SideNavToggle {
     NgIf,
     SubMenuComponent,
     FormsModule,
+    MatSlideToggleModule,
   ],
   animations: [
     fadeInOut,
@@ -64,6 +67,7 @@ export class SideMenuComponent implements OnInit {
   screenWidth = 0;
   navData = navbarData;
   multiple: boolean = false;
+  isDarkTheme$ = this.themeService.isDarkTheme$;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -77,7 +81,7 @@ export class SideMenuComponent implements OnInit {
     }
   }
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private themeService: ThemeService) {}
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
@@ -110,5 +114,9 @@ export class SideMenuComponent implements OnInit {
 
   getActiveClass(data: InavbarData): string {
     return this.router.url.includes(data.routeLink) ? 'active' : '';
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

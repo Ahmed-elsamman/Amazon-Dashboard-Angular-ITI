@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './Services/Auth/auth.service';
+import { KakComponent } from './Components/kak/kak.component';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -39,6 +40,7 @@ interface SideNavToggle {
     MatNativeDateModule,
     MatButtonModule,
     MatDialogModule,
+    KakComponent,
   ],
 })
 export class AppComponent implements OnInit {
@@ -78,7 +80,9 @@ export class AppComponent implements OnInit {
   isSidenav = false;
   screenWidth = 0;
   onToggleSideNav(data: SideNavToggle) {
-    this.screenWidth = data.screenWidth;
-    this.isSidenav = data.collapsed;
+    // this.screenWidth = data.screenWidth;
+    // this.isSidenav = data.collapsed;
+    this.screenWidth = 800;
+    this.isSidenav = true;
   }
 }
