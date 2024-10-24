@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { AddUserFormComponent } from './Components/add-user-form/add-user-form.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { userGuard } from './Guard/user.guard';
+import { ProductsComponentComponent } from './Components/products-component/products-component.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -61,14 +62,20 @@ export const routes: Routes = [
       ),
     title: 'settings',
   },
+  // {
+  //   path: 'products',
+  //   loadChildren: () =>
+  //     import('./Components/products/products-routing.module').then(
+  //       (m) => m.ProductsRoutingModule
+  //     ),
+  //   canActivate: [userGuard],
+  // },
   {
     path: 'products',
-    loadChildren: () =>
-      import('./Components/products/products-routing.module').then(
-        (m) => m.ProductsRoutingModule
-      ),
+    component: ProductsComponentComponent,
     canActivate: [userGuard],
   },
+
   {
     path: 'product-upload-form',
     component: ProductUploadFormComponent,
