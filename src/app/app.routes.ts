@@ -16,7 +16,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     title: 'dashboard',
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'login',
@@ -27,7 +27,7 @@ export const routes: Routes = [
     path: 'statistics',
     component: StatisticsComponent,
     title: 'statistics',
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'users',
@@ -35,7 +35,7 @@ export const routes: Routes = [
       import('./Components/final/users/users-routing.module').then(
         (m) => m.UsersRoutingModule
       ),
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'media',
@@ -46,7 +46,7 @@ export const routes: Routes = [
     path: 'bestseller',
     component: BestSellerComponent,
     title: 'bestseller',
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'updateprd/:id',
@@ -67,19 +67,19 @@ export const routes: Routes = [
       import('./Components/products/products-routing.module').then(
         (m) => m.ProductsRoutingModule
       ),
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'product-upload-form',
     component: ProductUploadFormComponent,
     title: 'product-upload-form',
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'user-upload-form',
     component: AddUserFormComponent,
     title: 'user-upload-form',
-    // canActivate: [userGuard],
+    canActivate: [userGuard],
   },
   {
     path: '**',

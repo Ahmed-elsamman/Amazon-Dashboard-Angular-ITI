@@ -12,7 +12,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Dialog2Component } from './dialog2/dialog2.component';
-import { UserAuthenServiceService } from 'src/app/Services/user-authen-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { AuthService } from 'src/app/Services/Auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
     private Router: Router,
     private productService: FirebasePrdService,
     public dialog: MatDialog,
-    private UserAuthenService: UserAuthenServiceService
+    private UserAuth: AuthService
   ) {}
 
   openDialog() {
@@ -116,8 +116,11 @@ export class HeaderComponent implements OnInit {
   }
 
   logOut() {
-    this.UserAuthenService.userLogout();
-    this.user = this.UserAuthenService.isUserLoggedInOrNot;
+    this.UserAuth.logout();
+    this.UserAuth.isUserLoggedIn$.subscribe((status) => {
+      this.user = status;
+    });
+
     localStorage.removeItem('currentUser');
     this.Toster.error('logOut', 'logOut Success');
   }

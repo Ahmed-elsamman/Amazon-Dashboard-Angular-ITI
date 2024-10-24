@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from './Services/Auth/auth.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -47,17 +48,25 @@ interface SideNavToggle {
   ],
 })
 export class AppComponent implements OnInit {
-  title = 'Amazon';
+  title = 'Amazon Dashboard';
 
   showHeader = true;
 
-  constructor(private router: Router, private spinner: NgxSpinnerService) {
+  constructor(
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private authService: AuthService
+  ) {
+    // مراقبة حالة التوجيه
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url == '/login') {
+        const currentPath = val.urlAfterRedirects.split('/')[1];
+        if (['login', 'register'].includes(currentPath)) {
           this.showHeader = false;
         } else {
-          this.showHeader = true;
+          this.authService.isUserLoggedIn$.subscribe((isAuth) => {
+            this.showHeader = isAuth;
+          });
         }
       }
     });
