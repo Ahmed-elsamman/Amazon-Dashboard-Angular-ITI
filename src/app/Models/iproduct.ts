@@ -10,3 +10,4 @@ export interface Iproduct {
   details: string;
   totalPrice?: number;
 }
+ng generate component productsComponent
