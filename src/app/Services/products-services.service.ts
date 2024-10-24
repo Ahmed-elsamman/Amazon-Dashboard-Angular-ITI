@@ -29,36 +29,40 @@ export interface Product {
   providedIn: 'root',
 })
 export class ProductsServicesService {
-  private apiUrl = 'https://ahmed-sabry-ffbbe964.koyeb.app/products'; // ضع هنا الـ URL الخاص بالـ API
+  private apiUrl = 'https://ahmed-sabry-ffbbe964.koyeb.app/products';
 
   constructor(private http: HttpClient) {}
 
-  // عرض كل المنتجات
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
   }
 
-  // عرض منتج واحد
+  getProductsWithPagination(
+    page: number,
+    limit: number
+  ): Observable<{ products: Product[]; totalCount: number }> {
+    return this.http.get<{ products: Product[]; totalCount: number }>(
+      `${this.apiUrl}/pagination?page=${page}&limit=${limit}`
+    );
+  }
+
   getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  // إضافة منتج جديد
   addProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(this.apiUrl, product, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
-  // تحديث منتج
   updateProduct(product: Product): Observable<Product> {
     return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
-  // حذف منتج
-  deleteProduct(id: number): Observable<void> {
+  deleteProduct(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

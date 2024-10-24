@@ -1,15 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  NavigationEnd,
-  Router,
-  RouterModule,
-  RouterOutlet,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { HeaderComponent } from './Components/header/header.component';
 import { SideMenuComponent } from './Components/final/side-menu/side-menu.component';
-import { BodyComponent } from './Components/final/body/body.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -66,6 +60,7 @@ export class AppComponent implements OnInit {
         if (['login', 'register'].includes(currentPath)) {
           this.showHeader = false;
         } else {
+          // هنا يجب أن تتحقق من حالة تسجيل الدخول
           this.authService.isUserLoggedIn$.subscribe((isAuth) => {
             this.showHeader = isAuth;
           });
