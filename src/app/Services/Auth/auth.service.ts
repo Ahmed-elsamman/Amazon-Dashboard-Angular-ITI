@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 interface AuthResponse {
   token: string;
@@ -27,7 +28,7 @@ export class AuthService {
   private isLoggedIn = new BehaviorSubject<boolean>(false);
   isUserLoggedIn$ = this.isLoggedIn.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.checkInitialAuth();
   }
 
@@ -67,6 +68,7 @@ export class AuthService {
         tap((response) => {
           this.setAuthData(response);
           this.isLoggedIn.next(true);
+          this.router.navigate(['/dashboard']);
         })
       );
   }
@@ -78,6 +80,7 @@ export class AuthService {
     this.isAuthenticatedSubject.next(false);
     this.userDataSubject.next(null);
     this.isLoggedIn.next(false);
+    this.router.navigate(['/login']);
   }
 
   getToken(): string | null {

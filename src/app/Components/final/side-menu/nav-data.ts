@@ -1,5 +1,5 @@
-import { RouterLink } from "@angular/router";
-import { InavbarData } from "./helper";
+import { RouterLink } from '@angular/router';
+import { InavbarData } from './helper';
 
 export const navbarData: InavbarData[] = [
   {
@@ -40,7 +40,7 @@ export const navbarData: InavbarData[] = [
         routeLink: 'products/level1.2',
         label: 'Level1.2',
       },
-    ]
+    ],
   },
   {
     routeLink: 'statistics',
@@ -59,7 +59,7 @@ export const navbarData: InavbarData[] = [
     label: 'Media',
   },
   {
-    routeLink: 'settings',
+    routeLink: 'settings/profile',
     icon: 'fal fa-cog',
     label: 'Settings',
     expanded: true,
@@ -72,7 +72,6 @@ export const navbarData: InavbarData[] = [
         routeLink: 'settings/customize',
         label: 'Customize',
       },
-
-    ]
+    ],
   },
-]
+];

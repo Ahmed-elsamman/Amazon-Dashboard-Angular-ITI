@@ -34,6 +34,7 @@ import { AuthService } from 'src/app/Services/Auth/auth.service';
     FormsModule,
     CdkMenuModule,
     MatBadgeModule,
+    HeaderComponent,
   ],
   styleUrls: ['./header.component.css'],
 })
@@ -78,7 +79,7 @@ export class HeaderComponent implements OnInit {
     this.selectedLanguage = this.languages[0];
   }
 
-  @Input() collapsed = false;
+  @Input() collapsed = true;
   @Input() screenWidth = 0;
 
   canShowSearchAsOverlay = false;
