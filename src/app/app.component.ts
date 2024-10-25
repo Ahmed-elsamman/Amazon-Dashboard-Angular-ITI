@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { HeaderComponent } from './Components/header/header.component';
 import { SideMenuComponent } from './Components/final/side-menu/side-menu.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,7 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './Services/Auth/auth.service';
-import { KakComponent } from './Components/kak/kak.component';
+import { MainHeaderComponent } from './Components/mainHeader/mainHeader.component';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -30,7 +29,6 @@ interface SideNavToggle {
     RouterOutlet,
     FormsModule,
     ReactiveFormsModule,
-    HeaderComponent,
     SideMenuComponent,
     NgxSpinnerModule,
     MatFormFieldModule,
@@ -40,7 +38,7 @@ interface SideNavToggle {
     MatNativeDateModule,
     MatButtonModule,
     MatDialogModule,
-    KakComponent,
+    MainHeaderComponent,
   ],
 })
 export class AppComponent implements OnInit {

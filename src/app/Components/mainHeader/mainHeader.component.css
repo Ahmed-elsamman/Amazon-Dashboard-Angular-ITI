@@ -7,13 +7,7 @@
 .animated-header {
   display: flex;
   align-items: center;
-  /* background-color: #ff9900;  */
-  background: linear-gradient(
-    90deg,
-    rgba(255, 153, 0, 1) 0%,
-    rgba(219, 255, 0, 1) 35%,
-    rgba(255, 153, 0, 1) 100%
-  );
+  background-color: #ff9900;
 
   padding: 10px;
   border-radius: 8px;

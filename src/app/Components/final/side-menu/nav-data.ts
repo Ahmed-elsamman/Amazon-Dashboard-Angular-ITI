@@ -19,10 +19,10 @@ export const navbarData: InavbarData[] = [
     label: 'Statistics',
   },
   {
-    routeLink: 'users/users',
+    routeLink: 'users/customers',
     icon: 'fal fa-users',
     label: 'Users',
-    expanded: false,
+    expanded: true,
   },
   {
     routeLink: 'media',

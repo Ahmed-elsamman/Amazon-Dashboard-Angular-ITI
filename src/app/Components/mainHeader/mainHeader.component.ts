@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { AuthService } from 'src/app/Services/Auth/auth.service';
 
 @Component({
-  selector: 'app-kak',
-  templateUrl: './kak.component.html',
-  styleUrls: ['./kak.component.css'],
+  selector: 'app-mainHeader',
+  templateUrl: './mainHeader.component.html',
+  styleUrls: ['./mainHeader.component.css'],
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule],
 })
-export class KakComponent implements OnInit {
+export class MainHeaderComponent implements OnInit {
   userName: string | null = null;
 
   constructor(private authService: AuthService) {}

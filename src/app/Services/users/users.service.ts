@@ -4,11 +4,15 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 interface User {
-  id: string;
-  email: string;
+  _id: string;
   name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  isVerified: boolean;
   createdAt: string;
 }
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +22,7 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}`);
+    return this.http.get<User[]>(this.API_URL);
   }
 
   getUserById(id: string): Observable<User> {

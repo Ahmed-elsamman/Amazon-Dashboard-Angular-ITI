@@ -1,11 +1,8 @@
-<!-- @if (showHeader) { -->
-<!-- } -->
 <div class="main-container">
   <div class="main-container-content">
     @if (showHeader) {
-    <app-kak></app-kak>
+    <app-mainHeader></app-mainHeader>
     }
-    <!-- <app-header [collapsed]="false" [screenWidth]="700"></app-header> -->
     <router-outlet></router-outlet>
   </div>
   @if (showHeader) {
