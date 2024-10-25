@@ -1,5 +1,7 @@
 import { RouterLink } from '@angular/router';
 import { InavbarData } from './helper';
+import { RouterLink } from '@angular/router';
+import { InavbarData } from './helper';
 
 export const navbarData: InavbarData[] = [
   {
@@ -44,5 +46,7 @@ export const navbarData: InavbarData[] = [
         label: 'Customize',
       },
     ],
+    ],
   },
+];
 ];
