@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface Product {
-  id: string;
+  _id: string;
   sellerId: string;
   reviews: string[];
   subcategoryId: string;
@@ -57,7 +57,7 @@ export class ProductsServicesService {
   }
 
   updateProduct(product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product, {
+    return this.http.put<Product>(`${this.apiUrl}/${product._id}`, product, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }

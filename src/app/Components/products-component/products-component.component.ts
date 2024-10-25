@@ -34,7 +34,9 @@ export class ProductsComponentComponent implements OnInit {
   constructor(
     private productsService: ProductsServicesService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    // console.log(localStorage.getItem('token'));
+  }
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -61,7 +63,7 @@ export class ProductsComponentComponent implements OnInit {
       }
     });
   }
-
+  openAddProductModal() {}
   onPageChange(event: any): void {
     this.page = event.pageIndex + 1; // Angular Material pageIndex is zero-based
     this.fetchProducts();
@@ -84,7 +86,7 @@ export class ProductsComponentComponent implements OnInit {
   deleteProduct(id: string): void {
     this.productsService.deleteProduct(id).subscribe({
       next: () => {
-        this.products = this.products.filter((p) => p.id !== id);
+        this.products = this.products.filter((p) => p._id !== id);
       },
       error: (err) => {
         console.error('Error deleting product:', err); // التعامل مع الأخطاء
