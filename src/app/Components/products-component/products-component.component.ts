@@ -29,7 +29,16 @@ export class ProductsComponentComponent implements OnInit {
   totalCount: number = 0;
   page: number = 1;
   limit: number = 10;
-  displayedColumns: string[] = ['image', 'name', 'price', 'actions'];
+  displayedColumns: string[] = [
+    'image',
+    'name',
+    'price',
+    'brand',
+    'stock',
+    'createdAt',
+    'updatedAt',
+    'actions',
+  ];
 
   constructor(
     private productsService: ProductsServicesService,
@@ -53,7 +62,7 @@ export class ProductsComponentComponent implements OnInit {
 
   openEditModal(product: Product): void {
     const dialogRef = this.dialog.open(EditProductModalComponent, {
-      width: '400px',
+      width: '700px',
       data: product, // Pass the product data to the modal
     });
 

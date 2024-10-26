@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   ProductsServicesService,
   Product,
+  UpdateProduct,
 } from 'src/app/Services/products-services.service';
 
 @Component({
@@ -26,29 +27,60 @@ import {
   ],
 })
 export class EditProductModalComponent {
-  product: Product;
+  product: UpdateProduct;
+  selectedFile: File | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<EditProductModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product,
-    private productsService: ProductsServicesService
+    private productsService: ProductsServicesService,
   ) {
-    this.product = { ...data }; // Create a copy of the product data to edit
+    this.product = {
+      name: data.name || { en: '', ar: '' },
+      price: data.price,
+      discounts: data.discounts || 0,
+      description: data.description || { en: '', ar: '' },
+      brand: data.brand || '',
+      imageUrls: data.imageUrls.length > 0 ? [...data.imageUrls] : [''],
+      stock: data.stock,
+    };
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 
   updateProduct(): void {
-    this.productsService.updateProduct(this.product).subscribe({
-      next: () => {
-        this.dialogRef.close(true); // Return true to indicate successful update
-      },
-      error: (err) => {
-        console.error('Error updating product:', err);
-        // Optionally handle errors here, e.g., show an alert
-      },
-    });
+
+  }
+
+  private submitProductUpdate(): void {
+    const updatedProduct = { ...this.product };
+
+    // Remove any unnecessary ID fields before sending
+    if (updatedProduct.name && '_id' in updatedProduct.name) {
+      delete updatedProduct.name._id;
+    }
+    if (updatedProduct.description && '_id' in updatedProduct.description) {
+      delete updatedProduct.description._id;
+    }
+
+    this.productsService
+      .updateProduct(this.data._id, updatedProduct)
+      .subscribe({
+        next: () => {
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          console.error('Error updating product:', err);
+        },
+      });
   }
 
   onNoClick(): void {
-    this.dialogRef.close(); // Close dialog without saving changes
+    this.dialogRef.close();
   }
 }

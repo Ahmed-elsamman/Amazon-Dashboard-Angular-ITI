@@ -6,7 +6,6 @@ export const authInterceptor = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const token = localStorage.getItem('token');
-  console.log('Intercepted request:', req);
 
   // Exclude requests to /login
   if (req.url.includes('/login')) {
