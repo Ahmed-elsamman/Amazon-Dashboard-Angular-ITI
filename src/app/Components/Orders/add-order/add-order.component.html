@@ -1,0 +1,54 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title>Add New Order</h2>
+
+  <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="order-form">
+    <mat-form-field appearance="outline">
+      <mat-label>User ID</mat-label>
+      <input matInput formControlName="userId" placeholder="Enter User ID" />
+    </mat-form-field>
+
+    <div formArrayName="items" class="items-container">
+      <div [formGroupName]="0" class="item-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Product ID</mat-label>
+          <input
+            matInput
+            formControlName="productId"
+            placeholder="Enter Product ID"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" formControlName="quantity" min="1" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Total Price</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="totalPrice"
+        placeholder="Enter Total Price"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Payment ID</mat-label>
+      <input
+        matInput
+        formControlName="paymentId"
+        placeholder="Enter Payment ID"
+      />
+    </mat-form-field>
+
+    <div class="dialog-actions">
+      <button mat-raised-button color="primary" type="submit">Save</button>
+      <button mat-raised-button type="button" (click)="onCancel()" color="warn">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

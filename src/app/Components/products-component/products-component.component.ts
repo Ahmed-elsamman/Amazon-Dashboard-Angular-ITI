@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProductModalComponent } from '../edit-product-modal/edit-product-modal.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { UsersService } from 'src/app/Services/users/users.service';
 
 @Component({
   selector: 'app-products-component',
@@ -33,13 +34,17 @@ export class ProductsComponentComponent implements OnInit {
 
   constructor(
     private productsService: ProductsServicesService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private usersService: UsersService
   ) {
     // console.log(localStorage.getItem('token'));
   }
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.usersService.getAllUsers().subscribe((users) => {
+      console.log('users:>>>>>>>>>>>>>>>>>>>', users);
+    });
   }
 
   fetchProducts(): void {

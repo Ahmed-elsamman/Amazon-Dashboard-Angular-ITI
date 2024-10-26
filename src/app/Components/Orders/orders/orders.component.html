@@ -1,0 +1,88 @@
+<div class="orders-container">
+  <p class="orders-title">Orders</p>
+
+  <!-- أضف هذا الكود بعد عنوان الصفحة في orders.component.html -->
+  <div class="header-actions">
+    <button mat-raised-button color="primary" (click)="openAddOrderDialog()">
+      <mat-icon>add</mat-icon>
+      Add New Order
+    </button>
+  </div>
+
+  <!-- Search Field -->
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Search for an order..."
+      #input
+    />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="orders-table">
+      <!-- ID Column -->
+      <ng-container matColumnDef="_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>OrderID</th>
+        <td mat-cell *matCellDef="let row">{{ row._id }}</td>
+      </ng-container>
+
+      <!-- UserID Column -->
+      <ng-container matColumnDef="userId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>UserID</th>
+        <td mat-cell *matCellDef="let row">{{ row.userId }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="orderStatus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="status-badge" [class]="row.orderStatus">{{
+            row.orderStatus
+          }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Total Price Column -->
+      <ng-container matColumnDef="totalPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Price</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row?.totalAmount | currency }}
+        </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let row">{{ row?.createdAt | date }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let row" class="actions-cell">
+          <button mat-icon-button color="primary" (click)="viewOrder(row)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="updateOrder(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteOrder(row._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of orders"
+    ></mat-paginator>
+  </div>
+</div>

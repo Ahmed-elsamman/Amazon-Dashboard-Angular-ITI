@@ -63,41 +63,40 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit() {
     this.loadUsers();
+    this.usersService
+      .getUserById('67161562900521accf77f9b7')
+      .subscribe((user) => {
+        console.log('user By ID:>>>>>>>>>>>>>>>>>>>', user);
+      });
   }
 
   loadUsers() {
     this.isLoading = true;
     this.error = null;
 
-    this.usersService
-      .getAllUsers()
-      .pipe(
-        catchError((error) => {
-          console.error('Error fetching users:', error);
-          if (error.status === 401) {
-            this.error = 'عذراً، يجب عليك تسجيل الدخول أولاً';
-            // يمكنك هنا إضافة توجيه المستخدم إلى صفحة تسجيل الدخول
-            // this.router.navigate(['/login']);
-          } else {
-            this.error = 'حدث خطأ أثناء تحميل البيانات';
-          }
-          return of([]); // إرجاع مصفوفة فارغة في حالة الخطأ
-        })
-      )
-      .subscribe((users) => {
+    this.usersService.getAllUsers().subscribe({
+      next: (users) => {
+        console.log('users:>>>>>>>>>>>>>>>>>>>', users);
         this.isLoading = false;
-        this.dataSource.data = users.map((user) => ({
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          isActive: user.isActive,
-          isVerified: user.isVerified,
-          createdAt: new Date(user.createdAt).toLocaleDateString('ar-EG'),
-        }));
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      });
+        if (users && users.length > 0) {
+          this.dataSource.data = users.map((user) => ({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+            isVerified: user.isVerified,
+            createdAt: new Date(user.createdAt).toLocaleDateString('ar-EG'),
+          }));
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('خطأ في الاشتراك:', error);
+      },
+    });
   }
 
   applyFilter(event: Event) {

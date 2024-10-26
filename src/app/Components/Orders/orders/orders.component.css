@@ -1,0 +1,133 @@
+.orders-container {
+  padding: 20px;
+  height: 100%;
+  border: 3px solid #ffd700;
+  border-radius: 10px;
+}
+.orders-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.search-field ::ng-deep .mat-form-field-wrapper {
+  background-color: #fff;
+}
+
+.search-field ::ng-deep .mat-form-field-outline {
+  background-color: #ffd700;
+}
+
+.table-container {
+  height: 50vh;
+  overflow: auto;
+}
+
+.orders-table {
+  width: 100%;
+  background-color: #fff;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background-color: #fff9e6;
+}
+
+.mat-mdc-row:hover {
+  background-color: #fff3cc;
+}
+
+.mat-mdc-header-cell {
+  background-color: #ffd700;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background-color: #ffeeba;
+  color: #856404;
+}
+
+.status-badge.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* تخصيص أزرار الإجراءات */
+.mat-icon-button {
+  margin: 0 4px;
+}
+
+/* تخصيص الـ Paginator */
+::ng-deep .mat-paginator {
+  background-color: #ffd700;
+}
+
+/* تخصيص شريط التمرير */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #dab900;
+}
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.header-actions button {
+  background-color: #ffd700;
+  color: black;
+  font-weight: bold;
+  padding: 0 20px;
+  height: 45px;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.header-actions button:hover {
+  background-color: #ffc600;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}

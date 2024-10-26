@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 interface User {
@@ -18,13 +22,50 @@ interface User {
 })
 export class UsersService {
   private readonly API_URL = `${environment.API_URL}/user`;
+  private readonly token = localStorage.getItem('token');
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.API_URL);
-  }
+  // getAllUsers(): Observable<User[]> {
+  //   const headers = new HttpHeaders({
+  //     Authorization: `${this.token}` || '',
+  //     Accept: 'application/json',
+  //   });
 
+  //   const options = {
+  //     headers: headers,
+  //     withCredentials: true,
+  //   };
+
+  //   return this.http.get<User[]>(this.API_URL, options).pipe(
+  //     catchError((error: HttpErrorResponse) => {
+  //       if (error.status === 302) {
+  //         const redirectUrl = error.headers.get('Location');
+  //         if (redirectUrl) {
+  //           console.log('إعادة توجيه إلى:', redirectUrl);
+  //           return this.http.get<User[]>(redirectUrl, options);
+  //         }
+  //       }
+  //       // إذا كان التوكن غير صالح أو منتهي الصلاحية
+  //       if (error.status === 401) {
+  //         localStorage.removeItem('token');
+  //         // يمكنك هنا إضافة منطق إعادة التوجيه إلى صفحة تسجيل الدخول
+  //       }
+  //       return throwError(() => {
+  //         console.error('خطأ في جلب البيانات:', error);
+  //         return error;
+  //       });
+  //     })
+  //   );
+  // }
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.API_URL, {
+      headers: new HttpHeaders({
+        Authorization: `${this.token}` || 'on token here samman',
+        Accept: 'application/json',
+      }),
+    });
+  }
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.API_URL}/${id}`);
   }
