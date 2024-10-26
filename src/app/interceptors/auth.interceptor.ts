@@ -1,5 +1,12 @@
-import { HttpEvent, HttpRequest, HttpHandlerFn } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {
+  HttpEvent,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpResponse,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export const authInterceptor = (
   req: HttpRequest<any>,
@@ -16,9 +23,26 @@ export const authInterceptor = (
   // Add token to the headers for all other requests
   const clonedRequest = token
     ? req.clone({
-        headers: req.headers.set('Authorization', `${token}`),
+        headers: req.headers
+          .set('Authorization', `${token}`)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json'),
       })
     : req;
 
-  return next(clonedRequest);
+  return next(clonedRequest).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 302 && error.error && Array.isArray(error.error)) {
+        // تحويل البيانات إلى HttpResponse
+        return of(
+          new HttpResponse({
+            body: error.error,
+            status: 200,
+            statusText: 'OK',
+          })
+        );
+      }
+      return throwError(() => error);
+    })
+  );
 };
