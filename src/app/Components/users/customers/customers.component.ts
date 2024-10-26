@@ -63,11 +63,11 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit() {
     this.loadUsers();
-    this.usersService
-      .getUserById('67161562900521accf77f9b7')
-      .subscribe((user) => {
-        console.log('user By ID:>>>>>>>>>>>>>>>>>>>', user);
-      });
+    // this.usersService
+    //   .getUserById('67161562900521accf77f9b7')
+    //   .subscribe((user) => {
+    //     console.log('user By ID:>>>>>>>>>>>>>>>>>>>', user);
+    //   });
   }
 
   loadUsers() {
