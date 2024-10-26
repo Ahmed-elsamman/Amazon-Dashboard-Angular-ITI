@@ -1,0 +1,18 @@
+.sellers-container {
+  padding: 20px;
+}
+
+/* أنماط إضافية للجدول */
+::ng-deep .sellers-container .mat-mdc-table {
+  background-color: white;
+  border-radius: 8px;
+}
+
+::ng-deep .sellers-container .mat-mdc-header-cell {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+::ng-deep .sellers-container .mat-mdc-row:hover {
+  background-color: #f8f8f8;
+}
