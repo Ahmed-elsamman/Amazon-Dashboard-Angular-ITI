@@ -35,7 +35,14 @@ import { catchError, EMPTY } from 'rxjs';
 })
 export class UpdateOrderComponent {
   orderForm: FormGroup;
-  orderStatuses = ['pending', 'processing', 'completed', 'cancelled'];
+  orderStatuses = [
+    'pending',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled',
+  ];
+  orderDetails: any; // لعرض تفاصيل الطلب
 
   constructor(
     private fb: FormBuilder,
@@ -43,29 +50,23 @@ export class UpdateOrderComponent {
     private ordersService: OrdersService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.orderDetails = data; // حفظ تفاصيل الطلب للعرض
+
+    // تبسيط النموذج ليحتوي فقط على حالة الطلب
     this.orderForm = this.fb.group({
-      userId: [data.userId, Validators.required],
-      items: this.fb.array([
-        this.fb.group({
-          productId: [data.items[0]?.productId || '', Validators.required],
-          quantity: [
-            data.items[0]?.quantity || 1,
-            [Validators.required, Validators.min(1)],
-          ],
-        }),
-      ]),
-      totalPrice: [data.totalPrice, [Validators.required, Validators.min(0)]],
       orderStatus: [data.orderStatus, Validators.required],
-      paymentId: [data.paymentId],
     });
   }
 
   onSubmit() {
     if (this.orderForm.valid) {
-      const orderData = this.prepareOrderData(this.orderForm.value);
+      // إرسال حالة الطلب فقط
+      const orderData = {
+        orderStatus: this.orderForm.value.orderStatus,
+      };
 
       this.ordersService
-        .updateOrder(this.data._id, orderData)
+        .updateOrderByAdmin(this.data._id, orderData)
         .pipe(
           catchError((error) => {
             console.error('Error updating order:', error);
@@ -78,17 +79,6 @@ export class UpdateOrderComponent {
           },
         });
     }
-  }
-
-  private prepareOrderData(formValue: any): any {
-    return {
-      ...formValue,
-      totalPrice: Number(formValue.totalPrice),
-      items: formValue.items.map((item: any) => ({
-        ...item,
-        quantity: Number(item.quantity),
-      })),
-    };
   }
 
   onCancel() {

@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
 import { OrdersService } from 'src/app/Services/orders.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddOrderComponent } from '../add-order/add-order.component';
 import { UpdateOrderComponent } from '../update-order/update-order.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-orders',
@@ -26,7 +27,10 @@ import { ViewOrderComponent } from '../view-order/view-order.component';
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     ViewOrderComponent,
+    AddOrderComponent,
+    UpdateOrderComponent,
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
@@ -41,12 +45,18 @@ export class OrdersComponent implements OnInit {
     'actions',
   ];
   dataSource: MatTableDataSource<any>;
+  isLoading = false;
+  error: string | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
 
-  constructor(private ordersService: OrdersService, private dialog: MatDialog) {
+  constructor(
+    private ordersService: OrdersService,
+    private dialog: MatDialog,
+    private toastr: ToastrService
+  ) {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -55,13 +65,22 @@ export class OrdersComponent implements OnInit {
   }
 
   loadOrders() {
+    this.isLoading = true;
+    this.error = null;
+
     this.ordersService.getUserOrders().subscribe({
       next: (orders) => {
         this.dataSource.data = orders;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.isLoading = false;
       },
-      error: (error) => console.error('Error loading orders:', error),
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        this.error = 'فشل في تحميل الطلبات';
+        this.isLoading = false;
+        this.toastr.error('فشل في تحميل الطلبات');
+      },
     });
   }
 
@@ -83,46 +102,76 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  updateOrder(order: any) {
-    console.log('Update order:', order);
-    const dialogRef = this.dialog.open(UpdateOrderComponent, {
+  openAddOrderDialog() {
+    const dialogRef = this.dialog.open(AddOrderComponent, {
       width: '600px',
-      data: order,
-      enterAnimationDuration: '300ms',
-      exitAnimationDuration: '200ms',
+      disableClose: true,
+      panelClass: 'custom-dialog',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.loadOrders();
+        this.ordersService.createOrderByAdmin(result).subscribe({
+          next: () => {
+            this.toastr.success('تم إضافة الطلب بنجاح');
+            this.loadOrders();
+          },
+          error: (error) => {
+            this.toastr.error('فشل في إضافة الطلب');
+            console.error(error);
+          },
+        });
+      }
+    });
+  }
+
+  updateOrder(order: any) {
+    const dialogRef = this.dialog.open(UpdateOrderComponent, {
+      width: '600px',
+      data: order,
+      disableClose: true,
+      panelClass: 'custom-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.ordersService.updateOrderByAdmin(order._id, result).subscribe({
+          next: () => {
+            this.toastr.success('تم تحديث الطلب بنجاح');
+            this.loadOrders();
+          },
+          error: (error) => {
+            this.toastr.error('فشل في تحديث الطلب');
+            console.error(error);
+          },
+        });
       }
     });
   }
 
   deleteOrder(orderId: string) {
-    if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-      this.ordersService.deleteOrder(orderId).subscribe({
-        next: () => {
-          this.loadOrders();
-        },
-        error: (error) => {
-          console.error('Error deleting order:', error);
-        },
-      });
-    }
-  }
-
-  openAddOrderDialog() {
-    const dialogRef = this.dialog.open(AddOrderComponent, {
-      width: '600px',
-      enterAnimationDuration: '300ms',
-      exitAnimationDuration: '200ms',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadOrders();
-      }
-    });
+    //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    //     width: '400px',
+    //     data: {
+    //       title: 'تأكيد الحذف',
+    //       message: 'هل أنت متأكد من حذف هذا الطلب؟',
+    //       confirmText: 'حذف',
+    //       cancelText: 'إلغاء'
+    //     }
+    //   });
+    //   dialogRef.afterClosed().subscribe(result => {
+    //     if (result) {
+    //       this.ordersService.deleteOrder(orderId).subscribe({
+    //         next: () => {
+    //           this.toastr.success('تم حذف الطلب بنجاح');
+    //           this.loadOrders();
+    //         },
+    //         error: (error) => {
+    //           this.toastr.error('فشل في حذف الطلب');
+    //           console.error(error);
+    //         },
+    //       });
+    //     }
+    //   });
   }
 }

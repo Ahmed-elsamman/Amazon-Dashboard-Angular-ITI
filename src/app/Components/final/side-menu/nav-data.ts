@@ -4,36 +4,50 @@ import { InavbarData } from './helper';
 export const navbarData: InavbarData[] = [
   {
     routeLink: 'dashboard',
-    icon: 'fal fa-home',
+    icon: 'fas fa-tachometer-alt',
     label: 'Dashboard',
   },
   {
     routeLink: 'products',
-    icon: 'fal fa-box-open',
+    icon: 'fas fa-shopping-cart',
     label: 'Products',
-    items: [],
   },
   {
     routeLink: 'statistics',
-    icon: 'fal fa-chart-bar',
-    label: 'Statistics',
+    icon: 'fas fa-chart-line',
+    label: 'Analytics Website',
   },
   {
     routeLink: 'users/customers',
-    icon: 'fal fa-users',
+    icon: 'fas fa-user-friends',
     label: 'Users',
     expanded: true,
+    items: [
+      {
+        routeLink: 'users/customers',
+        label: 'Customers',
+      },
+      {
+        routeLink: 'users/sellers',
+        label: 'Sellers',
+      },
+    ],
+  },
+  {
+    routeLink: 'orders',
+    icon: 'fas fa-shopping-bag',
+    label: 'Orders',
   },
   {
     routeLink: 'media',
-    icon: 'fal fa-camera',
-    label: 'Media',
+    icon: 'fas fa-photo-video',
+    label: 'Online Selling',
   },
   {
     routeLink: 'settings/profile',
-    icon: 'fal fa-cog',
+    icon: 'fas fa-cogs',
     label: 'Settings',
-    expanded: true,
+    expanded: false,
     items: [
       {
         routeLink: 'settings/profile',

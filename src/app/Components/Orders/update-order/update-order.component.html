@@ -1,63 +1,45 @@
 <div class="dialog-container">
-  <h2 mat-dialog-title>تحديث الطلب</h2>
+  <h2 mat-dialog-title>تحديث حالة الطلب</h2>
 
-  <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="order-form">
-    <mat-form-field appearance="outline">
-      <mat-label>معرف المستخدم</mat-label>
-      <input matInput formControlName="userId" placeholder="Enter User ID" />
-    </mat-form-field>
+  <div mat-dialog-content>
+    <!-- عرض تفاصيل الطلب -->
+    <div class="order-details">
+      <p><strong>رقم الطلب:</strong> {{ orderDetails._id }}</p>
+      <p><strong>المستخدم:</strong> {{ orderDetails.userId }}</p>
+      <p><strong>السعر الإجمالي:</strong> {{ orderDetails.totalPrice }}</p>
 
-    <div formArrayName="items" class="items-container">
-      <div [formGroupName]="0" class="item-row">
-        <mat-form-field appearance="outline">
-          <mat-label>معرف المنتج</mat-label>
-          <input
-            matInput
-            formControlName="productId"
-            placeholder="Enter Product ID"
-          />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>الكمية</mat-label>
-          <input matInput type="number" formControlName="quantity" min="1" />
-        </mat-form-field>
+      <div class="items-list">
+        <h3>المنتجات:</h3>
+        <ul>
+          <li *ngFor="let item of orderDetails.items">
+            {{ item.productName }} - الكمية: {{ item.quantity }}
+          </li>
+        </ul>
       </div>
     </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>السعر الإجمالي</mat-label>
-      <input
-        matInput
-        type="number"
-        formControlName="totalPrice"
-        placeholder="Enter Total Price"
-      />
-    </mat-form-field>
+    <!-- نموذج تحديث الحالة -->
+    <form [formGroup]="orderForm">
+      <mat-form-field appearance="fill">
+        <mat-label>حالة الطلب</mat-label>
+        <mat-select formControlName="orderStatus">
+          <mat-option *ngFor="let status of orderStatuses" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>حالة الطلب</mat-label>
-      <mat-select formControlName="orderStatus">
-        <mat-option *ngFor="let status of orderStatuses" [value]="status">
-          {{ status }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>معرف الدفع</mat-label>
-      <input
-        matInput
-        formControlName="paymentId"
-        placeholder="Enter Payment ID"
-      />
-    </mat-form-field>
-
-    <div class="dialog-actions">
-      <button mat-raised-button color="primary" type="submit">Update</button>
-      <button mat-raised-button color="warn" type="button" (click)="onCancel()">
-        Cancel
-      </button>
-    </div>
-  </form>
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">إلغاء</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="!orderForm.valid"
+    >
+      حفظ التغييرات
+    </button>
+  </div>
 </div>

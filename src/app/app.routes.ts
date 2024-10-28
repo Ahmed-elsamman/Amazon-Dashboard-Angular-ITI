@@ -51,15 +51,6 @@ export const routes: Routes = [
     title: 'settings',
   },
 
-  // {
-  //   path: 'products',
-  //   loadChildren: () =>
-  //     import('./Components/products/products-routing.module').then(
-  //       (m) => m.ProductsRoutingModule
-  //     ),
-  //   canActivate: [userGuard],
-  // },
-
   {
     path: 'users/customers', // هذا هو المسار الجديد
     component: CustomersComponent, // استخدم المكون الجديد هنا

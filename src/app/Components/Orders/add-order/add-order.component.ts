@@ -57,7 +57,7 @@ export class AddOrderComponent {
       const orderData = this.prepareOrderData(this.orderForm.value);
 
       this.ordersService
-        .initiateOrder(orderData)
+        .createOrderByAdmin(orderData)
         .pipe(
           catchError((error) => {
             console.error('Error creating order:', error);

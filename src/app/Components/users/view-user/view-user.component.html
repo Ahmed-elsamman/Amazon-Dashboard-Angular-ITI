@@ -1,0 +1,49 @@
+<div class="user-details-container">
+  <div class="header">
+    <h2>User Details</h2>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="user-info">
+    <div class="info-group">
+      <span class="label">Name:</span>
+      <span class="value">{{ data.name }}</span>
+    </div>
+
+    <div class="info-group">
+      <span class="label">Email:</span>
+      <span class="value">{{ data.email }}</span>
+    </div>
+
+    <div class="info-group">
+      <span class="label">Role:</span>
+      <span class="value role-badge" [ngClass]="data.role">{{
+        data.role | titlecase
+      }}</span>
+    </div>
+
+    <div class="info-group">
+      <span class="label">Status:</span>
+      <div class="status-badges">
+        <span class="badge" [ngClass]="{ active: data.isActive }">
+          {{ data.isActive ? "Active" : "Inactive" }}
+        </span>
+        <span class="badge" [ngClass]="{ verified: data.isVerified }">
+          {{ data.isVerified ? "Verified" : "Unverified" }}
+        </span>
+      </div>
+    </div>
+
+    <div class="info-group">
+      <span class="label">Created At:</span>
+      <span class="value">{{ data.createdAt }}</span>
+    </div>
+
+    <div class="info-group">
+      <span class="label">Last Updated:</span>
+      <span class="value">{{ data.updatedAt }}</span>
+    </div>
+  </div>
+</div>

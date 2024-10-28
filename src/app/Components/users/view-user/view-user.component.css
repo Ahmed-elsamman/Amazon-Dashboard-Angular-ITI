@@ -1,0 +1,89 @@
+.user-details-container {
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  min-width: 400px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #ffd700;
+  padding-bottom: 12px;
+}
+
+.header h2 {
+  margin: 0;
+  color: #232f3e;
+  font-size: 24px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  min-width: 120px;
+  font-weight: 500;
+  color: #666;
+}
+
+.value {
+  color: #232f3e;
+  font-size: 16px;
+}
+
+.role-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.role-badge.admin {
+  background-color: #ffd700;
+  color: #232f3e;
+}
+
+.role-badge.user {
+  background-color: #e3e3e3;
+  color: #232f3e;
+}
+
+.role-badge.seller {
+  background-color: #ffed4a;
+  color: #232f3e;
+}
+
+.status-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.badge.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.badge.verified {
+  background-color: #2196f3;
+  color: white;
+}

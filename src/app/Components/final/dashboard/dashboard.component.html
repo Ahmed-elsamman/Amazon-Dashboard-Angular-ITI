@@ -1,144 +1,175 @@
 <h1>Dashboard</h1>
 
-  <section id="content">
-    <main [ngClass]="getClass()">
-      <div class="head-title">
-        <div class="left">
+<section class="dashboard-container" [@fadeInUp]>
+  <!-- Users Section -->
+  <div class="section users-section">
+    <h2>Users Overview</h2>
 
-          <ul class="breadcrumb">
-            <li>
-              <a>Dashboard</a>
-            </li>
-            <li><i class='fa-solid fa-chevron-right'></i></li>
-            <li>
-              <a class="active" href="#">Home</a>
-            </li>
-          </ul>
+    <div class="cards-container">
+      <div class="info-card new-users" [@cardAnimation]>
+        <i class="fas fa-user-plus"></i>
+        <div class="card-content">
+          <h3>{{ newUsersCount }}</h3>
+          <p>New Users (Last Month)</p>
         </div>
-        <a href="#" class="btn-download">
-          <i class="fa-solid fa-cloud-arrow-down"></i>
-          <span class="text">Download PDF</span>
-        </a>
       </div>
 
-      <div class="card">
-      <div class="card-head">
-      <ul class="box-info">
-        <li>
-          <i class='bx fa-solid fa-calendar-check' ></i>
-          <span class="text">
-            <h3>1020</h3>
-            <p>New Order</p>
-          </span>
-        </li>
-        <li>
-          <i class='bx fa-solid fa-user-group' ></i>
-          <span class="text">
-            <h3>2834</h3>
-            <p>Visitors</p>
-          </span>
-        </li>
-        <li>
-          <i class='bx fa-solid fa-sack-dollar' ></i>
-          <span class="text">
-            <h3>$2543</h3>
-            <p>Total Sales</p>
-          </span>
-        </li>
-      </ul>
+      <div class="info-card active-users" [@cardAnimation]>
+        <i class="fas fa-user-check"></i>
+        <div class="card-content">
+          <h3>{{ activeUsersCount }}</h3>
+          <p>Active Users</p>
+        </div>
+      </div>
+
+      <div class="info-card sellers" [@cardAnimation]>
+        <i class="fas fa-store"></i>
+        <div class="card-content">
+          <h3>{{ sellersCount }}</h3>
+          <p>Sellers</p>
+        </div>
+      </div>
     </div>
 
-    <div class="card-body">
-      <div class="table-data">
-        <div class="order">
-          <div class="head">
-            <h3>Recent Orders</h3>
-            <i class='bx fa-solid fa-magnifying-glass' ></i>
-            <i class='bx fa-solid fa-sort' ></i>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Date Order</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <img src="assets/img/avatar2.png">
-                  <p>Muhammad Omar</p>
-                </td>
-                <td>01-11-2023</td>
-                <td><span class="status completed">Completed</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="assets/img/avatar3.png">
-                  <p>Fady Shenoda</p>
-                </td>
-                <td>01-10-2023</td>
-                <td><span class="status pending">Pending</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="assets/img/avatar5.png">
-                  <p>Ahmed Soliman</p>
-                </td>
-                <td>01-10-2022</td>
-                <td><span class="status process">Process</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="assets/img/avatar6.png">
-                  <p>Abdullah Ashraf</p>
-                </td>
-                <td>01-10-2021</td>
-                <td><span class="status pending">Pending</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="assets/img/avatar5.png">
-                  <p>Hamed</p>
-                </td>
-                <td>01-10-2020</td>
-                <td><span class="status completed">Completed</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="todo">
-          <div class="head">
-            <h3>Status</h3>
-            <i class='bx fa-solid fa-plus' ></i>
-            <i class='bx fa-solid fa-sort' ></i>
-          </div>
-          <ul class="todo-list">
-            <li class="completed">
-              <p>Sales List</p>
-              <i class='bx fa-solid fa-ellipsis-vertical' ></i>
-            </li>
-            <li class="completed">
-              <p>Sales List</p>
-              <i class='bx fa-solid fa-ellipsis-vertical' ></i>
-            </li>
-            <li class="not-completed">
-              <p>Sales List</p>
-              <i class='bx fa-solid fa-ellipsis-vertical' ></i>
-            </li>
-            <li class="completed">
-              <p>Sales List</p>
-              <i class='bx fa-solid fa-ellipsis-vertical' ></i>
-            </li>
-            <li class="not-completed">
-              <p>Sales List</p>
-              <i class='bx fa-solid fa-ellipsis-vertical' ></i>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="userDataSource"
+        matSort
+        #userSort="matSort"
+        class="users-table"
+      >
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="role-badge {{ user.role }}">{{ user.role }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="status-badge" [class.active]="user.isActive">
+              {{ user.isActive ? "Active" : "Inactive" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: userColumns"></tr>
+      </table>
+
+      <mat-paginator
+        #userPaginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 25]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </div>
-    </main>
-  </section>
+
+  <!-- Orders Section -->
+  <div class="section orders-section">
+    <h2>Orders Overview</h2>
+
+    <div class="cards-container">
+      <div class="info-card pending-orders" [@cardAnimation]>
+        <i class="fas fa-clock"></i>
+        <div class="card-content">
+          <h3>{{ pendingOrdersCount }}</h3>
+          <p>Pending Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card processing-orders" [@cardAnimation]>
+        <i class="fas fa-cogs"></i>
+        <div class="card-content">
+          <h3>{{ processingOrdersCount }}</h3>
+          <p>Processing Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card completed-orders" [@cardAnimation]>
+        <i class="fas fa-check-circle"></i>
+        <div class="card-content">
+          <h3>{{ completedOrdersCount }}</h3>
+          <p>Completed Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card cancelled-orders" [@cardAnimation]>
+        <i class="fas fa-times-circle"></i>
+        <div class="card-content">
+          <h3>{{ cancelledOrdersCount }}</h3>
+          <p>Cancelled Orders</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table
+        mat-table
+        [dataSource]="orderDataSource"
+        matSort
+        #orderSort="matSort"
+        class="orders-table"
+      >
+        <ng-container matColumnDef="orderNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Order ID</th>
+          <td mat-cell *matCellDef="let order">{{ order._id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="customer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+          <td mat-cell *matCellDef="let order">{{ order.userId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let order">
+            <span
+              class="order-status"
+              [ngClass]="getStatusClass(order.orderStatus)"
+            >
+              {{ order.orderStatus }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+          <td mat-cell *matCellDef="let order">${{ order.totalPrice }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let order">
+            {{ formatDate(order.createdAt) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="orderColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: orderColumns"></tr>
+      </table>
+
+      <mat-paginator
+        #orderPaginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 25]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</section>

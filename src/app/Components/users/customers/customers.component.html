@@ -1,76 +1,125 @@
-<div class="container">
-  <mat-form-field class="search-field">
-    <mat-label>بحث</mat-label>
-    <input
-      matInput
-      (keyup)="applyFilter($event)"
-      placeholder="ابحث عن مستخدم..."
-      #input
-    />
+<div class="users-container">
+  <p class="users-title">Manage Customers</p>
+
+  <div class="header-actions">
+    <button mat-raised-button color="primary" (click)="openAddUserDialog()">
+      <mat-icon>add</mat-icon>
+      Add new user
+    </button>
+  </div>
+
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Search Users</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input />
+    <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
-  <div class="table-container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort class="user-table">
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="user-table">
+      <!-- Define Columns -->
+      <!-- UserID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          UserID
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          userName
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user.name }} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Name
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="name-cell">
+            <div class="user-avatar">
+              {{ user.name.charAt(0) }}
+            </div>
+            <span class="name-text">{{ user.name }}</span>
+          </div>
+        </td>
       </ng-container>
 
+      <!-- Email Column -->
       <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          email
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user.email }} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Email
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
       </ng-container>
 
+      <!-- Role Column -->
       <ng-container matColumnDef="role">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          role
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user.role }} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Role
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.role }}</td>
       </ng-container>
 
+      <!-- Is Active Column -->
       <ng-container matColumnDef="isActive">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          isActive
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user">
-          <span class="status-badge" [class.active]="user.isActive">
-            {{ user.isActive ? "Yes" : "No" }}
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Status
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <span
+            class="status-badge"
+            [class.active]="user.isActive"
+            [class.inactive]="!user.isActive"
+          >
+            {{ user.isActive ? "Active" : "Inactive" }}
           </span>
-        </mat-cell>
+        </td>
       </ng-container>
 
+      <!-- Is Verified Column -->
       <ng-container matColumnDef="isVerified">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          isVerified
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user">
-          <span class="status-badge" [class.verified]="user.isVerified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Verified
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <span
+            class="status-badge"
+            [class.active]="user.isVerified"
+            [class.inactive]="!user.isVerified"
+          >
             {{ user.isVerified ? "Yes" : "No" }}
           </span>
-        </mat-cell>
+        </td>
       </ng-container>
 
+      <!-- Created At Column -->
       <ng-container matColumnDef="createdAt">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          createdAt
-        </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user.createdAt }} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-cell">
+          Created At
+        </th>
+        <td mat-cell *matCellDef="let user">{{ user.createdAt }}</td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        class="user-row"
-      ></mat-row>
-    </mat-table>
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="th-cell">Actions</th>
+        <td mat-cell *matCellDef="let user" class="actions-cell">
+          <button mat-icon-button color="primary" (click)="viewUser(user)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="editUser(user)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Choose page"
-    ></mat-paginator>
+      <!-- Define Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
   </div>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+  ></mat-paginator>
 </div>
