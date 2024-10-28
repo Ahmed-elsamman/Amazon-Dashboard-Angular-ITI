@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  HostListener,
+} from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -16,6 +22,7 @@ import { AddUserComponent } from '../add-user/add-user.component';
 import { UpdateUserComponent } from '../update-user/update-user.component';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { IUser, UserDisplay } from 'src/app/Models/iuser';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-customers',
@@ -33,6 +40,7 @@ import { IUser, UserDisplay } from 'src/app/Models/iuser';
     AddUserComponent,
     UpdateUserComponent,
     ViewUserComponent,
+    NgxChartsModule,
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
@@ -55,6 +63,19 @@ export class CustomersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  usersByRoleData: any[] = [];
+  usersByStatusData: any[] = [];
+  usersByMonthData: any[] = [];
+
+  colorScheme: any = {
+    name: 'custom',
+    selectable: true,
+    group: 'Ordinal',
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
+  };
+
+  chartWidth = Math.min(window.innerWidth - 100, 1200); // تحديد حد أقصى للعرض
+
   constructor(
     private usersService: UsersService,
     private dialog: MatDialog,
@@ -63,14 +84,18 @@ export class CustomersComponent implements OnInit {
     this.dataSource = new MatTableDataSource<UserDisplay>();
   }
 
+  @HostListener('window:resize')
+  onResize() {
+    this.chartWidth = Math.min(window.innerWidth - 100, 1200);
+  }
+
   ngOnInit() {
     this.loadUsers();
-
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  loadUsers() {
+  private loadUsers() {
     this.isLoading = true;
     this.error = null;
 
@@ -80,6 +105,7 @@ export class CustomersComponent implements OnInit {
       .subscribe({
         next: (users) => {
           this.dataSource.data = this.transformUsers(users);
+          this.updateCharts(users);
         },
         error: (error) => {
           this.toastr.error('حدث خطأ في تحميل البيانات');
@@ -88,7 +114,77 @@ export class CustomersComponent implements OnInit {
       });
   }
 
-  private transformUsers(users: IUser[]): UserDisplay[] {
+  private updateCharts(users: IUser[]) {
+    // تحديث بيانات المخطط الدائري حسب الأدوار
+    const roleCount = this.countByProperty(users, 'role');
+    this.usersByRoleData = Object.entries(roleCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+
+    // تحديث بيانات المخطط العمودي حسب الحالة
+    this.usersByStatusData = [
+      {
+        name: 'Active',
+        value: users.filter((user) => user.isActive).length,
+      },
+      {
+        name: 'Inactive',
+        value: users.filter((user) => !user.isActive).length,
+      },
+      {
+        name: 'Verified',
+        value: users.filter((user) => user.isVerified).length,
+      },
+    ];
+
+    // تحديث بيانات المخطط الخطي حسب الشهر
+    const monthlyData = this.getUsersByMonth(users);
+    this.usersByMonthData = [
+      {
+        name: 'New Users',
+        series: monthlyData,
+      },
+    ];
+  }
+
+  private countByProperty(array: any[], property: string) {
+    return array.reduce((acc, curr) => {
+      const key = curr[property];
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  private getUsersByMonth(users: IUser[]) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    const monthlyCount = new Array(12).fill(0);
+
+    users.forEach((user) => {
+      const month = new Date(user.createdAt).getMonth();
+      monthlyCount[month]++;
+    });
+
+    return months.map((month, index) => ({
+      name: month,
+      value: monthlyCount[index],
+    }));
+  }
+
+  transformUsers(users: IUser[]): UserDisplay[] {
     return users.map((user) => ({
       id: user._id,
       name: user.name,
@@ -189,5 +285,9 @@ export class CustomersComponent implements OnInit {
         });
       }
     });
+  }
+
+  onSelect(event: any) {
+    console.log(event);
   }
 }

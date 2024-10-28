@@ -3,6 +3,8 @@
   height: 100%;
   border: 3px solid #232f3e;
   border-radius: 10px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .users-title {
@@ -61,12 +63,17 @@
 }
 
 .table-container {
-  height: 50vh;
-  overflow: auto;
+  width: 100%;
+  overflow-x: auto; /* للجداول الصغيرة */
+  margin-bottom: 20px;
+  /* تعديل الارتفاع ليكون أكثر مرونة */
+  max-height: 60vh;
+  min-height: 300px;
 }
 
 .user-table {
   width: 100%;
+  min-width: 800px; /* لضمان عرض أدنى للجدول */
   background-color: #fff;
 }
 
@@ -101,6 +108,7 @@
   background-color: #857717;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* إضافة ظل للنص */
   letter-spacing: 0.5px; /* زيادة المسافة بين الحروف */
+  min-width: 100px; /* عرض أدنى لكل عمود */
 }
 
 .header-actions {
@@ -203,4 +211,123 @@
 
 .name-text {
   font-weight: 500;
+}
+
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-card {
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  color: #232f3e;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ffd700;
+}
+
+/* تحسين ظهور المخططات */
+:host ::ng-deep .ngx-charts {
+  float: none;
+  margin: 0 auto;
+}
+
+:host ::ng-deep .ngx-charts .grid-line-path {
+  stroke: #e0e0e0;
+  stroke-width: 0.5;
+}
+
+:host ::ng-deep .ngx-charts .tick text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .users-container {
+    padding: 10px;
+  }
+
+  .chart-card {
+    padding: 10px;
+  }
+
+  .chart-title {
+    font-size: 1.2rem;
+  }
+
+  .table-container {
+    max-height: 50vh;
+    margin-bottom: 10%;
+  }
+}
+
+/* تحسين مظهر الجدول للشاشات الصغيرة */
+.user-table {
+  width: 100%;
+  min-width: 800px; /* لضمان عرض أدنى للجدول */
+  background-color: #fff;
+}
+
+/* تحسين مظهر الخلايا */
+.mat-mdc-cell,
+.mat-mdc-header-cell {
+  padding: 12px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* تعديل عرض الأعمدة */
+.th-cell {
+  min-width: 100px; /* عرض أدنى لكل عمود */
+}
+
+/* تخصيص عرض بعض الأعمدة */
+[matColumnDef="id"] {
+  max-width: 80px;
+}
+
+[matColumnDef="actions"] {
+  max-width: 120px;
+}
+
+[matColumnDef="email"] {
+  min-width: 200px;
+}
+
+/* تحسين الاستجابة للشاشات المختلفة */
+@media screen and (max-width: 1200px) {
+  .chartWidth {
+    width: calc(100vw - 100px);
+  }
+
+  .chart-card {
+    padding: 15px;
+  }
 }
