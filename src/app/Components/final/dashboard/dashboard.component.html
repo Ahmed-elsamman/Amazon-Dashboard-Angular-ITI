@@ -35,13 +35,32 @@
       <div class="charts-grid">
         <div class="chart-card">
           <h2>User Distribution</h2>
-          <ngx-charts-advanced-pie-chart
+          <ngx-charts-pie-chart
             [results]="usersPieData"
             [gradient]="gradient"
             [animations]="true"
             [scheme]="colorScheme"
+            [doughnut]="true"
           >
-          </ngx-charts-advanced-pie-chart>
+            <ng-template #tooltipTemplate let-model="model">
+              <div class="tooltip-container">
+                <div class="tooltip-header">
+                  <i class="fas fa-users"></i>
+                  <span>{{ model.name }}</span>
+                </div>
+                <div class="tooltip-content">
+                  <div class="tooltip-value">
+                    <span>Count:</span>
+                    <strong>{{ model.value }}</strong>
+                  </div>
+                  <div class="tooltip-percentage">
+                    <span>Percentage:</span>
+                    <strong>{{ calculatePercentage(model.value) }}%</strong>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-charts-pie-chart>
         </div>
 
         <h2>Orders Overview</h2>
@@ -95,7 +114,7 @@
         </div>
 
         <div class="chart-card">
-          <h2>Revenue & Profit Trends</h2>
+          <h2>Analytics Orders (Last 6 Months completed Or Cancelled)</h2>
           <ngx-charts-line-chart
             [results]="revenueLineData"
             [gradient]="gradient"
@@ -108,6 +127,28 @@
             [scheme]="colorScheme"
           >
           </ngx-charts-line-chart>
+        </div>
+
+        <h2>Categories Overview</h2>
+        <div class="categories-grid">
+          <ngx-charts-pie-grid
+            [view]="[1000, 400]"
+            [scheme]="colorScheme"
+            [results]="categoriesChartData"
+            [designatedTotal]="100"
+            [tooltipDisabled]="true"
+            [animations]="true"
+          >
+            <ng-template #valueTemplate let-value="value">
+              {{ value }}%
+            </ng-template>
+            <ng-template #labelTemplate let-data="data">
+              <div class="grid-label">
+                <div>{{ data.name }}</div>
+                <div>Total: {{ data.total }}</div>
+              </div>
+            </ng-template>
+          </ngx-charts-pie-grid>
         </div>
       </div>
     </div>

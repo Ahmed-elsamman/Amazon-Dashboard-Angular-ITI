@@ -4,15 +4,15 @@
   <div mat-dialog-content>
     <!-- عرض تفاصيل الطلب -->
     <div class="order-details">
-      <p><strong>رقم الطلب:</strong> {{ orderDetails._id }}</p>
-      <p><strong>المستخدم:</strong> {{ orderDetails.userId }}</p>
-      <p><strong>السعر الإجمالي:</strong> {{ orderDetails.totalPrice }}</p>
+      <p><strong>Order ID:</strong> {{ orderDetails._id }}</p>
+      <p><strong>User ID:</strong> {{ orderDetails.userId }}</p>
+      <p><strong>Total Price:</strong> {{ orderDetails.totalPrice }}</p>
 
       <div class="items-list">
-        <h3>المنتجات:</h3>
+        <h3>Products:</h3>
         <ul>
           <li *ngFor="let item of orderDetails.items">
-            {{ item.productName }} - الكمية: {{ item.quantity }}
+            {{ item.productId }} - Quantity: {{ item.quantity }}
           </li>
         </ul>
       </div>
@@ -21,8 +21,8 @@
     <!-- نموذج تحديث الحالة -->
     <form [formGroup]="orderForm">
       <mat-form-field appearance="fill">
-        <mat-label>حالة الطلب</mat-label>
-        <mat-select formControlName="orderStatus">
+        <mat-label>Order Status</mat-label>
+        <mat-select formControlName="status">
           <mat-option *ngFor="let status of orderStatuses" [value]="status">
             {{ status }}
           </mat-option>
@@ -32,14 +32,14 @@
   </div>
 
   <div mat-dialog-actions align="end">
-    <button mat-button (click)="onCancel()">إلغاء</button>
+    <button mat-button (click)="onCancel()">Cancel</button>
     <button
       mat-raised-button
       color="primary"
       (click)="onSubmit()"
       [disabled]="!orderForm.valid"
     >
-      حفظ التغييرات
+      Save Changes
     </button>
   </div>
 </div>

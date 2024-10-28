@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -14,6 +14,8 @@ import { AddOrderComponent } from '../add-order/add-order.component';
 import { UpdateOrderComponent } from '../update-order/update-order.component';
 import { ViewOrderComponent } from '../view-order/view-order.component';
 import { ToastrService } from 'ngx-toastr';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { OrderStatus } from 'src/app/Models/order.model';
 
 @Component({
   selector: 'app-orders',
@@ -31,11 +33,12 @@ import { ToastrService } from 'ngx-toastr';
     ViewOrderComponent,
     AddOrderComponent,
     UpdateOrderComponent,
+    NgxChartsModule,
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     '_id',
     'userId',
@@ -51,6 +54,16 @@ export class OrdersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<any>;
+  containerWidth: number = 0;
+  containerHeight: number = 0;
+  orderStatusData: any[] = [];
+  colorScheme: any = {
+    name: 'custom',
+    selectable: true,
+    group: 'Ordinal',
+    domain: ['#ffd700', '#2196f3', '#4caf50', '#8bc34a', '#f44336'],
+  };
+  view: [number, number] = [700, 700];
 
   constructor(
     private ordersService: OrdersService,
@@ -64,6 +77,26 @@ export class OrdersComponent implements OnInit {
     this.loadOrders();
   }
 
+  ngAfterViewInit() {
+    const container = document.querySelector('.charts-container');
+    if (container) {
+      this.containerWidth = container.clientWidth;
+      this.containerHeight = container.clientHeight - 40; // نقص 40 لارتفاع العنوان
+    }
+  }
+
+  private updateChartData(orders: any[]) {
+    const statusCount = orders.reduce((acc: any, order: any) => {
+      acc[order.orderStatus] = (acc[order.orderStatus] || 0) + 1;
+      return acc;
+    }, {});
+
+    this.orderStatusData = Object.entries(statusCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }
+
   loadOrders() {
     this.isLoading = true;
     this.error = null;
@@ -73,13 +106,14 @@ export class OrdersComponent implements OnInit {
         this.dataSource.data = orders;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.updateChartData(orders);
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading orders:', error);
-        this.error = 'فشل في تحميل الطلبات';
+        this.error = 'Failed to load orders';
         this.isLoading = false;
-        this.toastr.error('فشل في تحميل الطلبات');
+        this.toastr.error('Failed to load orders');
       },
     });
   }
@@ -113,11 +147,11 @@ export class OrdersComponent implements OnInit {
       if (result) {
         this.ordersService.createOrderByAdmin(result).subscribe({
           next: () => {
-            this.toastr.success('تم إضافة الطلب بنجاح');
+            this.toastr.success('Order added successfully');
             this.loadOrders();
           },
           error: (error) => {
-            this.toastr.error('فشل في إضافة الطلب');
+            this.toastr.error('Failed to add order');
             console.error(error);
           },
         });
@@ -135,43 +169,37 @@ export class OrdersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.ordersService.updateOrderByAdmin(order._id, result).subscribe({
-          next: () => {
-            this.toastr.success('تم تحديث الطلب بنجاح');
-            this.loadOrders();
-          },
-          error: (error) => {
-            this.toastr.error('فشل في تحديث الطلب');
-            console.error(error);
-          },
-        });
+        console.log('result>>>>', result);
+        this.ordersService
+          .changeOrderStatus(order._id, result.orderStatus)
+          .subscribe({
+            next: () => {
+              this.toastr.success('Order updated successfully');
+              this.loadOrders();
+            },
+            error: (error) => {
+              this.toastr.error('Failed to update order');
+              console.error(error);
+            },
+          });
       }
     });
   }
 
-  deleteOrder(orderId: string) {
-    //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    //     width: '400px',
-    //     data: {
-    //       title: 'تأكيد الحذف',
-    //       message: 'هل أنت متأكد من حذف هذا الطلب؟',
-    //       confirmText: 'حذف',
-    //       cancelText: 'إلغاء'
-    //     }
-    //   });
-    //   dialogRef.afterClosed().subscribe(result => {
-    //     if (result) {
-    //       this.ordersService.deleteOrder(orderId).subscribe({
-    //         next: () => {
-    //           this.toastr.success('تم حذف الطلب بنجاح');
-    //           this.loadOrders();
-    //         },
-    //         error: (error) => {
-    //           this.toastr.error('فشل في حذف الطلب');
-    //           console.error(error);
-    //         },
-    //       });
-    //     }
-    //   });
+  cancelOrder(orderId: string) {
+    if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
+      this.ordersService
+        .changeOrderStatus(orderId, OrderStatus.CANCELLED)
+        .subscribe({
+          next: () => {
+            this.toastr.success('تم إلغاء الطلب بنجاح');
+            this.loadOrders();
+          },
+          error: (error) => {
+            this.toastr.error('فشل في إلغاء الطلب');
+            console.error(error);
+          },
+        });
+    }
   }
 }

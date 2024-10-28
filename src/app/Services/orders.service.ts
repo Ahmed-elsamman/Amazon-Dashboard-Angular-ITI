@@ -72,6 +72,12 @@ export class OrdersService {
       catchError(this.handleError)
     );
   }
+  getOrderById(orderId: string): Observable<IOrder> {
+    return this.http.get<IOrder>(`${this.apiUrl}/${orderId}`).pipe(
+      map((response) => this.transformOrderResponse(response)),
+      catchError(this.handleError)
+    );
+  }
 
   cancelOrder(orderId: string): Observable<IOrder> {
     return this.http.patch<IOrder>(`${this.apiUrl}/cancel/${orderId}`, {}).pipe(
@@ -80,11 +86,10 @@ export class OrdersService {
     );
   }
 
-  getOrderById(orderId: string): Observable<IOrder> {
-    return this.http.get<IOrder>(`${this.apiUrl}/${orderId}`).pipe(
-      map((response) => this.transformOrderResponse(response)),
-      catchError(this.handleError)
-    );
+  changeOrderStatus(orderId: string, status: string): Observable<any> {
+    return this.http
+      .patch<any>(`${this.apiUrl}/status/${orderId}`, { status })
+      .pipe(catchError(this.handleError));
   }
 
   deleteOrder(orderId: string): Observable<any> {

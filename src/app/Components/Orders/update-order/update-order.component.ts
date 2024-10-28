@@ -1,4 +1,4 @@
-import { Component, Inject, Pipe, PipeTransform } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { OrdersService } from 'src/app/Services/orders.service';
 import { catchError, EMPTY } from 'rxjs';
+import { OrderStatus } from 'src/app/Models/order.model';
 
 @Component({
   selector: 'app-update-order',
@@ -35,14 +36,8 @@ import { catchError, EMPTY } from 'rxjs';
 })
 export class UpdateOrderComponent {
   orderForm: FormGroup;
-  orderStatuses = [
-    'pending',
-    'processing',
-    'shipped',
-    'delivered',
-    'cancelled',
-  ];
-  orderDetails: any; // لعرض تفاصيل الطلب
+  orderStatuses = Object.values(OrderStatus);
+  orderDetails: any;
 
   constructor(
     private fb: FormBuilder,
@@ -50,23 +45,16 @@ export class UpdateOrderComponent {
     private ordersService: OrdersService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.orderDetails = data; // حفظ تفاصيل الطلب للعرض
-
-    // تبسيط النموذج ليحتوي فقط على حالة الطلب
+    this.orderDetails = data;
     this.orderForm = this.fb.group({
-      orderStatus: [data.orderStatus, Validators.required],
+      status: [data.orderStatus, Validators.required],
     });
   }
 
   onSubmit() {
     if (this.orderForm.valid) {
-      // إرسال حالة الطلب فقط
-      const orderData = {
-        orderStatus: this.orderForm.value.orderStatus,
-      };
-
       this.ordersService
-        .updateOrderByAdmin(this.data._id, orderData)
+        .changeOrderStatus(this.data._id, this.orderForm.value.status)
         .pipe(
           catchError((error) => {
             console.error('Error updating order:', error);

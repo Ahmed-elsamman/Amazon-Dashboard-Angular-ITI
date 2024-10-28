@@ -500,3 +500,364 @@ table {
   gap: 20px;
   margin-bottom: 30px;
 }
+
+.tooltip-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+
+.tooltip-header i {
+  color: #ffd700;
+  font-size: 1.2em;
+}
+
+.tooltip-header span {
+  font-weight: bold;
+  color: #333;
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tooltip-value,
+.tooltip-percentage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tooltip-value span,
+.tooltip-percentage span {
+  color: #666;
+}
+
+.tooltip-value strong,
+.tooltip-percentage strong {
+  color: #ffd700;
+  font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.categories-chart {
+  width: 100%;
+  height: 400px;
+}
+
+.tooltip-content {
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+}
+
+.tooltip-content span {
+  display: block;
+  margin: 4px 0;
+}
+
+.categories-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+  width: 100%;
+  height: 400px;
+  background-color: #474a58;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.grid-label {
+  text-align: center;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+::ng-deep .ngx-charts .pie-grid .pie-grid-item {
+  padding: 10px;
+}
+
+.products-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin: 20px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.table-header h2 {
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+.table-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  padding: 8px 36px 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 240px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+.search-box i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.add-button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-button:hover {
+  background: #2980b9;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-table th,
+.products-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.products-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.products-table td {
+  color: #334155;
+  font-size: 14px;
+}
+
+.product-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.low-stock {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn.edit {
+  background: #edf2f7;
+  color: #3498db;
+}
+
+.action-btn.edit:hover {
+  background: #e2e8f0;
+}
+
+.action-btn.delete {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.action-btn.delete:hover {
+  background: #fecaca;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination button:not(:disabled):hover {
+  background: #f8fafc;
+}
+
+.pagination span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .products-table th,
+  .products-table td {
+    white-space: nowrap;
+  }
+}
+
+.products-container {
+  padding: 20px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.table-container {
+  position: relative;
+  min-height: 200px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.product-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.low-stock {
+  color: #f44336;
+  font-weight: 500;
+}
+
+.mat-column-image {
+  width: 80px;
+  padding: 8px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-cell {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.mat-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mat-table {
+    overflow-x: auto;
+  }
+}

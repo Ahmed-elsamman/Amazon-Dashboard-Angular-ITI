@@ -45,7 +45,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'name',
@@ -91,6 +91,9 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit() {
     this.loadUsers();
+  }
+
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -158,7 +161,7 @@ export class CustomersComponent implements OnInit {
 
   private getUsersByMonth(users: IUser[]) {
     const months = [
-      'Jan',
+      'Ja n',
       'Feb',
       'Mar',
       'Apr',

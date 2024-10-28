@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface Product {
   _id: string;
@@ -44,8 +45,9 @@ export interface UpdateProduct {
   providedIn: 'root',
 })
 export class ProductsServicesService {
-  private apiUrl = 'https://ahmed-sabry-ffbbe964.koyeb.app/products';
-  private uploadUrl = `https://ahmed-sabry-ffbbe964.koyeb.app/upload/image`;
+  private apiUrl = `${environment.API_URL}/products`;
+  private apiCategoriesUrl = `${environment.API_URL}/categories`;
+  private uploadUrl = `${environment.API_URL}/upload/image`;
 
   constructor(private http: HttpClient) {}
 
@@ -92,5 +94,10 @@ export class ProductsServicesService {
   // Delete product by ID
   deleteProduct(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+  // ####################################
+  //get categories
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiCategoriesUrl);
   }
 }

@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersService } from '../../../Services/users/users.service';
 import { OrdersService } from '../../../Services/orders.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { OrderStatus } from 'src/app/Models/order.model';
+import {
+  ProductsServicesService,
+  Product,
+} from '../../../Services/products-services.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,13 +21,10 @@ import { OrderStatus } from 'src/app/Models/order.model';
   standalone: true,
   imports: [CommonModule, NgxChartsModule],
   animations: [
-    trigger('fadeInUp', [
+    trigger('fadeIn', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate(
-          '0.4s ease-out',
-          style({ opacity: 1, transform: 'translateY(0)' })
-        ),
+        style({ opacity: 0 }),
+        animate('300ms', style({ opacity: 1 })),
       ]),
     ]),
   ],
@@ -28,6 +33,7 @@ export class DashboardComponent implements OnInit {
   // Statistics
   newUsersCount = 0;
   activeUsersCount = 0;
+  isVerifiedUsersCount = 0;
   sellersCount = 0;
   pendingOrdersCount = 0;
   completedOrdersCount = 0;
@@ -54,15 +60,44 @@ export class DashboardComponent implements OnInit {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
+  // Categories Data
+  categoriesData: any[] = [];
+  totalProducts = 232417; // مجموع كل المنتجات
+
+  categoriesChartData: any[] = [];
+
+  products: Product[] = [];
+  loading = false;
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
+  searchTerm = '';
+
+  displayedColumns: string[] = [
+    'image',
+    'name',
+    'price',
+    'stock',
+    'discount',
+    'brand',
+  ];
+  dataSourceProducts: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  // @ViewChild(MatPaginator) paginatorProducts: MatPaginator;
+  // @ViewChild(MatSort) sortProducts: MatSort;
+
   constructor(
     private usersService: UsersService,
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    private productsService: ProductsServicesService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.loadUsersData();
     this.loadOrdersData();
     this.generateRevenueData(); // Mock data for demonstration
+    this.loadCategoriesData();
+    this.loadProducts();
   }
 
   private loadUsersData() {
@@ -77,6 +112,9 @@ export class DashboardComponent implements OnInit {
           (user) => new Date(user.createdAt) >= lastMonth
         ).length;
         this.activeUsersCount = users.filter((user) => user.isActive).length;
+        this.isVerifiedUsersCount = users.filter(
+          (user) => user.isVerified
+        ).length;
         this.sellersCount = users.filter(
           (user) => user.role === 'seller'
         ).length;
@@ -109,11 +147,75 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private loadCategoriesData() {
+    this.productsService.getCategories().subscribe({
+      next: (categories) => {
+        // توزيع نسب عشوائية للتوضيح (يمكنك تعديلها حسب بياناتك الفعلية)
+        const percentages = [18, 22, 16, 16, 14, 15];
+
+        this.categoriesChartData = categories.map((category, index) => {
+          const percentage = percentages[index];
+          const total = Math.round((percentage / 100) * this.totalProducts);
+
+          return {
+            name: category.name.en,
+            value: percentage,
+            total: total.toLocaleString(),
+            percentage: `${percentage}%`,
+          };
+        });
+      },
+      error: (error) => console.error('Error loading categories:', error),
+    });
+  }
+
+  private loadProducts() {
+    this.loading = true;
+    this.productsService.getProducts().subscribe({
+      next: (response) => {
+        console.log('response products >>>>>>', response);
+        this.products = response;
+        this.totalItems = response.length;
+        this.loading = false;
+        this.dataSourceProducts = new MatTableDataSource(response);
+        // this.dataSourceProducts.paginator = this.paginatorProducts;
+        // this.dataSourceProducts.sort = this.sortProducts;
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.loading = false;
+      },
+    });
+  }
+
+  // Calculate percentage
+  calculatePercentage(value: number): number {
+    const total = this.usersPieData.reduce((sum, item) => sum + item.value, 0);
+    return Math.round((value / total) * 100);
+  }
+
   private updateUsersPieChart() {
     this.usersPieData = [
-      { name: 'New Users', value: this.newUsersCount },
-      { name: 'Active Users', value: this.activeUsersCount },
-      { name: 'Sellers', value: this.sellersCount },
+      {
+        name: 'New Users',
+        value: this.newUsersCount,
+        icon: 'fa-user-plus',
+      },
+      {
+        name: 'Active Users',
+        value: this.activeUsersCount,
+        icon: 'fa-user-check',
+      },
+      {
+        name: 'Sellers',
+        value: this.sellersCount,
+        icon: 'fa-store',
+      },
+      {
+        name: 'Verified Users',
+        value: this.isVerifiedUsersCount,
+        icon: 'fa-user',
+      },
     ];
   }
 
