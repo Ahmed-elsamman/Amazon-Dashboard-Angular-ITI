@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditProductModalComponent } from '../edit-product-modal/edit-product-modal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { UsersService } from 'src/app/Services/users/users.service';
+import { CreateProductModalComponent } from '../create-product-modal/create-product-modal.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-products-component',
@@ -21,6 +23,8 @@ import { UsersService } from 'src/app/Services/users/users.service';
     MatIconModule,
     MatButtonModule,
     MatPaginator,
+    CreateProductModalComponent,
+    EditProductModalComponent,
   ],
   templateUrl: './products-component.component.html',
   styleUrls: ['./products-component.component.css'],
@@ -30,6 +34,7 @@ export class ProductsComponentComponent implements OnInit {
   totalCount: number = 0;
   page: number = 1;
   limit: number = 10;
+
   displayedColumns: string[] = [
     'image',
     'name',
@@ -77,7 +82,18 @@ export class ProductsComponentComponent implements OnInit {
       }
     });
   }
-  openAddProductModal() {}
+  openCreateProductModal(): void {
+    const dialogRef = this.dialog.open(CreateProductModalComponent, {
+      width: '700px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.fetchProducts();
+      }
+    });
+  }
+
   onPageChange(event: any): void {
     this.page = event.pageIndex + 1; // Angular Material pageIndex is zero-based
     this.fetchProducts();
@@ -98,13 +114,22 @@ export class ProductsComponentComponent implements OnInit {
   }
 
   deleteProduct(id: string): void {
-    this.productsService.deleteProduct(id).subscribe({
-      next: () => {
-        this.products = this.products.filter((p) => p._id !== id);
-      },
-      error: (err) => {
-        console.error('Error deleting product:', err); // التعامل مع الأخطاء
-      },
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '600px',
+      data: { message: 'هل أنت متأكد أنك تريد حذف هذا المنتج؟' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.productsService.deleteProduct(id).subscribe({
+          next: () => {
+            this.products = this.products.filter((p) => p._id !== id);
+          },
+          error: (err) => {
+            console.error('Error deleting product:', err);
+          },
+        });
+      }
     });
   }
 }

@@ -1,0 +1,32 @@
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input, textarea, button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}

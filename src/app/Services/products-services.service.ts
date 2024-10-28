@@ -76,14 +76,14 @@ export class ProductsServicesService {
   }
 
   // Add new product
-  addProduct(product: Product): Observable<Product> {
+  addProduct(product: any): Observable<Product> {
     return this.http.post<Product>(this.apiUrl, product, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
   // Update product
-  updateProduct(id: string, productData: UpdateProduct): Observable<Product> {
+  updateProduct(id: string, productData: any): Observable<Product> {
     return this.http.put<Product>(`${this.apiUrl}/${id}`, productData, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });

@@ -11,6 +11,7 @@ import {
   Product,
   UpdateProduct,
 } from 'src/app/Services/products-services.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-product-modal',
@@ -27,13 +28,16 @@ import {
   ],
 })
 export class EditProductModalComponent {
-  product: UpdateProduct;
+  product: any;
   selectedFile: File | null = null;
+  private api_url: string =
+    'https://ahmed-sabry-ffbbe964.koyeb.app/upload/image';
 
   constructor(
     public dialogRef: MatDialogRef<EditProductModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product,
     private productsService: ProductsServicesService,
+    private http: HttpClient
   ) {
     this.product = {
       name: data.name || { en: '', ar: '' },
@@ -43,6 +47,7 @@ export class EditProductModalComponent {
       brand: data.brand || '',
       imageUrls: data.imageUrls.length > 0 ? [...data.imageUrls] : [''],
       stock: data.stock,
+      _id: data._id,
     };
   }
 
@@ -50,16 +55,32 @@ export class EditProductModalComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.uploadImage(this.selectedFile);
     }
   }
 
-  updateProduct(): void {
+  uploadImage(file: File): void {
+    const formData = new FormData();
+    formData.append('file', file);
 
+    this.http.post<{ url: string }>(this.api_url, formData).subscribe(
+      (response) => {
+        this.product.imageUrls.push(response.url); // Add the new image URL to the product's imageUrls
+      },
+      (error) => {
+        console.error('Image upload failed', error);
+      }
+    );
   }
 
-  private submitProductUpdate(): void {
-    const updatedProduct = { ...this.product };
+  deleteImage(index: number): void {
+    this.product.imageUrls.splice(index, 1); // Remove the image from the array
+  }
 
+  updateProduct(): void {
+    // Create a copy of the product to avoid mutating the original data
+    const updatedProduct = { ...this.product };
+    delete updatedProduct._id;
     // Remove any unnecessary ID fields before sending
     if (updatedProduct.name && '_id' in updatedProduct.name) {
       delete updatedProduct.name._id;
@@ -69,7 +90,7 @@ export class EditProductModalComponent {
     }
 
     this.productsService
-      .updateProduct(this.data._id, updatedProduct)
+      .updateProduct(this.product._id, updatedProduct)
       .subscribe({
         next: () => {
           this.dialogRef.close(true);

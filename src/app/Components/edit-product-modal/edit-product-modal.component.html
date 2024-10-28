@@ -37,55 +37,19 @@
     </div>
 
     <div class="form-row">
-      <mat-form-field
-        appearance="fill"
-        class="full-width"
-        *ngIf="product.description"
-      >
-        <mat-label>Description (EN)</mat-label>
-        <textarea
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Stock</mat-label>
+        <input
           matInput
-          [(ngModel)]="product.description.en"
-          name="descriptionEn"
-        ></textarea>
-      </mat-form-field>
-
-      <mat-form-field
-        appearance="fill"
-        class="full-width"
-        *ngIf="product.description"
-      >
-        <mat-label>Description (AR)</mat-label>
-        <textarea
-          matInput
-          [(ngModel)]="product.description.ar"
-          name="descriptionAr"
-        ></textarea>
+          type="number"
+          [(ngModel)]="product.stock"
+          name="stock"
+          required
+        />
       </mat-form-field>
     </div>
 
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Brand</mat-label>
-      <input matInput [(ngModel)]="product.brand" name="brand" />
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Image URL</mat-label>
-      <input matInput [(ngModel)]="product.imageUrls[0]" name="imageUrl" />
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Stock</mat-label>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="product.stock"
-        name="stock"
-        required
-      />
-    </mat-form-field>
-
-    <div class="form-group">
+    <div class="form-row">
       <label for="imageUpload">Upload Product Image</label>
       <input
         type="file"
@@ -96,6 +60,22 @@
       />
     </div>
 
+    <div class="form-group mb-3">
+      <h5>Uploaded Images</h5>
+      <ul>
+        <li *ngFor="let url of product.imageUrls; let i = index">
+          <img
+            [src]="url"
+            alt="Product Image"
+            class="product-image"
+            width="50px"
+          />
+          <button mat-button color="warn" (click)="deleteImage(i)">
+            Delete
+          </button>
+        </li>
+      </ul>
+    </div>
   </form>
 </mat-dialog-content>
 
