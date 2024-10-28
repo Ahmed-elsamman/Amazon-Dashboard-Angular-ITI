@@ -9,7 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   ProductsServicesService,
   Product,
+  UpdateProduct,
 } from 'src/app/Services/products-services.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-product-modal',
@@ -26,29 +28,80 @@ import {
   ],
 })
 export class EditProductModalComponent {
-  product: Product;
+  product: any;
+  selectedFile: File | null = null;
+  private api_url: string =
+    'https://ahmed-sabry-ffbbe964.koyeb.app/upload/image';
 
   constructor(
     public dialogRef: MatDialogRef<EditProductModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product,
-    private productsService: ProductsServicesService
+    private productsService: ProductsServicesService,
+    private http: HttpClient
   ) {
-    this.product = { ...data }; // Create a copy of the product data to edit
+    this.product = {
+      name: data.name || { en: '', ar: '' },
+      price: data.price,
+      discounts: data.discounts || 0,
+      description: data.description || { en: '', ar: '' },
+      brand: data.brand || '',
+      imageUrls: data.imageUrls.length > 0 ? [...data.imageUrls] : [''],
+      stock: data.stock,
+      _id: data._id,
+    };
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.uploadImage(this.selectedFile);
+    }
+  }
+
+  uploadImage(file: File): void {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post<{ url: string }>(this.api_url, formData).subscribe(
+      (response) => {
+        this.product.imageUrls.push(response.url); // Add the new image URL to the product's imageUrls
+      },
+      (error) => {
+        console.error('Image upload failed', error);
+      }
+    );
+  }
+
+  deleteImage(index: number): void {
+    this.product.imageUrls.splice(index, 1); // Remove the image from the array
   }
 
   updateProduct(): void {
-    this.productsService.updateProduct(this.product).subscribe({
-      next: () => {
-        this.dialogRef.close(true); // Return true to indicate successful update
-      },
-      error: (err) => {
-        console.error('Error updating product:', err);
-        // Optionally handle errors here, e.g., show an alert
-      },
-    });
+    // Create a copy of the product to avoid mutating the original data
+    const updatedProduct = { ...this.product };
+    delete updatedProduct._id;
+    // Remove any unnecessary ID fields before sending
+    if (updatedProduct.name && '_id' in updatedProduct.name) {
+      delete updatedProduct.name._id;
+    }
+    if (updatedProduct.description && '_id' in updatedProduct.description) {
+      delete updatedProduct.description._id;
+    }
+
+    this.productsService
+      .updateProduct(this.product._id, updatedProduct)
+      .subscribe({
+        next: () => {
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          console.error('Error updating product:', err);
+        },
+      });
   }
 
   onNoClick(): void {
-    this.dialogRef.close(); // Close dialog without saving changes
+    this.dialogRef.close();
   }
 }

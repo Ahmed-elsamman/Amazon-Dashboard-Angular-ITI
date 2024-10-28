@@ -1,0 +1,103 @@
+<div class="modal-dialog">
+  <div class="modal-content p-4">
+    <h2 mat-dialog-title class="my-4 text-center">Create Product</h2>
+
+    <button
+      mat-button
+      color="warn"
+      mat-dialog-close
+      (click)="onClose()"
+      class="position-absolute end-0 top-0 m-3"
+    >
+      Close
+    </button>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <!-- Subcategory Selector -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Subcategory</mat-label>
+        <mat-select formControlName="subcategoryId">
+          <mat-option
+            *ngFor="let subcategory of subCategoriesIDs | keyvalue"
+            [value]="subcategory.value"
+          >
+            {{ subcategory.key }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Name (English) -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Name (English)</mat-label>
+        <input matInput formControlName="nameEn" type="text" />
+      </mat-form-field>
+
+      <!-- Name (Arabic) -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Name (Arabic)</mat-label>
+        <input matInput formControlName="nameAr" type="text" />
+      </mat-form-field>
+
+      <!-- Price -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Price</mat-label>
+        <input matInput formControlName="price" type="number" />
+      </mat-form-field>
+
+      <!-- Stock -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Stock</mat-label>
+        <input matInput formControlName="stock" type="number" />
+      </mat-form-field>
+
+      <!-- Brand -->
+      <mat-form-field appearance="fill" class="full-width mb-3">
+        <mat-label>Brand</mat-label>
+        <input matInput formControlName="brand" type="text" />
+      </mat-form-field>
+
+      <!-- Description (English) -->
+      <mat-form-field appearance="fill" class="mb-3">
+        <mat-label>Description (English)</mat-label>
+        <textarea matInput formControlName="descriptionEn"></textarea>
+      </mat-form-field>
+
+      <!-- Description (Arabic) -->
+      <mat-form-field appearance="fill" class="ml-auto mb-3">
+        <mat-label>Description (Arabic)</mat-label>
+        <textarea matInput formControlName="descriptionAr"></textarea>
+      </mat-form-field>
+
+      <!-- Image Upload Section -->
+      <div class="form-group mb-3">
+        <label for="imageUpload">Upload Images:</label>
+        <input
+          type="file"
+          id="imageUpload"
+          class="form-control"
+          (change)="onFileSelected($event)"
+        />
+      </div>
+
+      <!-- Display uploaded image URLs -->
+      <div *ngIf="imageUrls.length > 0" class="mb-3">
+        <h5>Uploaded Images</h5>
+        <ul>
+          <li *ngFor="let url of imageUrls">{{ url }}</li>
+        </ul>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="d-flex justify-content-end mt-4">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!productForm.valid"
+        >
+          Create Product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

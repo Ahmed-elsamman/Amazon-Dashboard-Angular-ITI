@@ -1,31 +1,92 @@
-<h2 mat-dialog-title>Edit Product</h2>
-<mat-dialog-content>
-  <form>
-    <mat-form-field appearance="fill">
-      <mat-label>Product Name</mat-label>
-      <input matInput [(ngModel)]="product.name.en" name="name" required />
-    </mat-form-field>
+<h2 mat-dialog-title class="dialog-title">Edit Product</h2>
+<mat-dialog-content class="dialog-content">
+  <form class="dialog-form">
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Product Name (EN)</mat-label>
+        <input matInput [(ngModel)]="product.name.en" name="nameEn" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Price</mat-label>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Product Name (AR)</mat-label>
+        <input matInput [(ngModel)]="product.name.ar" name="nameAr" required />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.price"
+          name="price"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Discounts</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.discounts"
+          name="discounts"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Stock</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.stock"
+          name="stock"
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <label for="imageUpload">Upload Product Image</label>
       <input
-        matInput
-        type="number"
-        [(ngModel)]="product.price"
-        name="price"
-        required
+        type="file"
+        id="imageUpload"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        class="form-control"
       />
-    </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Image URL</mat-label>
-      <input matInput [(ngModel)]="product.imageUrls[0]" name="imageUrl" />
-    </mat-form-field>
-
-    <!-- Add more fields as needed -->
+    <div class="form-group mb-3">
+      <h5>Uploaded Images</h5>
+      <ul>
+        <li *ngFor="let url of product.imageUrls; let i = index">
+          <img
+            [src]="url"
+            alt="Product Image"
+            class="product-image"
+            width="50px"
+          />
+          <button mat-button color="warn" (click)="deleteImage(i)">
+            Delete
+          </button>
+        </li>
+      </ul>
+    </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions>
+
+<mat-dialog-actions align="end">
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="updateProduct()" cdkFocusInitial>Save</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="updateProduct()"
+    cdkFocusInitial
+  >
+    Save
+  </button>
 </mat-dialog-actions>

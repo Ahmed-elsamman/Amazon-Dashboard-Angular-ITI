@@ -1,0 +1,39 @@
+.dialog-content {
+  width: 700px;
+  max-width: 90vw;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: calc(50% - 0.5rem);
+}
+
+mat-dialog-content {
+  padding-bottom: 1rem;
+}
+
+mat-dialog-actions {
+  padding-top: 1rem;
+}
+
+button[mat-flat-button] {
+  font-weight: bold;
+}
+
+mat-dialog-actions button {
+  margin-left: 0.5rem;
+}

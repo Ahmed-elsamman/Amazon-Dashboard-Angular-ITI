@@ -13,7 +13,6 @@ export const authInterceptor = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const token = localStorage.getItem('token');
-  console.log('Intercepted request:', req);
 
   // Exclude requests to /login
   if (req.url.includes('/login')) {
@@ -23,10 +22,7 @@ export const authInterceptor = (
   // Add token to the headers for all other requests
   const clonedRequest = token
     ? req.clone({
-        headers: req.headers
-          .set('Authorization', `${token}`)
-          .set('Accept', 'application/json')
-          .set('Content-Type', 'application/json'),
+        headers: req.headers.set('Authorization', `${token}`),
       })
     : req;
 
