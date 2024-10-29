@@ -1,18 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsersService } from '../../../Services/users/users.service';
-import { OrdersService } from '../../../Services/orders.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { OrderStatus } from 'src/app/Models/order.model';
-import {
-  ProductsServicesService,
-  Product,
-} from '../../../Services/products-services.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { UsersService } from 'src/app/Services/users/users.service';
+import { OrdersService } from 'src/app/Services/orders.service';
+import { ProductsServicesService } from 'src/app/Services/products-services.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,217 +14,166 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: true,
   imports: [CommonModule, NgxChartsModule],
   animations: [
-    trigger('fadeIn', [
+    trigger('fadeInUp', [
       transition(':enter', [
-        style({ opacity: 0 }),
-        animate('300ms', style({ opacity: 1 })),
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '300ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
+    trigger('cardAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.95)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
       ]),
     ]),
   ],
 })
 export class DashboardComponent implements OnInit {
   // Statistics
-  newUsersCount = 0;
-  activeUsersCount = 0;
-  isVerifiedUsersCount = 0;
-  sellersCount = 0;
-  pendingOrdersCount = 0;
-  completedOrdersCount = 0;
-  processingOrdersCount = 0;
-  shippedOrdersCount = 0;
-  cancelledOrdersCount = 0;
-
-  // Charts Data
-  usersPieData: any[] = [];
-  ordersBarData: any[] = [];
-  revenueLineData: any[] = [];
+  statistics = {
+    users: {
+      new: 0,
+      active: 0,
+      verified: 0,
+      sellers: 0,
+    },
+    orders: {
+      pending: 0,
+      shipped: 0,
+      completed: 0,
+      cancelled: 0,
+    },
+  };
 
   // Chart Options
-  showXAxis = true;
-  showYAxis = true;
-  gradient = true;
-  showLegend = true;
-  showXAxisLabel = true;
-  showYAxisLabel = true;
-  timeline = true;
-
-  // Custom color schemes
+  chartOptions = {
+    view: undefined as any, // سيتم تحديثه تلقائياً
+    showXAxis: true,
+    showYAxis: true,
+    gradient: true,
+    showLegend: true,
+    showXAxisLabel: true,
+    showYAxisLabel: true,
+    timeline: true,
+    autoScale: true,
+    roundDomains: true,
+    animations: true,
+    legendPosition: 'right',
+    responsive: true,
+  };
   colorScheme: any = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
-  // Categories Data
-  categoriesData: any[] = [];
-  totalProducts = 232417; // مجموع كل المنتجات
-
+  // Chart Data
+  usersPieData: any[] = [];
+  ordersBarData: any[] = [];
+  revenueLineData: any[] = [];
   categoriesChartData: any[] = [];
-
-  products: Product[] = [];
-  loading = false;
-  currentPage = 1;
-  itemsPerPage = 10;
-  totalItems = 0;
-  searchTerm = '';
-
-  displayedColumns: string[] = [
-    'image',
-    'name',
-    'price',
-    'stock',
-    'discount',
-    'brand',
-  ];
-  dataSourceProducts: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  // @ViewChild(MatPaginator) paginatorProducts: MatPaginator;
-  // @ViewChild(MatSort) sortProducts: MatSort;
 
   constructor(
     private usersService: UsersService,
     private ordersService: OrdersService,
-    private productsService: ProductsServicesService,
-    private dialog: MatDialog
+    private productsService: ProductsServicesService
   ) {}
 
   ngOnInit(): void {
-    this.loadUsersData();
-    this.loadOrdersData();
-    this.generateRevenueData(); // Mock data for demonstration
-    this.loadCategoriesData();
-    this.loadProducts();
+    this.loadDashboardData();
+  }
+  // إضافة دالة لتحديث حجم المخططات
+  @HostListener('window:resize')
+  onResize() {
+    this.updateChartDimensions();
   }
 
-  private loadUsersData() {
-    this.usersService.getAllUsers().subscribe({
-      next: (users) => {
-        const currentDate = new Date();
-        const lastMonth = new Date(
-          currentDate.setMonth(currentDate.getMonth() - 1)
-        );
-
-        this.newUsersCount = users.filter(
-          (user) => new Date(user.createdAt) >= lastMonth
-        ).length;
-        this.activeUsersCount = users.filter((user) => user.isActive).length;
-        this.isVerifiedUsersCount = users.filter(
-          (user) => user.isVerified
-        ).length;
-        this.sellersCount = users.filter(
-          (user) => user.role === 'seller'
-        ).length;
-
-        this.updateUsersPieChart();
-      },
-      error: (error) => console.error('Error loading users:', error),
+  private updateChartDimensions() {
+    const chartElements = document.querySelectorAll('.chart-card');
+    chartElements.forEach((element) => {
+      const width = element.clientWidth;
+      const height = element.clientHeight;
+      this.chartOptions.view = [width, height];
     });
   }
-
-  private loadOrdersData() {
-    this.ordersService.getUserOrders().subscribe({
-      next: (orders) => {
-        this.pendingOrdersCount = orders.filter(
-          (order) => order.orderStatus === OrderStatus.PENDING
-        ).length;
-        this.shippedOrdersCount = orders.filter(
-          (order) => order.orderStatus === OrderStatus.SHIPPED
-        ).length;
-        this.completedOrdersCount = orders.filter(
-          (order) => order.orderStatus === OrderStatus.COMPLETED
-        ).length;
-        this.cancelledOrdersCount = orders.filter(
-          (order) => order.orderStatus === OrderStatus.CANCELLED
-        ).length;
-
-        this.updateOrdersBarChart();
-      },
-      error: (error) => console.error('Error loading orders:', error),
-    });
+  ngAfterViewInit() {
+    this.updateChartDimensions();
   }
 
-  private loadCategoriesData() {
-    this.productsService.getCategories().subscribe({
-      next: (categories) => {
-        // توزيع نسب عشوائية للتوضيح (يمكنك تعديلها حسب بياناتك الفعلية)
-        const percentages = [18, 22, 16, 16, 14, 15];
-
-        this.categoriesChartData = categories.map((category, index) => {
-          const percentage = percentages[index];
-          const total = Math.round((percentage / 100) * this.totalProducts);
-
-          return {
-            name: category.name.en,
-            value: percentage,
-            total: total.toLocaleString(),
-            percentage: `${percentage}%`,
-          };
-        });
-      },
-      error: (error) => console.error('Error loading categories:', error),
-    });
+  private async loadDashboardData() {
+    try {
+      await Promise.all([
+        this.loadUsersData(),
+        this.loadOrdersData(),
+        this.loadCategoriesData(),
+        this.generateRevenueData(),
+      ]);
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    }
   }
 
-  private loadProducts() {
-    this.loading = true;
-    this.productsService.getProducts().subscribe({
-      next: (response) => {
-        console.log('response products >>>>>>', response);
-        this.products = response;
-        this.totalItems = response.length;
-        this.loading = false;
-        this.dataSourceProducts = new MatTableDataSource(response);
-        // this.dataSourceProducts.paginator = this.paginatorProducts;
-        // this.dataSourceProducts.sort = this.sortProducts;
-      },
-      error: (error) => {
-        console.error('Error loading products:', error);
-        this.loading = false;
-      },
-    });
+  private async loadUsersData() {
+    const users = await this.usersService.getAllUsers().toPromise();
+    const currentDate = new Date();
+    const lastMonth = new Date(
+      currentDate.setMonth(currentDate.getMonth() - 1)
+    );
+
+    this.statistics.users = {
+      new:
+        users?.filter((user) => new Date(user.createdAt) >= lastMonth).length ||
+        0,
+      active: users?.filter((user) => user.isActive).length || 0,
+      verified: users?.filter((user) => user.isVerified).length || 0,
+      sellers: users?.filter((user) => user.role === 'seller').length || 0,
+    };
+
+    this.updateUsersPieChart();
   }
 
-  // Calculate percentage
-  calculatePercentage(value: number): number {
-    const total = this.usersPieData.reduce((sum, item) => sum + item.value, 0);
-    return Math.round((value / total) * 100);
+  private async loadOrdersData() {
+    const orders = await this.ordersService.getUserOrders().toPromise();
+
+    this.statistics.orders = {
+      pending:
+        orders?.filter((order) => order.orderStatus === OrderStatus.PENDING)
+          .length || 0,
+      shipped:
+        orders?.filter((order) => order.orderStatus === OrderStatus.SHIPPED)
+          .length || 0,
+      completed:
+        orders?.filter((order) => order.orderStatus === OrderStatus.COMPLETED)
+          .length || 0,
+      cancelled:
+        orders?.filter((order) => order.orderStatus === OrderStatus.CANCELLED)
+          .length || 0,
+    };
+
+    this.updateOrdersBarChart();
   }
 
   private updateUsersPieChart() {
     this.usersPieData = [
-      {
-        name: 'New Users',
-        value: this.newUsersCount,
-        icon: 'fa-user-plus',
-      },
-      {
-        name: 'Active Users',
-        value: this.activeUsersCount,
-        icon: 'fa-user-check',
-      },
-      {
-        name: 'Sellers',
-        value: this.sellersCount,
-        icon: 'fa-store',
-      },
-      {
-        name: 'Verified Users',
-        value: this.isVerifiedUsersCount,
-        icon: 'fa-user',
-      },
+      { name: 'New Users', value: this.statistics.users.new },
+      { name: 'Active Users', value: this.statistics.users.active },
+      { name: 'Verified Users', value: this.statistics.users.verified },
+      { name: 'Sellers', value: this.statistics.users.sellers },
     ];
   }
 
   private updateOrdersBarChart() {
     this.ordersBarData = [
-      { name: 'Pending', value: this.pendingOrdersCount },
-      { name: 'Shipped', value: this.shippedOrdersCount },
-      { name: 'Completed', value: this.completedOrdersCount },
-      { name: 'Cancelled', value: this.cancelledOrdersCount },
+      { name: 'Pending', value: this.statistics.orders.pending },
+      { name: 'Shipped', value: this.statistics.orders.shipped },
+      { name: 'Completed', value: this.statistics.orders.completed },
+      { name: 'Cancelled', value: this.statistics.orders.cancelled },
     ];
   }
 
   private generateRevenueData() {
-    // Mock data for revenue line chart
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-
     this.revenueLineData = [
       {
         name: 'Revenue',
@@ -240,13 +182,33 @@ export class DashboardComponent implements OnInit {
           value: Math.floor(Math.random() * 50000) + 10000,
         })),
       },
-      {
-        name: 'Profit',
-        series: months.map((month) => ({
-          name: month,
-          value: Math.floor(Math.random() * 25000) + 5000,
-        })),
-      },
     ];
   }
+
+  calculatePercentage(value: number): number {
+    const total = this.usersPieData.reduce((sum, item) => sum + item.value, 0);
+    return Math.round((value / total) * 100);
+  }
+  // ... existing code ...
+
+  private async loadCategoriesData() {
+    try {
+      const products = await this.productsService.getCategories().toPromise();
+      const categories = products?.reduce((acc: any, product: any) => {
+        acc[product.category] = (acc[product.category] || 0) + 1;
+        return acc;
+      }, {});
+
+      this.categoriesChartData = Object.entries(categories || {}).map(
+        ([name, value]) => ({
+          name,
+          value,
+        })
+      );
+    } catch (error) {
+      console.error('Error loading categories data:', error);
+    }
+  }
+
+  // ... existing code ...
 }

@@ -7,8 +7,7 @@ import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { userGuard } from './Guard/user.guard';
 import { ProductsComponentComponent } from './Components/products-component/products-component.component';
 import { CustomersComponent } from './Components/users/customers/customers.component';
-import { DispalyOfTableComponent } from './Components/dispaly-of-table/dispaly-of-table.component';
-import { SellersComponent } from './Components/users/sellers/sellers.component';
+
 import { OrdersComponent } from './Components/Orders/orders/orders.component';
 
 export const routes: Routes = [
@@ -30,11 +29,11 @@ export const routes: Routes = [
     title: 'statistics',
     canActivate: [userGuard],
   },
-  {
-    path: 'test',
-    component: DispalyOfTableComponent,
-    title: 'test',
-  },
+  // {
+  //   path: 'test',
+  //   component: ,
+  //   title: 'test',
+  // },
 
   {
     path: 'media',
@@ -57,12 +56,12 @@ export const routes: Routes = [
     title: 'Customers', // عنوان الصفحة
     canActivate: [userGuard], // إذا كان هناك حاجة للحماية
   },
-  {
-    path: 'users/sellers', // هذا هو المسار الجديد
-    component: SellersComponent, // استخدم المكون الجديد هنا
-    title: 'Sellers', // عنوان الصفحة
-    canActivate: [userGuard], // إذا كان هناك حاجة للحماية
-  },
+  // {
+  //   path: 'users/sellers', // هذا هو المسار الجديد
+  //   component: SellersComponent, // استخدم المكون الجديد هنا
+  //   title: 'Sellers', // عنوان الصفحة
+  //   canActivate: [userGuard], // إذا كان هناك حاجة للحماية
+  // },
   {
     path: 'orders',
     component: OrdersComponent,

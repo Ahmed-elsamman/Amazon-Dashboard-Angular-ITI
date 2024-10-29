@@ -1,7 +1,7 @@
 <div class="dashboard-wrapper" [@fadeInUp]>
   <h1>Dashboard Overview</h1>
 
-  <!-- Statistics Cards -->
+  <!-- Users Section -->
   <div class="section users-section">
     <h2>Users Overview</h2>
 
@@ -9,7 +9,7 @@
       <div class="info-card new-users" [@cardAnimation]>
         <i class="fas fa-user-plus"></i>
         <div class="card-content">
-          <h3>{{ newUsersCount }}</h3>
+          <h3>{{ statistics.users.new }}</h3>
           <p>New Users (Last Month)</p>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <div class="info-card active-users" [@cardAnimation]>
         <i class="fas fa-user-check"></i>
         <div class="card-content">
-          <h3>{{ activeUsersCount }}</h3>
+          <h3>{{ statistics.users.active }}</h3>
           <p>Active Users</p>
         </div>
       </div>
@@ -25,19 +25,19 @@
       <div class="info-card sellers" [@cardAnimation]>
         <i class="fas fa-store"></i>
         <div class="card-content">
-          <h3>{{ sellersCount }}</h3>
+          <h3>{{ statistics.users.sellers }}</h3>
           <p>Sellers</p>
         </div>
       </div>
     </div>
     <div class="section orders-section">
-      <!-- Charts Section -->
+      <!-- Charts Users Section -->
       <div class="charts-grid">
         <div class="chart-card">
           <h2>User Distribution</h2>
           <ngx-charts-pie-chart
             [results]="usersPieData"
-            [gradient]="gradient"
+            [gradient]="chartOptions.gradient"
             [animations]="true"
             [scheme]="colorScheme"
             [doughnut]="true"
@@ -63,13 +63,14 @@
           </ngx-charts-pie-chart>
         </div>
 
+        <!-- Orders Section -->
         <h2>Orders Overview</h2>
 
         <div class="cards-container">
           <div class="info-card pending-orders" [@cardAnimation]>
             <i class="fas fa-clock"></i>
             <div class="card-content">
-              <h3>{{ pendingOrdersCount }}</h3>
+              <h3>{{ statistics.orders.pending }}</h3>
               <p>Pending Orders</p>
             </div>
           </div>
@@ -77,7 +78,7 @@
           <div class="info-card processing-orders" [@cardAnimation]>
             <i class="fas fa-cogs"></i>
             <div class="card-content">
-              <h3>{{ shippedOrdersCount }}</h3>
+              <h3>{{ statistics.orders.shipped }}</h3>
               <p>Shipped Orders</p>
             </div>
           </div>
@@ -85,7 +86,7 @@
           <div class="info-card completed-orders" [@cardAnimation]>
             <i class="fas fa-check-circle"></i>
             <div class="card-content">
-              <h3>{{ completedOrdersCount }}</h3>
+              <h3>{{ statistics.orders.completed }}</h3>
               <p>Completed Orders</p>
             </div>
           </div>
@@ -93,21 +94,21 @@
           <div class="info-card cancelled-orders" [@cardAnimation]>
             <i class="fas fa-times-circle"></i>
             <div class="card-content">
-              <h3>{{ cancelledOrdersCount }}</h3>
+              <h3>{{ statistics.orders.cancelled }}</h3>
               <p>Cancelled Orders</p>
             </div>
           </div>
         </div>
-
+        <!-- Orders Chart -->
         <div class="chart-card">
           <h2>Orders Status</h2>
           <ngx-charts-bar-vertical
             [results]="ordersBarData"
-            [gradient]="gradient"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [legend]="showLegend"
-            [showXAxisLabel]="showXAxisLabel"
+            [gradient]="chartOptions.gradient"
+            [xAxis]="chartOptions.showXAxis"
+            [yAxis]="chartOptions.showYAxis"
+            [legend]="chartOptions.showLegend"
+            [showXAxisLabel]="chartOptions.showXAxisLabel"
             [scheme]="colorScheme"
           >
           </ngx-charts-bar-vertical>
@@ -117,17 +118,19 @@
           <h2>Analytics Orders (Last 6 Months completed Or Cancelled)</h2>
           <ngx-charts-line-chart
             [results]="revenueLineData"
-            [gradient]="gradient"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [legend]="showLegend"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [timeline]="timeline"
+            [gradient]="chartOptions.gradient"
+            [xAxis]="chartOptions.showXAxis"
+            [yAxis]="chartOptions.showYAxis"
+            [legend]="chartOptions.showLegend"
+            [showXAxisLabel]="chartOptions.showXAxisLabel"
+            [showYAxisLabel]="chartOptions.showYAxisLabel"
+            [timeline]="chartOptions.timeline"
             [scheme]="colorScheme"
           >
           </ngx-charts-line-chart>
         </div>
+
+        <!-- Categories Chart -->
 
         <h2>Categories Overview</h2>
         <div class="categories-grid">
