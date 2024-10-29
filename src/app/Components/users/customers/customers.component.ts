@@ -23,6 +23,7 @@ import { UpdateUserComponent } from '../update-user/update-user.component';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { IUser, UserDisplay } from 'src/app/Models/iuser';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-customers',
@@ -41,6 +42,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     UpdateUserComponent,
     ViewUserComponent,
     NgxChartsModule,
+    FormsModule,
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',

@@ -37,3 +37,205 @@ mat-paginator {
   display: flex;
   justify-content: center;
 }
+
+/* إضافة أنماط جديدة للبحث */
+.search-container {
+  width: 100%;
+  margin-bottom: 2rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #ffd700;
+  background-color: #000;
+}
+.search-input {
+  width: 100%;
+  padding: 1.2rem 3rem 1.2rem 1.2rem;
+  font-size: 1.1rem;
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 215, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ffed4a;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.search-input::placeholder {
+  color: #888;
+  opacity: 0.8;
+}
+
+/* إضافة أيقونة البحث */
+.search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffd700;
+  transition: all 0.3s ease;
+}
+
+.search-container:hover .search-icon {
+  transform: translateY(-50%) scale(1.1);
+  color: #ffed4a;
+}
+
+/* تحسينات الاستجابة */
+@media (max-width: 1200px) {
+  .search-input {
+    padding: 1rem 2.8rem 1rem 1rem;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    padding: 0.9rem 2.5rem 0.9rem 0.9rem;
+    font-size: 1rem;
+  }
+
+  .search-container {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    padding: 0.8rem 2.2rem 0.8rem 0.8rem;
+    font-size: 0.9rem;
+    border-width: 1.5px;
+  }
+
+  .search-container {
+    margin-bottom: 1rem;
+  }
+}
+
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+
+.chart-wrapper {
+  width: 100%;
+  min-height: 400px;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.chart-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #ffffff;
+  background-color: #1a1a1a;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.actions-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1200px) {
+  .chart-wrapper {
+    min-height: 350px;
+  }
+
+  .chart-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .chart-wrapper {
+    min-height: 300px;
+  }
+
+  .charts-container {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mat-header-cell,
+  .mat-cell {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .product-image {
+    width: 35px;
+  }
+
+  .chart-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-header-cell,
+  .mat-cell {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+
+  .product-image {
+    width: 30px;
+  }
+
+  .mat-icon-button {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  .mat-icon {
+    font-size: 18px;
+  }
+}
+
+/* تحديث الجداول ليكونوا أكثر استجابة */
+.table-responsive-container {
+  margin: 1rem -15px;
+  padding: 0 15px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+table {
+  min-width: 800px;
+  width: 100%;
+}

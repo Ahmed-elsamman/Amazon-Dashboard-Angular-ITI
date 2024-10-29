@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -38,7 +44,7 @@ import { OrderStatus } from 'src/app/Models/order.model';
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
 })
-export class OrdersComponent implements OnInit, AfterViewInit {
+export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
     '_id',
     'userId',
@@ -65,6 +71,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   };
   view: [number, number] = [700, 700];
 
+  private resizeObserver!: ResizeObserver;
+
   constructor(
     private ordersService: OrdersService,
     private dialog: MatDialog,
@@ -78,10 +86,38 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.initializeChartSize();
+    this.setupResizeObserver();
+  }
+
+  private initializeChartSize() {
     const container = document.querySelector('.charts-container');
     if (container) {
-      this.containerWidth = container.clientWidth;
-      this.containerHeight = container.clientHeight - 40; // نقص 40 لارتفاع العنوان
+      this.updateChartDimensions(container as HTMLElement);
+    }
+  }
+
+  private setupResizeObserver() {
+    const container = document.querySelector('.charts-container');
+    if (container) {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          this.updateChartDimensions(entry.target as HTMLElement);
+        }
+      });
+      this.resizeObserver.observe(container);
+    }
+  }
+
+  private updateChartDimensions(container: HTMLElement) {
+    const padding = 40;
+    this.containerWidth = container.clientWidth - padding;
+    this.containerHeight = Math.min(container.clientHeight - padding, 500);
+  }
+
+  ngOnDestroy() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
     }
   }
 
