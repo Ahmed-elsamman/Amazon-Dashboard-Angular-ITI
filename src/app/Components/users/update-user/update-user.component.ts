@@ -42,7 +42,7 @@ interface UserData {
 })
 export class UpdateUserComponent {
   userForm: FormGroup;
-  roles = ['user', 'admin', 'seller'];
+  roles = ['user', 'admin'];
 
   constructor(
     private fb: FormBuilder,
