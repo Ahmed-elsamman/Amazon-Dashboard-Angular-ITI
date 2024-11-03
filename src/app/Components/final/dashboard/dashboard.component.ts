@@ -1,6 +1,6 @@
 import { ProductsService } from './../../../Services/products-services.service';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { OrderStatus } from 'src/app/Models/order.model';
@@ -12,7 +12,7 @@ import { OrdersService } from 'src/app/Services/orders.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, NgxChartsModule],
+  imports: [CommonModule, NgxChartsModule, NgClass],
   animations: [
     trigger('fadeInUp', [
       transition(':enter', [
