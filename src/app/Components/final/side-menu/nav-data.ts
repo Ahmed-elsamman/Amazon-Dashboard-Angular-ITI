@@ -1,68 +1,54 @@
-import { RouterLink } from "@angular/router";
-import { InavbarData } from "./helper";
+import { RouterLink } from '@angular/router';
+import { InavbarData } from './helper';
 
 export const navbarData: InavbarData[] = [
   {
     routeLink: 'dashboard',
-    icon: 'fal fa-home',
+    icon: 'fas fa-home',
     label: 'Dashboard',
   },
   {
     routeLink: 'products',
-    icon: 'fal fa-box-open',
+    icon: 'fas fa-box',
     label: 'Products',
-    items: [
-      {
-        routeLink: 'products/level1.1',
-        label: 'Level1.1',
-        // items: [
-        //   {
-        //     routeLink: 'products/level2.1',
-        //     label: 'Level2.1',
-        //   },
-        //   {
-        //     routeLink: 'products/level2.2',
-        //     label: 'Level2.2',
-        //     items: [
-        //       {
-        //         routeLink: 'products/level3.1',
-        //         label: 'Level3.1',
-        //       },
-        //       {
-        //         routeLink: 'products/level3.2',
-        //         label: 'Level3.2',
-        //       }
-        //     ]
-        //   }
-        // ],
-      },
-      {
-        routeLink: 'products/level1.2',
-        label: 'Level1.2',
-      },
-    ]
   },
   {
     routeLink: 'statistics',
-    icon: 'fal fa-chart-bar',
-    label: 'Statistics',
+    icon: 'fas fa-chart-bar',
+    label: 'Analytics Website',
   },
   {
-    routeLink: 'users/users',
-    icon: 'fal fa-users',
+    routeLink: 'users/customers',
+    icon: 'fas fa-users',
     label: 'Users',
-    expanded: false,
+    expanded: true,
+    defaultRoute: 'users/customers',
+    items: [
+      {
+        routeLink: 'users/customers',
+        label: 'Customers',
+      },
+      {
+        routeLink: 'users/sellers',
+        label: 'Sellers',
+      },
+    ],
+  },
+  {
+    routeLink: 'orders',
+    icon: 'fas fa-clipboard-list',
+    label: 'Orders',
   },
   {
     routeLink: 'media',
-    icon: 'fal fa-camera',
-    label: 'Media',
+    icon: 'fas fa-store',
+    label: 'Online Selling',
   },
   {
-    routeLink: 'settings',
-    icon: 'fal fa-cog',
+    routeLink: 'settings/profile',
+    icon: 'fas fa-sliders-h',
     label: 'Settings',
-    expanded: true,
+    expanded: false,
     items: [
       {
         routeLink: 'settings/profile',
@@ -72,7 +58,6 @@ export const navbarData: InavbarData[] = [
         routeLink: 'settings/customize',
         label: 'Customize',
       },
-
-    ]
+    ],
   },
-]
+];

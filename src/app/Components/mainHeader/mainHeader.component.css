@@ -1,0 +1,146 @@
+.kak-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.animated-header {
+  display: flex;
+  align-items: center;
+  background-color: #ff9900;
+  padding: 10px 20px;
+  border-radius: 8px;
+  animation: slideIn 1s ease-out;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user-name {
+  margin: 0;
+  font-size: clamp(18px, 4vw, 25px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.avatar {
+  width: clamp(40px, 8vw, 50px);
+  height: clamp(40px, 8vw, 50px);
+  margin-right: 15px;
+}
+
+.icons {
+  margin-left: auto;
+  display: flex;
+  gap: clamp(10px, 2vw, 20px);
+  flex-wrap: nowrap;
+}
+
+.icons i {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+
+  color: #fff;
+  margin-left: 15px;
+}
+
+.icons i:hover {
+  transform: scale(1.2);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.logout-button {
+  background-color: #ff9900; /* اللون الأصفر المستخدم في أمازون */
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  background-color: #553910;
+}
+
+.theme-toggle {
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-button i {
+  margin-left: 8px;
+  font-size: 16px;
+  color: #fff;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle {
+  margin: 0;
+}
+
+:host ::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
+  background: #553910;
+}
+
+:host ::ng-deep .mdc-switch:enabled:hover .mdc-switch__track::after {
+  background: #3e2523;
+}
+
+:host ::ng-deep .mdc-switch:enabled .mdc-switch__handle::after {
+  background: #ff9900;
+}
+
+@media screen and (max-width: 600px) {
+  .animated-header {
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .icons {
+    margin: 10px 0;
+    justify-content: center;
+    width: 100%;
+    order: 3;
+  }
+
+  .theme-toggle {
+    margin: 10px 0;
+    justify-content: center;
+    width: 100%;
+    order: 4;
+  }
+
+  .logout-button {
+    width: 100%;
+    margin: 10px 0;
+    order: 5;
+  }
+}

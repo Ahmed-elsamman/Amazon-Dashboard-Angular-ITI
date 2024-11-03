@@ -1,8 +1,8 @@
-@if (showHeader) {
-<app-header [collapsed]="isSidenav" [screenWidth]="screenWidth"></app-header>
-}
 <div class="main-container">
   <div class="main-container-content">
+    @if (showHeader) {
+    <app-mainHeader></app-mainHeader>
+    }
     <router-outlet></router-outlet>
   </div>
   @if (showHeader) {

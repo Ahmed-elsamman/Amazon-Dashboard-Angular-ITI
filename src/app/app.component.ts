@@ -1,15 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  NavigationEnd,
-  Router,
-  RouterModule,
-  RouterOutlet,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { HeaderComponent } from './Components/header/header.component';
 import { SideMenuComponent } from './Components/final/side-menu/side-menu.component';
-import { BodyComponent } from './Components/final/body/body.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +11,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from './Services/Auth/auth.service';
+import { MainHeaderComponent } from './Components/mainHeader/mainHeader.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -34,7 +30,6 @@ interface SideNavToggle {
     RouterOutlet,
     FormsModule,
     ReactiveFormsModule,
-    HeaderComponent,
     SideMenuComponent,
     NgxSpinnerModule,
     MatFormFieldModule,
@@ -44,20 +39,31 @@ interface SideNavToggle {
     MatNativeDateModule,
     MatButtonModule,
     MatDialogModule,
+    MainHeaderComponent,
+    MatSnackBarModule,
   ],
 })
 export class AppComponent implements OnInit {
-  title = 'Amazon';
+  title = 'Amazon Dashboard';
 
   showHeader = true;
 
-  constructor(private router: Router, private spinner: NgxSpinnerService) {
+  constructor(
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private authService: AuthService
+  ) {
+    // مراقبة حالة التوجيه
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url == '/login') {
+        const currentPath = val.urlAfterRedirects.split('/')[1];
+        if (['login', 'register'].includes(currentPath)) {
           this.showHeader = false;
         } else {
-          this.showHeader = true;
+          // هنا يجب أن تتحقق من حالة تسجيل الدخول
+          this.authService.isUserLoggedIn$.subscribe((isAuth) => {
+            this.showHeader = isAuth;
+          });
         }
       }
     });
@@ -74,7 +80,9 @@ export class AppComponent implements OnInit {
   isSidenav = false;
   screenWidth = 0;
   onToggleSideNav(data: SideNavToggle) {
-    this.screenWidth = data.screenWidth;
-    this.isSidenav = data.collapsed;
+    // this.screenWidth = data.screenWidth;
+    // this.isSidenav = data.collapsed;
+    this.screenWidth = 800;
+    this.isSidenav = true;
   }
 }

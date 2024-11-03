@@ -1,0 +1,44 @@
+.dialog-content {
+  width: 700px;
+  max-width: 90vw;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: calc(50% - 0.5rem);
+}
+
+mat-dialog-content {
+  padding-bottom: 1rem;
+}
+
+mat-dialog-actions {
+  padding-top: 1rem;
+  background-color: #e0e0e0;
+}
+
+button[mat-flat-button] {
+  font-weight: bold;
+  color: #333;
+}
+
+mat-dialog-actions button {
+  margin-left: 0.5rem;
+}

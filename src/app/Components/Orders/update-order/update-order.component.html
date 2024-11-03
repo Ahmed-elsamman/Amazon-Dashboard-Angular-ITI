@@ -1,0 +1,45 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title>تحديث حالة الطلب</h2>
+
+  <div mat-dialog-content>
+    <!-- عرض تفاصيل الطلب -->
+    <div class="order-details">
+      <p><strong>Order ID:</strong> {{ orderDetails._id }}</p>
+      <p><strong>User ID:</strong> {{ orderDetails.userId }}</p>
+      <p><strong>Total Price:</strong> {{ orderDetails.totalPrice }}</p>
+
+      <div class="items-list">
+        <h3>Products:</h3>
+        <ul>
+          <li *ngFor="let item of orderDetails.items">
+            {{ item.productId }} - Quantity: {{ item.quantity }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- نموذج تحديث الحالة -->
+    <form [formGroup]="orderForm">
+      <mat-form-field appearance="fill">
+        <mat-label>Order Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let status of orderStatuses" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="!orderForm.valid"
+    >
+      Save Changes
+    </button>
+  </div>
+</div>

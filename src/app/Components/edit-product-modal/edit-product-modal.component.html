@@ -1,0 +1,114 @@
+<h2 mat-dialog-title class="dialog-title" style="color: #333">Edit Product</h2>
+<mat-dialog-content class="dialog-content">
+  <form class="dialog-form">
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label style="color: #333">Product Name (EN)</mat-label>
+        <input matInput [(ngModel)]="product.name.en" name="nameEn" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label style="color: #333">Product Name (AR)</mat-label>
+        <input matInput [(ngModel)]="product.name.ar" name="nameAr" required />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.price"
+          name="price"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="half-width">
+        <mat-label>Discounts</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.discounts"
+          name="discounts"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Stock</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="product.stock"
+          name="stock"
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-checkbox
+        [(ngModel)]="product.isVerified"
+        name="isVerified"
+        color="primary"
+      >
+        Is Verified
+      </mat-checkbox>
+    </div>
+
+    <div class="form-row">
+      <label for="imageUpload" style="color: #333">Upload Product Image</label>
+      <input
+        type="file"
+        id="imageUpload"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group mb-3">
+      <h5 style="color: #333">Uploaded Images</h5>
+      <ul>
+        <li *ngFor="let url of product.imageUrls; let i = index">
+          <img
+            [src]="url"
+            alt="Product Image"
+            class="product-image"
+            width="50px"
+          />
+          <button mat-button color="warn" (click)="deleteImage(i)">
+            Delete
+          </button>
+        </li>
+      </ul>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    color="success"
+    (click)="updateProduct()"
+    cdkFocusInitial
+    style="background-color: yellow; color: black; margin-left: 10px"
+  >
+    Save
+  </button>
+  <button
+    mat-raised-button
+    color="cancel"
+    style="
+      color: rgb(255, 255, 255);
+      background-color: #eb1111;
+      margin-left: 10px;
+    "
+    (click)="onNoClick()"
+  >
+    Cancel
+  </button>
+</mat-dialog-actions>

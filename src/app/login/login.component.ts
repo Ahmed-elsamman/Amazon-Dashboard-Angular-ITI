@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../Services/aut-service.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../Services/Auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,41 +15,41 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
-  isUserLogged: boolean = false;
-  user: boolean = true;
+  isLoading: boolean = false;
 
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private toastr = inject(ToastrService);
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.isUserLogged = this.authService.isUserLogged;
+    this.authService.isUserLoggedIn$.subscribe((isAuth: boolean) => {
+      if (isAuth) {
+        this.router.navigate(['/dashboard']);
+      }
+    });
   }
 
-  login(): void {
-    this.authService
-      .signInWithEmailAndPassword(this.email, this.password)
-      .then(() => {
-        this.toastr.success('نجاح', 'تم تسجيل الدخول بنجاح');
-        this.router.navigate(['dashboard']);
-      })
-      .catch((error) => {
-        console.error('خطأ في تسجيل الدخول:', error);
-        this.toastr.error('فشل', 'فشل تسجيل الدخول');
-      });
-    this.isUserLogged = this.authService.isUserLogged;
-  }
+  onLogin(): void {
+    if (!this.email || !this.password) {
+      this.toastr.error('Please enter your email and password');
+      return;
+    }
 
-  logout(): void {
-    this.authService
-      .signOut()
-      .then(() => {
-        this.toastr.success('نجاح', 'تم تسجيل الخروج بنجاح');
-        this.router.navigate(['login']);
-      })
-      .catch((error) => {
-        console.error('خطأ في تسجيل الخروج:', error);
-      });
-    this.isUserLogged = this.authService.isUserLogged;
+    this.isLoading = true;
+    this.authService.login(this.email, this.password).subscribe({
+      next: () => {
+        this.toastr.success('Login successful');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error: any) => {
+        this.toastr.error(error.error.message || 'Login failed');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 }

@@ -1,0 +1,136 @@
+<div class="seller-details-container">
+  <div class="header">
+    <h2>Seller Details</h2>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="seller-info">
+    <div class="info-section">
+      <h3>Business Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Business Name:</span>
+          <span class="value">{{ data.businessName }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Business Name (Arabic):</span>
+          <span class="value">{{ data.businessNameArabic }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Registration Number:</span>
+          <span class="value">{{ data.registrationNumber }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Status:</span>
+          <span class="status-badge" [ngClass]="data.status">{{
+            data.status
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Personal Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Full Name:</span>
+          <span class="value">{{ data.fullName }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Phone Number:</span>
+          <span class="value">{{ data.phoneNumber }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Date of Birth:</span>
+          <span class="value">{{
+            data.dateOfBirth | date : "longDate" : "UTC"
+          }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Country of Birth:</span>
+          <span class="value">{{ data.countryOfBirth }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Citizenship:</span>
+          <span class="value">{{ data.countryOfCitizenship }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Address Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Country:</span>
+          <span class="value">{{ data.country }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Governorate:</span>
+          <span class="value">{{ data.governorate }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Address:</span>
+          <span class="value">{{ data.addressLine }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Identity Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Identity Type:</span>
+          <span class="value">{{ data.identityProof }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">ID/Passport Number:</span>
+          <span class="value">{{ data.nationalIdOrPassport }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Country of Issue:</span>
+          <span class="value">{{ data.countryOfIssue }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Card Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Card Number:</span>
+          <span class="value">{{ data.cardNumber }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Card Holder:</span>
+          <span class="value">{{ data.cardHolderName }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Expiration Date:</span>
+          <span class="value">{{
+            data.expirationDate | date : "longDate" : "UTC"
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>System Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <span class="label">Created At:</span>
+          <span class="value">{{
+            data.createdAt | date : "medium" : "UTC"
+          }}</span>
+        </div>
+        <div class="info-group">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{
+            data.updatedAt | date : "medium" : "UTC"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

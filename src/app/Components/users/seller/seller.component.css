@@ -1,0 +1,497 @@
+/* Main Container Styles */
+.sellers-dashboard {
+  padding: 2rem;
+  background: #fafafa;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 1rem;
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.dashboard-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: #ffd700;
+  border-radius: 2px;
+}
+
+/* Search Field Styles */
+.search-container {
+  margin-bottom: 2rem;
+  width: 100%;
+  animation: slideInDown 0.5s ease-out;
+}
+
+.search-field {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-field:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-field .mat-mdc-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+/* Table Container Styles */
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideInUp 0.5s ease-out;
+}
+
+.table-wrapper {
+  position: relative;
+  min-height: 200px;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.table-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in;
+}
+
+/* Table Styles */
+.sellers-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.sellers-table th {
+  background: #ffd700;
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.sellers-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease;
+}
+
+.sellers-table tr:hover td {
+  background-color: #fff9e6;
+}
+
+/* Status Styles */
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  text-transform: capitalize;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Loading Styles */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.error-message {
+  color: #721c24;
+  background: #f8d7da;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .sellers-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+
+  .sellers-table th,
+  .sellers-table td {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Add loading animation for table rows */
+.sellers-table tr {
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Update loading overlay styles */
+.initial-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Add new animation for pagination loading */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Action Buttons Styles */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-buttons button {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  transition: all 0.3s ease;
+}
+
+.action-buttons mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.view-btn {
+  color: #2196f3;
+}
+
+.view-btn:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.approve-btn {
+  color: #4caf50;
+}
+
+.approve-btn:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.reject-btn {
+  color: #f44336;
+}
+
+.reject-btn:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.action-buttons button[disabled] {
+  color: rgba(0, 0, 0, 0.26);
+  background-color: transparent;
+}
+
+/* Add animation for buttons */
+.action-buttons button {
+  transform: scale(1);
+}
+
+.action-buttons button:not([disabled]):hover {
+  transform: scale(1.1);
+}
+
+.action-buttons button:not([disabled]):active {
+  transform: scale(0.95);
+}
+
+.animate-button {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.animate-button:hover {
+  transform: translate3d(0, -1.5px, 0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.animate-button:hover::before {
+  width: 120%;
+  height: 120%;
+}
+
+.animate-button:active {
+  transform: translate3d(0, 1px, 0);
+}
+
+.animate-button mat-icon {
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.animate-button:hover mat-icon {
+  transform: scale(1.1);
+  color: #ffd700;
+}
+
+/* تحسين مظهر الديالوج */
+::ng-deep .seller-dialog {
+  .mat-mdc-dialog-container {
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-content {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.view-btn {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Stats Section */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Card Variants */
+.stat-card.total .stat-icon {
+  background: rgba(33, 150, 243, 0.1);
+}
+.stat-card.total mat-icon {
+  color: #2196f3;
+}
+
+.stat-card.pending .stat-icon {
+  background: rgba(255, 152, 0, 0.1);
+}
+.stat-card.pending mat-icon {
+  color: #ff9800;
+}
+
+.stat-card.approved .stat-icon {
+  background: rgba(76, 175, 80, 0.1);
+}
+.stat-card.approved mat-icon {
+  color: #4caf50;
+}
+
+.stat-card.rejected .stat-icon {
+  background: rgba(244, 67, 54, 0.1);
+}
+.stat-card.rejected mat-icon {
+  color: #f44336;
+}
+
+/* تحسين حقل البحث */
+.search-field {
+  width: 100%;
+  background: rgba(218, 152, 11, 0.619);
+  border-radius: 8px;
+}
+
+.search-field ::ng-deep .mat-mdc-floating-label {
+  position: relative;
+  transform: translateY(-1.5em) scale(0.75);
+  background: white;
+  padding: 0 4px;
+}
+
+.search-field ::ng-deep .mat-mdc-text-field-wrapper {
+  background: white;
+}
+
+@media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+}
