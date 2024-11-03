@@ -3,6 +3,47 @@
     Products
   </h1>
   <!-- Add Product Button -->
+  <!-- Unverified Products Section -->
+  <div
+    class="unverified-products-section"
+    *ngIf="unverifiedProducts.length > 0"
+  >
+    <h2 class="section-title">Unverified Products</h2>
+    <div class="unverified-products-container">
+      <div
+        class="unverified-product-card"
+        *ngFor="let product of unverifiedProducts"
+      >
+        <img
+          [src]="product.imageUrls[0]"
+          [alt]="product.name.en"
+          class="unverified-product-image"
+        />
+        <div class="unverified-product-details">
+          <h3>{{ product.name.en }}</h3>
+          <p class="brand">{{ product.brand }}</p>
+          <p class="price">{{ product.price | currency }}</p>
+          <p class="stock">{{ product.stock }}</p>
+          <div class="actions">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="openEditModal(product)"
+            >
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="deleteProduct(product._id)"
+            >
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <button
     mat-raised-button
@@ -21,8 +62,6 @@
   </div>
 
   <!-- Add Product Button -->
-
-  <h2 class="mb-2 text-center">Products List</h2>
 
   <!-- تحديث قسم الجدول ليكون مستجيب -->
   <div class="table-responsive-container">
@@ -67,6 +106,21 @@
       <ng-container matColumnDef="stock">
         <th mat-header-cell *matHeaderCellDef>Stock</th>
         <td mat-cell *matCellDef="let product">{{ product.stock }}</td>
+      </ng-container>
+
+      <!-- isVerified Column -->
+      <ng-container matColumnDef="isVerified">
+        <th mat-header-cell *matHeaderCellDef>Verification Status</th>
+        <td mat-cell *matCellDef="let product">
+          <span
+            [ngClass]="{
+              verified: product.isVerified,
+              'not-verified': !product.isVerified
+            }"
+          >
+            {{ product.isVerified ? "Verified" : "Not Verified" }}
+          </span>
+        </td>
       </ng-container>
 
       <!-- CreatedAt Column -->
@@ -117,10 +171,10 @@
   >
   </mat-paginator>
 
-  <!-- تحديث قسم الرسوم البيانية -->
+  <!-- Update Charts Section -->
   <div class="charts-container">
     <div class="chart-wrapper">
-      <h3 class="chart-title">توزيع المنتجات حسب العلامة التجارية</h3>
+      <h3 class="chart-title">Products Distribution by Brand</h3>
       <ngx-charts-bar-vertical
         [view]="[width, width > 768 ? 300 : 200]"
         [results]="brandChartData"
@@ -132,7 +186,7 @@
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
         [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="'النسبة المئوية (%)'"
+        [yAxisLabel]="'Percentage (%)'"
         (window:resize)="onResize($event)"
         [animations]="true"
       >
@@ -140,7 +194,7 @@
     </div>
 
     <div class="chart-wrapper">
-      <h3 class="chart-title">توزيع المنتجات حسب البائعين</h3>
+      <h3 class="chart-title">Products Distribution by Sellers</h3>
       <ngx-charts-bar-horizontal
         [view]="[width, width > 768 ? 300 : 200]"
         [results]="sellerChartData"
@@ -151,8 +205,8 @@
         [legend]="width > 480"
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="'النسبة المئوية (%)'"
-        [yAxisLabel]="'البائع'"
+        [xAxisLabel]="'Percentage (%)'"
+        [yAxisLabel]="'Seller'"
         (window:resize)="onResize($event)"
         [animations]="true"
       >

@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  ProductsServicesService,
   Product,
-} from './../../Services/products-services.service';
+  ProductsService,
+} from '../../Services/products-services.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { EditProductModalComponent } from '../edit-product-modal/edit-product-modal.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { UsersService } from 'src/app/Services/users/users.service';
-import { CreateProductModalComponent } from '../create-product-modal/create-product-modal.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { CreateProductModalComponent } from '../create-product-modal/create-product-modal.component';
+import { EditProductModalComponent } from '../edit-product-modal/edit-product-modal.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-products-component',
@@ -36,11 +37,13 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     NgxChartsModule,
     ToastrModule,
   ],
+  providers: [ProductsService],
   templateUrl: './products-component.component.html',
   styleUrls: ['./products-component.component.css'],
 })
 export class ProductsComponentComponent implements OnInit {
   products: Product[] = [];
+  unverifiedProducts: Product[] = [];
   totalCount: number = 0;
   page: number = 1;
   limit: number = 10;
@@ -65,6 +68,7 @@ export class ProductsComponentComponent implements OnInit {
     'price',
     'brand',
     'stock',
+    'isVerified',
     'createdAt',
     'updatedAt',
     'actions',
@@ -77,7 +81,7 @@ export class ProductsComponentComponent implements OnInit {
   width: number = 0;
 
   constructor(
-    private productsService: ProductsServicesService,
+    private productsService: ProductsService,
     public dialog: MatDialog,
     private usersService: UsersService,
     private toastr: ToastrService
@@ -95,8 +99,12 @@ export class ProductsComponentComponent implements OnInit {
       .getProductsWithPagination(this.page, this.limit)
       .subscribe((response) => {
         this.products = response.products;
-        this.originalProducts = [...response.products]; // حفظ نسخة من المنتجات الأصلية
+        this.originalProducts = [...response.products];
         this.totalCount = response.totalCount;
+        // فلترة المنتجات غير المتحققة
+        this.unverifiedProducts = this.products.filter(
+          (product) => !product.isVerified
+        );
         this.prepareBrandChartData();
         this.prepareSellerChartData();
       });

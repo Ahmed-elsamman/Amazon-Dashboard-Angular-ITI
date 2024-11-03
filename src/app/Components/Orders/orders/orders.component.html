@@ -1,20 +1,50 @@
-<div class="orders-container">
-  <p class="orders-title">Orders</p>
+<div class="orders-container" [@fadeIn]>
+  <p class="orders-title" [@slideIn]>Orders Management</p>
+
+  <!-- Search and Stats Section -->
+  <div class="stats-container" [@fadeIn]>
+    <div
+      class="stat-card"
+      *ngFor="let stat of orderStats"
+      [class]="stat.status"
+    >
+      <div class="stat-icon">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>{{ stat.count }}</h3>
+        <p>{{ stat.status }}</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Search Field -->
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Search</mat-label>
-    <input
-      matInput
-      (keyup)="applyFilter($event)"
-      placeholder="Search for an order..."
-      #input
-    />
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
+  <div class="filters-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Search for an order..."
+        #input
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
-  <!-- Table -->
-  <div class="table-container mat-elevation-z8">
+    <mat-button-toggle-group
+      [(ngModel)]="selectedStatus"
+      (change)="filterByStatus()"
+    >
+      <mat-button-toggle value="all">All</mat-button-toggle>
+      <mat-button-toggle value="pending">Pending</mat-button-toggle>
+      <mat-button-toggle value="shipped">Shipped</mat-button-toggle>
+      <mat-button-toggle value="delivered">Delivered</mat-button-toggle>
+      <mat-button-toggle value="cancelled">Cancelled</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="table-container mat-elevation-z8" [@slideIn]>
     <table mat-table [dataSource]="dataSource" matSort class="orders-table">
       <!-- ID Column -->
       <ng-container matColumnDef="_id">
@@ -70,29 +100,32 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns; sticky"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
     <mat-paginator
       [pageSizeOptions]="[5, 10, 25, 100]"
       aria-label="Select page of orders"
+      [ngStyle]="{ position: 'sticky', bottom: '0', 'z-index': '1' }"
     ></mat-paginator>
   </div>
 
   <!-- Charts Container -->
   <div class="charts-container">
     <h3 class="chart-title">Orders by Status</h3>
-    <ngx-charts-pie-chart
-      [results]="orderStatusData"
-      [scheme]="colorScheme"
-      [gradient]="true"
-      [legend]="true"
-      [labels]="true"
-      [doughnut]="true"
-      [animations]="true"
-      [view]="[containerWidth, containerHeight]"
-    >
-    </ngx-charts-pie-chart>
+    <div class="chart-wrapper">
+      <ngx-charts-pie-chart
+        [results]="orderStatusData"
+        [scheme]="colorScheme"
+        [gradient]="true"
+        [legend]="true"
+        [labels]="true"
+        [doughnut]="true"
+        [animations]="true"
+        [view]="[700, 400]"
+      >
+      </ngx-charts-pie-chart>
+    </div>
   </div>
 </div>

@@ -1375,3 +1375,56 @@ h2 {
     break-inside: avoid;
   }
 }
+
+.categories-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.categories-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.grid-label {
+  text-align: center;
+  color: #2c3e50;
+  font-family: "Poppins", sans-serif;
+  padding: 8px;
+}
+
+.category-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.category-total {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.category-percentage {
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+  .categories-grid {
+    padding: 10px;
+  }
+
+  .grid-label {
+    font-size: 14px;
+  }
+}

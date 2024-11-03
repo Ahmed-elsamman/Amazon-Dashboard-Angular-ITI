@@ -60,19 +60,5 @@
         }
       </li>
     </ul>
-    <!-- theme Button -->
-    <div class="theme-toggle">
-      <mat-slide-toggle
-        [checked]="isDarkTheme$ | async"
-        (change)="toggleTheme()"
-        class="theme-toggle-button"
-      >
-        <i
-          class="fas font-size-16"
-          [ngClass]="(isDarkTheme$ | async) ? 'fa-moon' : 'fa-sun'"
-        ></i>
-        <!-- {{ (isDarkTheme$ | async) ? "Dark Mode" : "Light Mode" }} -->
-      </mat-slide-toggle>
-    </div>
   </div>
 </div>

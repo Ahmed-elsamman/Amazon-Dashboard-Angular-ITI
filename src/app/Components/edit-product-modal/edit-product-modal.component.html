@@ -1,14 +1,14 @@
-<h2 mat-dialog-title class="dialog-title">Edit Product</h2>
+<h2 mat-dialog-title class="dialog-title" style="color: #333">Edit Product</h2>
 <mat-dialog-content class="dialog-content">
   <form class="dialog-form">
     <div class="form-row">
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Product Name (EN)</mat-label>
+        <mat-label style="color: #333">Product Name (EN)</mat-label>
         <input matInput [(ngModel)]="product.name.en" name="nameEn" required />
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Product Name (AR)</mat-label>
+        <mat-label style="color: #333">Product Name (AR)</mat-label>
         <input matInput [(ngModel)]="product.name.ar" name="nameAr" required />
       </mat-form-field>
     </div>
@@ -50,7 +50,17 @@
     </div>
 
     <div class="form-row">
-      <label for="imageUpload">Upload Product Image</label>
+      <mat-checkbox
+        [(ngModel)]="product.isVerified"
+        name="isVerified"
+        color="primary"
+      >
+        Is Verified
+      </mat-checkbox>
+    </div>
+
+    <div class="form-row">
+      <label for="imageUpload" style="color: #333">Upload Product Image</label>
       <input
         type="file"
         id="imageUpload"
@@ -61,7 +71,7 @@
     </div>
 
     <div class="form-group mb-3">
-      <h5>Uploaded Images</h5>
+      <h5 style="color: #333">Uploaded Images</h5>
       <ul>
         <li *ngFor="let url of product.imageUrls; let i = index">
           <img
@@ -80,13 +90,25 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()">Cancel</button>
   <button
-    mat-flat-button
-    color="primary"
+    mat-raised-button
+    color="success"
     (click)="updateProduct()"
     cdkFocusInitial
+    style="background-color: yellow; color: black; margin-left: 10px"
   >
     Save
+  </button>
+  <button
+    mat-raised-button
+    color="cancel"
+    style="
+      color: rgb(255, 255, 255);
+      background-color: #eb1111;
+      margin-left: 10px;
+    "
+    (click)="onNoClick()"
+  >
+    Cancel
   </button>
 </mat-dialog-actions>

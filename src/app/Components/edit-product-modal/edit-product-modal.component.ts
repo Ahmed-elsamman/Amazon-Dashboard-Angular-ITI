@@ -6,9 +6,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
-  ProductsServicesService,
   Product,
+  ProductsService,
   UpdateProduct,
 } from 'src/app/Services/products-services.service';
 import { HttpClient } from '@angular/common/http';
@@ -25,6 +26,7 @@ import { HttpClient } from '@angular/common/http';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatCheckboxModule,
   ],
 })
 export class EditProductModalComponent {
@@ -36,7 +38,7 @@ export class EditProductModalComponent {
   constructor(
     public dialogRef: MatDialogRef<EditProductModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product,
-    private productsService: ProductsServicesService,
+    private productsService: ProductsService,
     private http: HttpClient
   ) {
     this.product = {
@@ -47,6 +49,7 @@ export class EditProductModalComponent {
       brand: data.brand || '',
       imageUrls: data.imageUrls.length > 0 ? [...data.imageUrls] : [''],
       stock: data.stock,
+      isVerified: data.isVerified || false,
       _id: data._id,
     };
   }

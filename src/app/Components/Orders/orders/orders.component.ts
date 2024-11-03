@@ -4,6 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTable } from '@angular/material/table';
@@ -22,6 +23,9 @@ import { ViewOrderComponent } from '../view-order/view-order.component';
 import { ToastrService } from 'ngx-toastr';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { OrderStatus } from 'src/app/Models/order.model';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-orders',
@@ -40,9 +44,28 @@ import { OrderStatus } from 'src/app/Models/order.model';
     AddOrderComponent,
     UpdateOrderComponent,
     NgxChartsModule,
+    MatButtonToggleModule,
+    FormsModule,
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.css',
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms ease-in', style({ opacity: 1 })),
+      ]),
+    ]),
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateY(-20px)', opacity: 0 }),
+        animate(
+          '500ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
@@ -71,12 +94,17 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   view: [number, number] = [700, 700];
 
+  chartDimensions: [number, number] = [0, 0];
   private resizeObserver!: ResizeObserver;
+
+  selectedStatus: string = 'all';
+  orderStats: any[] = [];
 
   constructor(
     private ordersService: OrdersService,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {
     this.dataSource = new MatTableDataSource();
   }
@@ -86,33 +114,27 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.initializeChartSize();
-    this.setupResizeObserver();
+    this.setupChartResize();
   }
 
-  private initializeChartSize() {
-    const container = document.querySelector('.charts-container');
-    if (container) {
-      this.updateChartDimensions(container as HTMLElement);
-    }
-  }
-
-  private setupResizeObserver() {
-    const container = document.querySelector('.charts-container');
-    if (container) {
-      this.resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          this.updateChartDimensions(entry.target as HTMLElement);
-        }
+  private setupChartResize() {
+    const chartContainer = document.querySelector('.chart-wrapper');
+    if (chartContainer) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.updateChartDimensions(chartContainer as HTMLElement);
       });
-      this.resizeObserver.observe(container);
+      this.resizeObserver.observe(chartContainer);
     }
   }
 
   private updateChartDimensions(container: HTMLElement) {
-    const padding = 40;
-    this.containerWidth = container.clientWidth - padding;
-    this.containerHeight = Math.min(container.clientHeight - padding, 500);
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    // احتفظ بنسبة العرض إلى الارتفاع مناسبة
+    const size = Math.min(width * 0.8, height * 0.8);
+    this.chartDimensions = [size, size];
+    // تحديث المخطط
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {
@@ -133,6 +155,36 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     }));
   }
 
+  updateOrderStats(orders: any[]) {
+    const stats = {
+      pending: { count: 0, icon: 'hourglass_empty' },
+      shipped: { count: 0, icon: 'local_shipping' },
+      delivered: { count: 0, icon: 'check_circle' },
+      cancelled: { count: 0, icon: 'cancel' },
+    };
+
+    orders.forEach((order) => {
+      if (stats[order.orderStatus as keyof typeof stats]) {
+        stats[order.orderStatus as keyof typeof stats].count++;
+      }
+    });
+
+    this.orderStats = Object.entries(stats).map(([status, data]) => ({
+      status,
+      count: data.count,
+      icon: data.icon,
+    }));
+  }
+
+  filterByStatus() {
+    this.dataSource.filter =
+      this.selectedStatus === 'all' ? '' : this.selectedStatus;
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      if (filter === '') return true;
+      return data.orderStatus.toLowerCase() === filter.toLowerCase();
+    };
+  }
+
   loadOrders() {
     this.isLoading = true;
     this.error = null;
@@ -142,6 +194,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.data = orders;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.updateOrderStats(orders);
         this.updateChartData(orders);
         this.isLoading = false;
       },

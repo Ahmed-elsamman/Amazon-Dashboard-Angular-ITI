@@ -1,3 +1,4 @@
+import { ProductsService } from './../../../Services/products-services.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -5,7 +6,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { OrderStatus } from 'src/app/Models/order.model';
 import { UsersService } from 'src/app/Services/users/users.service';
 import { OrdersService } from 'src/app/Services/orders.service';
-import { ProductsServicesService } from 'src/app/Services/products-services.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -73,11 +73,12 @@ export class DashboardComponent implements OnInit {
   ordersBarData: any[] = [];
   revenueLineData: any[] = [];
   categoriesChartData: any[] = [];
+  totalProducts: number = 0;
 
   constructor(
     private usersService: UsersService,
     private ordersService: OrdersService,
-    private productsService: ProductsServicesService
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
@@ -106,7 +107,6 @@ export class DashboardComponent implements OnInit {
       await Promise.all([
         this.loadUsersData(),
         this.loadOrdersData(),
-        this.loadCategoriesData(),
         this.generateRevenueData(),
       ]);
     } catch (error) {
@@ -189,26 +189,9 @@ export class DashboardComponent implements OnInit {
     const total = this.usersPieData.reduce((sum, item) => sum + item.value, 0);
     return Math.round((value / total) * 100);
   }
-  // ... existing code ...
 
-  private async loadCategoriesData() {
-    try {
-      const products = await this.productsService.getCategories().toPromise();
-      const categories = products?.reduce((acc: any, product: any) => {
-        acc[product.category] = (acc[product.category] || 0) + 1;
-        return acc;
-      }, {});
-
-      this.categoriesChartData = Object.entries(categories || {}).map(
-        ([name, value]) => ({
-          name,
-          value,
-        })
-      );
-    } catch (error) {
-      console.error('Error loading categories data:', error);
-    }
+  calculateProductPercentage(value: number): number {
+    if (!this.totalProducts) return 0;
+    return Math.round((value / this.totalProducts) * 100);
   }
-
-  // ... existing code ...
 }

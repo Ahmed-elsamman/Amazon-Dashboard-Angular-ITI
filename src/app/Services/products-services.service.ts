@@ -23,6 +23,7 @@ export interface Product {
   stock: number;
   createdAt: Date;
   updatedAt: Date;
+  isVerified: boolean;
 }
 
 export interface UpdateProduct {
@@ -44,7 +45,7 @@ export interface UpdateProduct {
 @Injectable({
   providedIn: 'root',
 })
-export class ProductsServicesService {
+export class ProductsService {
   private apiUrl = `${environment.API_URL}/products`;
   private apiCategoriesUrl = `${environment.API_URL}/categories`;
   private uploadUrl = `${environment.API_URL}/upload/image`;

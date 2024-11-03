@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ProductsServicesService } from 'src/app/Services/products-services.service';
+import { ProductsService } from 'src/app/Services/products-services.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -38,7 +38,7 @@ export class CreateProductModalComponent {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private productsService: ProductsServicesService
+    private productsService: ProductsService
   ) {
     this.productForm = this.fb.group({
       subcategoryId: ['', Validators.required],

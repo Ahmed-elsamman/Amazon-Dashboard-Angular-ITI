@@ -33,7 +33,7 @@
     <div class="section orders-section">
       <!-- Charts Users Section -->
       <div class="charts-grid">
-        <div class="chart-card">
+        <!-- <div class="chart-card">
           <h2>User Distribution</h2>
           <ngx-charts-pie-chart
             [results]="usersPieData"
@@ -61,7 +61,7 @@
               </div>
             </ng-template>
           </ngx-charts-pie-chart>
-        </div>
+        </div> -->
 
         <!-- Orders Section -->
         <h2>Orders Overview</h2>
@@ -133,26 +133,28 @@
         <!-- Categories Chart -->
 
         <h2>Categories Overview</h2>
-        <div class="categories-grid">
+        <!-- <div class="categories-grid">
           <ngx-charts-pie-grid
-            [view]="[1000, 400]"
+            [view]="[1200, 400]"
             [scheme]="colorScheme"
             [results]="categoriesChartData"
-            [designatedTotal]="100"
-            [tooltipDisabled]="true"
+            [designatedTotal]="totalProducts"
+            [tooltipDisabled]="false"
             [animations]="true"
+            [label]="'Products'"
           >
             <ng-template #valueTemplate let-value="value">
-              {{ value }}%
+              {{ value }} Products
             </ng-template>
             <ng-template #labelTemplate let-data="data">
               <div class="grid-label">
-                <div>{{ data.name }}</div>
-                <div>Total: {{ data.total }}</div>
+                <div class="category-name">{{ data.name }}</div>
+                <div class="category-total">{{ data.value }} Products</div>
+                <div class="category-percentage">{{ calculatePercentage(data.value) }}%</div>
               </div>
             </ng-template>
           </ngx-charts-pie-grid>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

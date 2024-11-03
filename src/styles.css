@@ -84,3 +84,17 @@ body.light-theme .card {
   background-color: var(--light-card-background);
   border-color: var(--light-border);
 }
+
+.success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+.mat-mdc-snack-bar-action {
+  color: white !important;
+}

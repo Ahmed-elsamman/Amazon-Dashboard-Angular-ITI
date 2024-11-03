@@ -9,6 +9,7 @@ import { ProductsComponentComponent } from './Components/products-component/prod
 import { CustomersComponent } from './Components/users/customers/customers.component';
 
 import { OrdersComponent } from './Components/Orders/orders/orders.component';
+import { SellerComponent } from './Components/users/seller/seller.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -56,12 +57,12 @@ export const routes: Routes = [
     title: 'Customers', // عنوان الصفحة
     canActivate: [userGuard], // إذا كان هناك حاجة للحماية
   },
-  // {
-  //   path: 'users/sellers', // هذا هو المسار الجديد
-  //   component: SellersComponent, // استخدم المكون الجديد هنا
-  //   title: 'Sellers', // عنوان الصفحة
-  //   canActivate: [userGuard], // إذا كان هناك حاجة للحماية
-  // },
+  {
+    path: 'users/sellers', // هذا هو المسار الجديد
+    component: SellerComponent, // استخدم المكون الجديد هنا
+    title: 'Sellers', // عنوان الصفحة
+    canActivate: [userGuard], // إذا كان هناك حاجة للحماية
+  },
   {
     path: 'orders',
     component: OrdersComponent,

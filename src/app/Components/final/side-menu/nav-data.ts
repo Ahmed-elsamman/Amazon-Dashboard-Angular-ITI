@@ -4,24 +4,25 @@ import { InavbarData } from './helper';
 export const navbarData: InavbarData[] = [
   {
     routeLink: 'dashboard',
-    icon: 'fas fa-tachometer-alt',
+    icon: 'fas fa-home',
     label: 'Dashboard',
   },
   {
     routeLink: 'products',
-    icon: 'fas fa-shopping-cart',
+    icon: 'fas fa-box',
     label: 'Products',
   },
   {
     routeLink: 'statistics',
-    icon: 'fas fa-chart-line',
+    icon: 'fas fa-chart-bar',
     label: 'Analytics Website',
   },
   {
     routeLink: 'users/customers',
-    icon: 'fas fa-user-friends',
+    icon: 'fas fa-users',
     label: 'Users',
     expanded: true,
+    defaultRoute: 'users/customers',
     items: [
       {
         routeLink: 'users/customers',
@@ -35,17 +36,17 @@ export const navbarData: InavbarData[] = [
   },
   {
     routeLink: 'orders',
-    icon: 'fas fa-shopping-bag',
+    icon: 'fas fa-clipboard-list',
     label: 'Orders',
   },
   {
     routeLink: 'media',
-    icon: 'fas fa-photo-video',
+    icon: 'fas fa-store',
     label: 'Online Selling',
   },
   {
     routeLink: 'settings/profile',
-    icon: 'fas fa-cogs',
+    icon: 'fas fa-sliders-h',
     label: 'Settings',
     expanded: false,
     items: [

@@ -82,6 +82,41 @@
   background-color: #553910;
 }
 
+.theme-toggle {
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-button i {
+  margin-left: 8px;
+  font-size: 16px;
+  color: #fff;
+}
+
+:host ::ng-deep .mat-mdc-slide-toggle {
+  margin: 0;
+}
+
+:host ::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
+  background: #553910;
+}
+
+:host ::ng-deep .mdc-switch:enabled:hover .mdc-switch__track::after {
+  background: #3e2523;
+}
+
+:host ::ng-deep .mdc-switch:enabled .mdc-switch__handle::after {
+  background: #ff9900;
+}
+
 @media screen and (max-width: 600px) {
   .animated-header {
     justify-content: center;
@@ -96,9 +131,16 @@
     order: 3;
   }
 
+  .theme-toggle {
+    margin: 10px 0;
+    justify-content: center;
+    width: 100%;
+    order: 4;
+  }
+
   .logout-button {
     width: 100%;
     margin: 10px 0;
-    order: 4;
+    order: 5;
   }
 }

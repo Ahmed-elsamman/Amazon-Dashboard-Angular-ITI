@@ -1,11 +1,14 @@
 .dialog-content {
   width: 700px;
   max-width: 90vw;
+  background-color: #f0f0f0;
+  border-radius: 8px;
 }
 
 .dialog-form {
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
 .form-row {
@@ -28,10 +31,12 @@ mat-dialog-content {
 
 mat-dialog-actions {
   padding-top: 1rem;
+  background-color: #e0e0e0;
 }
 
 button[mat-flat-button] {
   font-weight: bold;
+  color: #333;
 }
 
 mat-dialog-actions button {

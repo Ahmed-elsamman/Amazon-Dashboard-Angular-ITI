@@ -6,5 +6,17 @@
     <i class="fas fa-bell"></i>
     <i class="fas fa-user"></i>
   </div>
+  <div class="theme-toggle">
+    <mat-slide-toggle
+      [checked]="isDarkTheme$ | async"
+      (change)="toggleTheme()"
+      class="theme-toggle-button"
+    >
+      <i
+        class="fas"
+        [ngClass]="(isDarkTheme$ | async) ? 'fa-moon' : 'fa-sun'"
+      ></i>
+    </mat-slide-toggle>
+  </div>
   <button class="logout-button" (click)="logout()">Logout</button>
 </header>

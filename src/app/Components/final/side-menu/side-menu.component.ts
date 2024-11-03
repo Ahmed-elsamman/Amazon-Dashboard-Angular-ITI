@@ -102,14 +102,21 @@ export class SideMenuComponent implements OnInit {
     });
   }
   handleClick(item: InavbarData): void {
-    if (!this.multiple) {
-      for (let modelItem of this.navData) {
-        if (item != modelItem && modelItem.expanded) {
-          modelItem.expanded = false;
-        }
-      }
+    // if (!this.multiple) {
+    //   for (let modelItem of this.navData) {
+    //     if (item != modelItem && modelItem.expanded) {
+    //       modelItem.expanded = false;
+    //     }
+    //   }
+    // }
+    // item.expanded = !item.expanded;
+    if (item.items && item.items.length > 0) {
+      item.expanded = !item.expanded;
     }
-    item.expanded = !item.expanded;
+
+    if (item.defaultRoute) {
+      this.router.navigate([item.defaultRoute]);
+    }
   }
 
   getActiveClass(data: InavbarData): string {

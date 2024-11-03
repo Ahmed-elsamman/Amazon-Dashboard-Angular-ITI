@@ -64,16 +64,16 @@
 
 .table-container {
   width: 100%;
-  overflow-x: auto; /* للجداول الصغيرة */
+  overflow: auto;
   margin-bottom: 20px;
-  /* تعديل الارتفاع ليكون أكثر مرونة */
   max-height: 60vh;
   min-height: 300px;
+  position: relative;
 }
 
-.user-table {
+.orders-table {
   width: 100%;
-  min-width: 800px; /* لضمان عرض أدنى للجدول */
+  min-width: 800px;
   background-color: #fff;
 }
 
@@ -83,32 +83,31 @@
 
 .mat-mdc-header-cell {
   background-color: #3e2523;
-  color: #0b0b0b !important; /* لون ذهبي */
+  color: #0b0b0b !important;
   font-weight: bold;
   font-size: 18px;
   text-align: center;
   padding: 12px 8px;
-  text-transform: uppercase; /* تحويل النص إلى أحرف كبيرة */
+  text-transform: uppercase;
   letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(24, 9, 9, 0.609);
 }
 
-/* لتحسين تأثير التحويم */
 .mat-mdc-header-cell:hover {
-  color: #ffed4a !important; /* لون أفتح عند التحويم */
+  color: #ffed4a !important;
   transition: color 0.3s ease;
 }
 .th-cell {
   width: 10%;
-  color: #030201; /* تغيير لون النص إلى ذهبي */
+  color: #030201;
   font-weight: bold;
   text-align: center;
   font-size: 14px;
   padding: 8px 10px;
   background-color: #857717;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* إضافة ظل للنص */
-  letter-spacing: 0.5px; /* زيادة المسافة بين الحروف */
-  min-width: 100px; /* عرض أدنى لكل عمود */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+  min-width: 100px;
 }
 
 .header-actions {
@@ -142,22 +141,34 @@
 }
 
 .status-badge {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  display: inline-block;
+  min-width: 80px;
 }
 
 .status-badge.active {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #05ed19;
+  color: #fff;
 }
 
 .status-badge.inactive {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: #363636;
+  color: #fff;
+}
+.status-badge.Yes {
+  background-color: #05ed19;
+  color: #fff;
 }
 
-/* أنيميشن للصفوف */
+.status-badge.No {
+  background-color: #d70d0d;
+  color: #fff;
+}
+
 .user-row {
   animation: fadeIn 0.5s ease-in;
 }
@@ -173,7 +184,6 @@
   }
 }
 
-/* تخصيص لون أمازون */
 :host ::ng-deep .mat-sort-header-arrow {
   color: #ff9900;
 }
@@ -252,7 +262,6 @@
   border-bottom: 2px solid #ffd700;
 }
 
-/* تحسين ظهور المخططات */
 :host ::ng-deep .ngx-charts {
   float: none;
   margin: 0 auto;
@@ -287,14 +296,12 @@
   }
 }
 
-/* تحسين مظهر الجدول للشاشات الصغيرة */
 .user-table {
   width: 100%;
-  min-width: 800px; /* لضمان عرض أدنى للجدول */
+  min-width: 800px;
   background-color: #ffffff;
 }
 
-/* تحسين مظهر الخلايا */
 .mat-mdc-cell,
 .mat-mdc-header-cell {
   padding: 12px 8px;
@@ -303,12 +310,10 @@
   text-overflow: ellipsis;
 }
 
-/* تعديل عرض الأعمدة */
 .th-cell {
-  min-width: 100px; /* عرض أدنى لكل عمود */
+  min-width: 100px;
 }
 
-/* تخصيص عرض بعض الأعمدة */
 [matColumnDef="id"] {
   max-width: 80px;
 }
@@ -321,7 +326,6 @@
   min-width: 200px;
 }
 
-/* تحسين الاستجابة للشاشات المختلفة */
 @media screen and (max-width: 1200px) {
   .chartWidth {
     width: calc(100vw - 100px);
@@ -330,4 +334,48 @@
   .chart-card {
     padding: 15px;
   }
+}
+
+.role-cell {
+  text-align: center;
+}
+
+.role-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  display: inline-block;
+  min-width: 80px;
+}
+
+.role-badge.admin {
+  background-color: #9b2f0b;
+  color: #fff;
+}
+
+.role-badge.user {
+  background-color: #11758b;
+  color: #fff;
+}
+
+.role-badge.seller {
+  background-color: #307c0f;
+  color: #070505;
+}
+
+.mat-mdc-header-row {
+  background-color: #fff;
+  z-index: 2;
+}
+
+.mat-mdc-paginator {
+  background-color: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-mdc-header-row,
+.mat-mdc-paginator {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

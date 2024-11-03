@@ -13,6 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './Services/Auth/auth.service';
 import { MainHeaderComponent } from './Components/mainHeader/mainHeader.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -39,6 +40,7 @@ interface SideNavToggle {
     MatButtonModule,
     MatDialogModule,
     MainHeaderComponent,
+    MatSnackBarModule,
   ],
 })
 export class AppComponent implements OnInit {
