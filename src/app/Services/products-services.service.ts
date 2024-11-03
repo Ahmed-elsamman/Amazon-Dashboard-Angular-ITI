@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 export interface Product {
   _id: string;
-  sellerId: string;
+  sellerId: any;
   reviews: string[];
   subcategoryId: string;
   name: {

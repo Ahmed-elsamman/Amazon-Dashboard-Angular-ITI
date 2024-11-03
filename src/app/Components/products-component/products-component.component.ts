@@ -229,8 +229,9 @@ export class ProductsComponentComponent implements OnInit {
   prepareSellerChartData(): void {
     const sellerCount = new Map<string, number>();
     this.products.forEach((product) => {
-      const count = sellerCount.get(product.sellerId) || 0;
-      sellerCount.set(product.sellerId, count + 1);
+      const count = sellerCount.get(product.sellerId.name) || 0;
+      sellerCount.set(product.sellerId.name, count + 1);
+      console.log('sellerId >>>>>>>>>>>>>>', product.sellerId);
     });
 
     this.sellerChartData = Array.from(sellerCount).map(([name, value]) => ({
