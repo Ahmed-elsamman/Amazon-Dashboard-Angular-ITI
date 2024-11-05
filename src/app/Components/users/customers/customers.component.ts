@@ -4,6 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   HostListener,
+  OnDestroy,
 } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -11,8 +12,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { UsersService } from '../../../Services/users/users.service';
-import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
@@ -24,6 +25,8 @@ import { ViewUserComponent } from '../view-user/view-user.component';
 import { IUser, UserDisplay } from 'src/app/Models/iuser';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customers',
@@ -47,7 +50,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
 })
-export class CustomersComponent implements OnInit, AfterViewInit {
+export class CustomersComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
     'id',
     'name',
@@ -78,6 +81,8 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   chartWidth = Math.min(window.innerWidth - 100, 1200); // تحديد حد أقصى للعرض
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private usersService: UsersService,
     private dialog: MatDialog,
@@ -93,6 +98,13 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadUsers();
+
+    this.usersService.usersRefresh$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => this.loadUsers())
+      )
+      .subscribe();
   }
 
   ngAfterViewInit() {
@@ -104,19 +116,21 @@ export class CustomersComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.error = null;
 
-    this.usersService
+    return this.usersService
       .getAllUsers()
       .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (users) => {
-          this.dataSource.data = this.transformUsers(users);
-          this.updateCharts(users);
-        },
-        error: (error) => {
-          this.toastr.error('حدث خطأ في تحميل البيانات');
-          console.error(error);
-        },
-      });
+      .pipe(
+        tap({
+          next: (users) => {
+            this.dataSource.data = this.transformUsers(users);
+            this.updateCharts(users);
+          },
+          error: (error) => {
+            this.toastr.error('Error Loading Users');
+            console.error(error);
+          },
+        })
+      );
   }
 
   private updateCharts(users: IUser[]) {
@@ -190,24 +204,35 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   transformUsers(users: IUser[]): UserDisplay[] {
-    return users.map((user) => ({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      isActive: user.isActive,
-      isVerified: user.isVerified,
-      createdAt: new Date(user.createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }),
-      updatedAt: new Date(user.updatedAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      }),
-    }));
+    return users
+      .map((user) => ({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+        isVerified: user.isVerified,
+        createdAt: new Date(user.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }),
+        updatedAt: new Date(user.updatedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }),
+      }))
+      .sort((a, b) => {
+        // قارن أولاً تاريخ التحديث
+        const updateDiff =
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        if (updateDiff !== 0) return updateDiff;
+        // إذا كان تاريخ التحديث متساوياً، قارن تاريخ الإنشاء
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
   }
 
   applyFilter(event: Event) {
@@ -233,14 +258,13 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // نستخدم _id بدلاً من id
         const userId = result._id;
-        delete result._id; // نحذف _id من البيانات المرسلة للتحديث
+        delete result._id;
 
         this.usersService.updateUser(userId, result).subscribe({
           next: () => {
             this.toastr.success('Done Updating User Successfully');
-            this.loadUsers();
+            this.usersService.refreshUsers();
           },
           error: (error) => {
             this.toastr.error('Error Updating User Try Again');
@@ -256,7 +280,7 @@ export class CustomersComponent implements OnInit, AfterViewInit {
       this.usersService.deleteUser(id).subscribe({
         next: () => {
           this.toastr.success('Done Deleting User Successfully');
-          this.loadUsers();
+          this.usersService.refreshUsers();
         },
         error: (error) => {
           this.toastr.error('Error Deleting User');
@@ -275,13 +299,12 @@ export class CustomersComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // تنظيف البيانات قبل إرسالها
         const { _id, createdAt, updatedAt, ...cleanedData } = result;
 
         this.usersService.createUser(cleanedData).subscribe({
           next: () => {
             this.toastr.success('Done Adding User Successfully');
-            this.loadUsers();
+            this.usersService.refreshUsers();
           },
           error: (error) => {
             this.toastr.error('Error Adding User Try Again');
@@ -293,6 +316,11 @@ export class CustomersComponent implements OnInit, AfterViewInit {
   }
 
   onSelect(event: any) {
-    console.log(event);
+    console.log('event >>>>>', event);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

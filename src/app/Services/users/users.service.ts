@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, throwError, map } from 'rxjs';
+import { catchError, Observable, throwError, map, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 interface User {
@@ -20,9 +20,13 @@ interface User {
 })
 export class UsersService {
   private API_URL = `${environment.API_URL}/user`;
-
+  private usersRefreshSubject = new BehaviorSubject<boolean>(true);
   constructor(private http: HttpClient) {}
 
+  usersRefresh$ = this.usersRefreshSubject.asObservable();
+  refreshUsers() {
+    this.usersRefreshSubject.next(true);
+  }
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.API_URL).pipe(
       catchError((error: HttpErrorResponse) => {

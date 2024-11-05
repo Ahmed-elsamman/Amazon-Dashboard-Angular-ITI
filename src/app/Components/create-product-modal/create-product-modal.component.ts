@@ -76,7 +76,6 @@ export class CreateProductModalComponent {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
-    console.log(file);
 
     if (file) {
       this.uploadImage(file);
@@ -89,7 +88,6 @@ export class CreateProductModalComponent {
 
     this.http.post<{ url: string }>(this.api_url, formData).subscribe(
       (response) => {
-        console.log('Image uploaded successfully:', response.url);
         this.imageUrls.push(response.url);
       },
       (error) => {
@@ -97,34 +95,6 @@ export class CreateProductModalComponent {
       }
     );
   }
-
-  // onSubmit(): void {
-  //   if (this.productForm.valid) {
-  //     const productData = {
-  //       ...this.productForm.value,
-  //       name: {
-  //         en: this.productForm.value.nameEn,
-  //         ar: this.productForm.value.nameAr,
-  //       },
-  //       description: {
-  //         en: this.productForm.value.descriptionEn,
-  //         ar: this.productForm.value.descriptionAr,
-  //       },
-  //       imageUrls: this.imageUrls,
-  //     };
-  //     this.productsService.addProduct(productData).subscribe({
-  //       next: () => {
-  //         console.log('Product created successfully');
-  //         this.onClose(); // Close the modal
-  //       },
-  //       error: (err) => {
-  //         console.error('Error creating product:', err);
-  //       },
-  //     });
-  //   } else {
-  //     console.log('Form is not valid');
-  //   }
-  // }
 
   onSubmit(): void {
     if (this.productForm.valid) {
@@ -146,8 +116,7 @@ export class CreateProductModalComponent {
 
       this.productsService.addProduct(productData).subscribe({
         next: () => {
-          console.log('Product created successfully');
-          this.onClose(); // Close the modal
+          this.onClose();
         },
         error: (err) => {
           console.error('Error creating product:', err);

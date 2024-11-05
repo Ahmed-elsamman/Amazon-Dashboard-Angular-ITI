@@ -52,4 +52,49 @@ export class LoginComponent implements OnInit {
       },
     });
   }
+
+  forgotPassword(): void {
+    if (!this.email) {
+      this.toastr.error('Please enter your email address');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
+      this.toastr.error('Please enter a valid email address and try again');
+      return;
+    }
+
+    this.isLoading = true;
+    this.authService.initiateAdminPasswordReset(this.email).subscribe({
+      next: (response) => {
+        console.log('Password reset response:', response);
+        this.toastr.success(
+          'Password reset instructions have been sent to your email'
+        );
+      },
+      error: (error: any) => {
+        console.error('Password reset error:', error);
+
+        // تحسين رسائل الخطأ
+        let errorMessage = 'Failed to process password reset request';
+
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 500) {
+          errorMessage = 'Server error occurred. Please try again later.';
+        } else if (error.status === 404) {
+          errorMessage = 'Email not found in our records.';
+        } else if (error.status === 400) {
+          errorMessage = 'Invalid email format or request.';
+        }
+
+        this.toastr.error(errorMessage);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
 }

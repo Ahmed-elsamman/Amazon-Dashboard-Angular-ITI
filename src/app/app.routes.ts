@@ -10,6 +10,7 @@ import { CustomersComponent } from './Components/users/customers/customers.compo
 
 import { OrdersComponent } from './Components/Orders/orders/orders.component';
 import { SellerComponent } from './Components/users/seller/seller.component';
+import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -23,6 +24,11 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login',
+  },
+  {
+    path: 'resetPassword',
+    component: ResetPasswordComponent,
+    title: 'Reset Password',
   },
   {
     path: 'statistics',

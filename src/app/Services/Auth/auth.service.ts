@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
@@ -20,8 +20,8 @@ interface UserInfo {
 })
 export class AuthService {
   private readonly API_URL = `${environment.API_URL}/user`;
-  private readonly TOKEN_KEY = 'token';
-  private readonly USER_INFO_KEY = 'userInfo';
+  private readonly ADMIN_TOKEN_KEY = 'admin_token';
+  private readonly ADMIN_INFO_KEY = 'admin_info';
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private userDataSubject = new BehaviorSubject<UserInfo | null>(null);
@@ -33,7 +33,8 @@ export class AuthService {
   }
 
   private checkInitialAuth(): void {
-    const token = localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage.getItem(this.ADMIN_TOKEN_KEY);
+    console.log('Token:>>>>>>>>>>>>', token);
     if (token) {
       const userInfo = this.getUserInfoFromStorage();
       this.isAuthenticatedSubject.next(true);
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   private getUserInfoFromStorage(): UserInfo | null {
-    const userInfoStr = localStorage.getItem(this.USER_INFO_KEY);
+    const userInfoStr = localStorage.getItem(this.ADMIN_INFO_KEY);
     return userInfoStr ? JSON.parse(userInfoStr) : null;
   }
 
@@ -53,8 +54,8 @@ export class AuthService {
       userName: response.userName,
     };
 
-    localStorage.setItem(this.TOKEN_KEY, response.token);
-    localStorage.setItem(this.USER_INFO_KEY, JSON.stringify(userInfo));
+    localStorage.setItem(this.ADMIN_TOKEN_KEY, response.token);
+    localStorage.setItem(this.ADMIN_INFO_KEY, JSON.stringify(userInfo));
 
     this.isAuthenticatedSubject.next(true);
     this.userDataSubject.next(userInfo);
@@ -63,7 +64,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${this.API_URL}/login`, { email, password })
+      .post<AuthResponse>(`${this.API_URL}/admin/login`, { email, password })
       .pipe(
         tap((response) => {
           this.setAuthData(response);
@@ -74,17 +75,39 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_INFO_KEY);
+    localStorage.removeItem(this.ADMIN_TOKEN_KEY);
+    localStorage.removeItem(this.ADMIN_INFO_KEY);
 
     this.isAuthenticatedSubject.next(false);
     this.userDataSubject.next(null);
     this.isLoggedIn.next(false);
     this.router.navigate(['/login']);
   }
+  // إضافة دالة طلب إعادة تعيين كلمة المرور للمسؤول
+  initiateAdminPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/admin/initiate-password-reset`, {
+      email,
+    });
+  }
+
+  // إضافة دالة إعادة تعيين كلمة المرور للمسؤول
+  adminResetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http
+      .post(`${this.API_URL}/admin/reset-password`, {
+        token,
+        newPassword,
+      })
+      .pipe(
+        tap((response) => console.log('Password reset response:', response)),
+        catchError((error) => {
+          console.error('Password reset error:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return localStorage.getItem(this.ADMIN_TOKEN_KEY);
   }
 
   get isAuthenticated$(): Observable<boolean> {

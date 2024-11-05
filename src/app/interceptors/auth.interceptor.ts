@@ -12,7 +12,7 @@ export const authInterceptor = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('admin_token');
 
   // Exclude requests to /login
   if (req.url.includes('/login')) {

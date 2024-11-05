@@ -167,34 +167,33 @@ export class SellerComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadInitialData(): Subscription {
-    this.isLoadingResults = true;
+    return this.sellerService.getAllSellers().subscribe({
+      next: (sellers) => {
+        // ترتيب البائعين حسب آخر تحديث
+        const sortedSellers = sellers.sort((a, b) => {
+          const dateA = new Date(a.updatedAt || a.createdAt).getTime();
+          const dateB = new Date(b.updatedAt || b.createdAt).getTime();
+          return dateB - dateA; // ترتيب تنازلي (الأحدث أولاً)
+        });
 
-    return this.sellerService
-      .getAllSellers()
-      .pipe(
-        finalize(() => {
-          this.isLoadingResults = false;
-        }),
-        catchError(() => {
-          this.isRateLimitReached = true;
-          return [];
-        })
-      )
-      .subscribe((data) => {
-        const mappedData = data.map((seller) => ({
+        this.dataSource.data = sortedSellers.map((seller) => ({
           _id: seller._id,
           fullName: seller.fullName,
           country: seller.country,
           businessName: seller.businessName,
           status: seller.status,
-          ordersCount: seller.orders.length,
-          productsCount: seller.products.length,
+          ordersCount: seller.ordersCount || 0,
+          productsCount: seller.productsCount || 0,
         }));
 
-        this.dataSource.data = mappedData;
-        this.resultsLength = mappedData.length;
-        this.isRateLimitReached = false;
-      });
+        this.isLoadingResults = false;
+      },
+      error: (error) => {
+        console.error('Error loading sellers:', error);
+        this.isLoadingResults = false;
+        this.isRateLimitReached = true;
+      },
+    });
   }
 
   private loadSellerStats(): void {
