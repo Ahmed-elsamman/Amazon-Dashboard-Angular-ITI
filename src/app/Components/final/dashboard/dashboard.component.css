@@ -264,10 +264,10 @@ li {
 }
 
 .section {
-  background: white;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow);
   border-radius: 15px;
   padding: clamp(15px, 2vw, 25px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
@@ -288,6 +288,8 @@ li {
   border-radius: 12px;
   transition: transform 0.3s ease;
   cursor: pointer;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
 }
 
 .info-card:hover {
@@ -340,6 +342,7 @@ li {
 table {
   width: 100%;
   border-collapse: collapse;
+  background-color: var(--card-bg);
 }
 
 .status-badge {
@@ -684,8 +687,8 @@ table {
 }
 
 .products-table th {
-  background: #f8fafc;
-  color: #64748b;
+  background-color: var(--secondary-bg);
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 14px;
 }
@@ -1016,7 +1019,7 @@ svg {
   display: block;
 }
 
-/* تحسين عرض الجداول على الش��شات الصغيرة */
+/* تحسين عرض الجداول على الششات الصغيرة */
 .table-responsive {
   width: 100%;
   overflow-x: auto;

@@ -10,10 +10,9 @@ export class ThemeService {
 
   toggleTheme() {
     this.isDarkTheme.next(!this.isDarkTheme.value);
-    if (this.isDarkTheme.value) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
+    document.documentElement.setAttribute(
+      'data-theme',
+      this.isDarkTheme.value ? 'dark' : 'light'
+    );
   }
 }
