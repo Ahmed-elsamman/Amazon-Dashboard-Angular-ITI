@@ -5,7 +5,7 @@ import { MediaComponent } from './Components/final/media/media.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { userGuard } from './Guard/user.guard';
-import { ProductsComponentComponent } from './Components/products-component/products-component.component';
+import { ProductsComponentComponent } from './Components/Products/products-component/products-component.component';
 import { CustomersComponent } from './Components/users/customers/customers.component';
 
 import { OrdersComponent } from './Components/Orders/orders/orders.component';
@@ -36,25 +36,11 @@ export const routes: Routes = [
     title: 'statistics',
     canActivate: [userGuard],
   },
-  // {
-  //   path: 'test',
-  //   component: ,
-  //   title: 'test',
-  // },
 
   {
     path: 'media',
     component: MediaComponent,
     title: 'media',
-  },
-
-  {
-    path: 'settings',
-    loadChildren: () =>
-      import('./Components/final/settings/settings-routing.module').then(
-        (m) => m.SettingsRoutingModule
-      ),
-    title: 'settings',
   },
 
   {

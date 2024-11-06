@@ -130,10 +130,8 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateChartDimensions(container: HTMLElement) {
     const width = container.clientWidth;
     const height = container.clientHeight;
-    // احتفظ بنسبة العرض إلى الارتفاع مناسبة
     const size = Math.min(width * 0.8, height * 0.8);
     this.chartDimensions = [size, size];
-    // تحديث المخطط
     this.cdr.detectChanges();
   }
 
@@ -191,11 +189,17 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.ordersService.getUserOrders().subscribe({
       next: (orders) => {
-        this.dataSource.data = orders;
+        const sortedOrders = orders.sort((a, b) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
+
+        this.dataSource = new MatTableDataSource(sortedOrders);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.updateOrderStats(orders);
-        this.updateChartData(orders);
+        this.updateOrderStats(sortedOrders);
+        this.updateChartData(sortedOrders);
         this.isLoading = false;
       },
       error: (error) => {
@@ -235,9 +239,12 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.ordersService.createOrderByAdmin(result).subscribe({
-          next: () => {
+          next: (newOrder) => {
+            const updatedOrders = [newOrder, ...this.dataSource.data];
+            this.dataSource.data = updatedOrders;
+            this.updateOrderStats(updatedOrders);
+            this.updateChartData(updatedOrders);
             this.toastr.success('Order added successfully');
-            this.loadOrders();
           },
           error: (error) => {
             this.toastr.error('Failed to add order');
@@ -258,13 +265,30 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('result>>>>', result);
         this.ordersService
           .changeOrderStatus(order._id, result.orderStatus)
           .subscribe({
-            next: () => {
+            next: (updatedOrder) => {
+              const updatedOrders = this.dataSource.data.map((o: any) =>
+                o._id === order._id
+                  ? {
+                      ...o,
+                      orderStatus: result.orderStatus,
+                      updatedAt: new Date(),
+                    }
+                  : o
+              );
+              const sortedOrders = updatedOrders.sort((a: any, b: any) => {
+                return (
+                  new Date(b.updatedAt || b.createdAt).getTime() -
+                  new Date(a.updatedAt || a.createdAt).getTime()
+                );
+              });
+
+              this.dataSource.data = sortedOrders;
+              this.updateOrderStats(sortedOrders);
+              this.updateChartData(sortedOrders);
               this.toastr.success('Order updated successfully');
-              this.loadOrders();
             },
             error: (error) => {
               this.toastr.error('Failed to update order');
@@ -276,16 +300,34 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cancelOrder(orderId: string) {
-    if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
+    if (confirm('Are you sure you want to cancel this order?')) {
       this.ordersService
         .changeOrderStatus(orderId, OrderStatus.CANCELLED)
         .subscribe({
           next: () => {
-            this.toastr.success('تم إلغاء الطلب بنجاح');
-            this.loadOrders();
+            const updatedOrders = this.dataSource.data.map((o: any) =>
+              o._id === orderId
+                ? {
+                    ...o,
+                    orderStatus: OrderStatus.CANCELLED,
+                    updatedAt: new Date(),
+                  }
+                : o
+            );
+            const sortedOrders = updatedOrders.sort((a: any, b: any) => {
+              return (
+                new Date(b.updatedAt || b.createdAt).getTime() -
+                new Date(a.updatedAt || a.createdAt).getTime()
+              );
+            });
+
+            this.dataSource.data = sortedOrders;
+            this.updateOrderStats(sortedOrders);
+            this.updateChartData(sortedOrders);
+            this.toastr.success('Order cancelled successfully');
           },
           error: (error) => {
-            this.toastr.error('فشل في إلغاء الطلب');
+            this.toastr.error('Failed to cancel order');
             console.error(error);
           },
         });

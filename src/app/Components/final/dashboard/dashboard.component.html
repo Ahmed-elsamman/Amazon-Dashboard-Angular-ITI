@@ -101,17 +101,22 @@
         </div>
         <!-- Orders Chart -->
         <div class="chart-card">
-          <h2>Orders Status</h2>
-          <ngx-charts-bar-vertical
-            [results]="ordersBarData"
-            [gradient]="chartOptions.gradient"
-            [xAxis]="chartOptions.showXAxis"
-            [yAxis]="chartOptions.showYAxis"
-            [legend]="chartOptions.showLegend"
-            [showXAxisLabel]="chartOptions.showXAxisLabel"
-            [scheme]="colorScheme"
-          >
-          </ngx-charts-bar-vertical>
+          <h2>Orders Status Distribution</h2>
+          <div class="chart-container">
+            <ngx-charts-bar-vertical
+              [results]="ordersBarData"
+              [scheme]="colorScheme"
+              [gradient]="true"
+              [xAxis]="true"
+              [yAxis]="true"
+              [legend]="true"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxisLabel]="'Status'"
+              [yAxisLabel]="'Count'"
+            >
+            </ngx-charts-bar-vertical>
+          </div>
         </div>
 
         <div class="chart-card">
@@ -132,28 +137,28 @@
 
         <!-- Categories Chart -->
 
-        <h2>Categories Overview</h2>
-        <!-- <div class="categories-grid">
-          <ngx-charts-pie-grid
-            [view]="[1200, 400]"
-            [scheme]="colorScheme"
+        <!-- <h2>Categories Overview</h2>
+        <div class="chart-container">
+          <ngx-charts-pie-chart
             [results]="categoriesChartData"
-            [designatedTotal]="totalProducts"
-            [tooltipDisabled]="false"
-            [animations]="true"
-            [label]="'Products'"
+            [scheme]="colorScheme"
+            [gradient]="true"
+            [legend]="true"
+            [labels]="true"
+            [doughnut]="true"
+            [view]="[700, 400]"
           >
-            <ng-template #valueTemplate let-value="value">
-              {{ value }} Products
-            </ng-template>
-            <ng-template #labelTemplate let-data="data">
-              <div class="grid-label">
-                <div class="category-name">{{ data.name }}</div>
-                <div class="category-total">{{ data.value }} Products</div>
-                <div class="category-percentage">{{ calculatePercentage(data.value) }}%</div>
+            <ng-template #tooltipTemplate let-model="model">
+              <div class="tooltip-content">
+                <span class="tooltip-label">{{ model.name }}</span>
+                <span
+                  >{{ model.value }} Products ({{
+                    calculatePercentage(model.value)
+                  }}%)</span
+                >
               </div>
             </ng-template>
-          </ngx-charts-pie-grid>
+          </ngx-charts-pie-chart>
         </div> -->
       </div>
     </div>

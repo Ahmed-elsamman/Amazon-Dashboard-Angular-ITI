@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
 
   // Chart Options
   chartOptions = {
-    view: undefined as any, // سيتم تحديثه تلقائياً
+    view: [700, 400],
     showXAxis: true,
     showYAxis: true,
     gradient: true,
@@ -60,15 +60,13 @@ export class DashboardComponent implements OnInit {
     timeline: true,
     autoScale: true,
     roundDomains: true,
-    animations: true,
-    legendPosition: 'right',
-    responsive: true,
-  };
-  colorScheme: any = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
-  // Chart Data
+  colorScheme: any = {
+    domain: ['#2196F3', '#4CAF50', '#FFC107', '#FF5252'],
+  };
+
+  // Chart Data Arrays
   usersPieData: any[] = [];
   ordersBarData: any[] = [];
   revenueLineData: any[] = [];
@@ -83,6 +81,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.loadCategoriesData();
   }
   // إضافة دالة لتحديث حجم المخططات
   @HostListener('window:resize')
@@ -111,6 +110,43 @@ export class DashboardComponent implements OnInit {
       ]);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+    }
+  }
+
+  private async loadCategoriesData() {
+    try {
+      const [categories, products] = await Promise.all([
+        this.productsService.getCategories().toPromise(),
+        this.productsService.getProducts().toPromise(),
+      ]);
+
+      const categoryMap = new Map();
+
+      products?.forEach((product) => {
+        const category = categories?.find((cat) =>
+          cat.subcategories.some(
+            (sub: any) => sub._id === product.subcategoryId
+          )
+        );
+
+        if (category) {
+          const currentCount = categoryMap.get(category.name.en) || 0;
+          categoryMap.set(category.name.en, currentCount + 1);
+        }
+      });
+
+      this.categoriesChartData = Array.from(categoryMap.entries()).map(
+        ([name, value]) => ({
+          name,
+          value,
+        })
+      );
+
+      this.totalProducts = products?.length || 0;
+
+      this.categoriesChartData = [...this.categoriesChartData];
+    } catch (error) {
+      console.error('Error loading categories data:', error);
     }
   }
 
@@ -186,11 +222,6 @@ export class DashboardComponent implements OnInit {
   }
 
   calculatePercentage(value: number): number {
-    const total = this.usersPieData.reduce((sum, item) => sum + item.value, 0);
-    return Math.round((value / total) * 100);
-  }
-
-  calculateProductPercentage(value: number): number {
     if (!this.totalProducts) return 0;
     return Math.round((value / this.totalProducts) * 100);
   }

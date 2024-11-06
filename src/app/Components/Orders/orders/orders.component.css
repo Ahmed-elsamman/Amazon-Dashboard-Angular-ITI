@@ -189,6 +189,7 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: calc(4rem + 20px);
 }
 
 .chart-wrapper {
@@ -225,6 +226,20 @@
   .charts-container {
     min-height: calc(30vh - 20px);
     padding: 15px;
+    margin-bottom: calc(5rem + 20px);
+  }
+
+  .chart-title {
+    font-size: 16px;
+    padding-bottom: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .charts-container {
+    min-height: calc(30vh - 20px);
+    padding: 15px;
+    margin-bottom: calc(6rem + 20px);
   }
 
   .chart-title {

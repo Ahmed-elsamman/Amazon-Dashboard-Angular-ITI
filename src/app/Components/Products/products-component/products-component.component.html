@@ -1,0 +1,220 @@
+<div class="products-container" [@fadeIn]>
+  <!-- Header Section -->
+  <div class="header">
+    <h1 class="title">Products Management</h1>
+    <div class="actions-container">
+      <button
+        mat-raised-button
+        class="add-button"
+        (click)="openCreateProductModal()"
+      >
+        <mat-icon>add</mat-icon>
+        Add New Product
+      </button>
+
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Products</mat-label>
+        <input
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder="Search by name, brand, price..."
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Unverified Products Section -->
+  <div class="unverified-section" *ngIf="unverifiedProducts.length > 0">
+    <h2>Unverified Products</h2>
+    <div class="unverified-grid">
+      <mat-card *ngFor="let product of unverifiedProducts" class="product-card">
+        <img [src]="product.imageUrls[0]" [alt]="product.name.en" />
+        <div class="product-info">
+          <h3>{{ product.name.en }}</h3>
+          <p class="brand">{{ product.brand }}</p>
+          <p class="price">{{ product.price | currency }}</p>
+          <div class="card-actions">
+            <button
+              mat-mini-fab
+              color="accent"
+              (click)="openEditModal(product)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-mini-fab
+              color="warn"
+              (click)="deleteProduct(product._id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Products Table -->
+  <div class="table-container mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Image Column -->
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <td mat-cell *matCellDef="let product">
+          <img
+            [src]="product.imageUrls[0]"
+            [alt]="product.name.en"
+            class="product-image"
+          />
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let product">
+          <div class="product-name">
+            <span class="primary-text">{{ product.name.en }}</span>
+            <span class="secondary-text">{{ product.name.ar }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <td mat-cell *matCellDef="let product">
+          {{ product.price | currency }}
+        </td>
+      </ng-container>
+
+      <!-- Brand Column -->
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Brand</th>
+        <td mat-cell *matCellDef="let product">{{ product.brand }}</td>
+      </ng-container>
+
+      <!-- Stock Column -->
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
+        <td mat-cell *matCellDef="let product">{{ product.stock }}</td>
+      </ng-container>
+
+      <!-- Verification Status -->
+      <ng-container matColumnDef="isVerified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let product">
+          <span
+            [class]="product.isVerified ? 'verified-badge' : 'unverified-badge'"
+          >
+            {{ product.isVerified ? "Verified" : "Unverified" }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Created Date Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+        <td mat-cell *matCellDef="let product">
+          {{ product.createdAt | date : "medium" }}
+        </td>
+      </ng-container>
+
+      <!-- Updated Date Column -->
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Update</th>
+        <td mat-cell *matCellDef="let product">
+          {{
+            product.updatedAt
+              ? (product.updatedAt | date : "medium")
+              : "Not updated"
+          }}
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let product">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="openEditModal(product)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteProduct(product._id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [@rowHover]="row === hoveredRow ? 'hovered' : 'normal'"
+        (mouseenter)="hoveredRow = row"
+        (mouseleave)="hoveredRow = null"
+      ></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of products"
+      class="paginator"
+      sticky:true
+    >
+    </mat-paginator>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-container">
+      <h3>Brand Distribution</h3>
+      <div class="chart-wrapper">
+        <ngx-charts-bar-vertical
+          [view]="[getResponsiveWidth(), 300]"
+          [results]="brandChartData"
+          [scheme]="'cool'"
+          [gradient]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Brand'"
+          [yAxisLabel]="'Percentage'"
+          [animations]="true"
+        >
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3>Seller Distribution</h3>
+      <div class="chart-wrapper">
+        <ngx-charts-bar-horizontal
+          [view]="[getResponsiveWidth(), 300]"
+          [results]="sellerChartData"
+          [scheme]="'cool'"
+          [gradient]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Percentage'"
+          [yAxisLabel]="'Seller'"
+          [animations]="true"
+        >
+        </ngx-charts-bar-horizontal>
+      </div>
+    </div>
+  </div>
+</div>
