@@ -35,6 +35,9 @@ export class CreateProductModalComponent {
     'https://ahmed-sabry-ffbbe964.koyeb.app/upload/image';
   productForm: FormGroup;
   imageUrls: string[] = [];
+  @Output() productCreated = new EventEmitter<void>();
+  @Output() cancelCreate = new EventEmitter<void>();
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -42,13 +45,27 @@ export class CreateProductModalComponent {
   ) {
     this.productForm = this.fb.group({
       subcategoryId: ['', Validators.required],
-      nameEn: ['', Validators.required],
-      nameAr: ['', Validators.required],
-      price: [null, Validators.required],
-      stock: [null, Validators.required],
-      brand: [''],
-      descriptionEn: [''],
-      descriptionAr: [''],
+      nameEn: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.pattern(/^[a-zA-Z0-9\s]+$/),
+        ],
+      ],
+      nameAr: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.pattern(/^[\u0600-\u06FF\s]+$/),
+        ],
+      ],
+      price: [null, [Validators.required, Validators.min(0.01)]],
+      stock: [null, [Validators.required, Validators.min(1)]],
+      brand: ['', Validators.pattern(/^[a-zA-Z0-9\s]+$/)],
+      descriptionEn: ['', Validators.maxLength(500)],
+      descriptionAr: ['', Validators.maxLength(500)],
     });
   }
 
@@ -116,7 +133,7 @@ export class CreateProductModalComponent {
 
       this.productsService.addProduct(productData).subscribe({
         next: () => {
-          this.onClose();
+          this.productCreated.emit();
         },
         error: (err) => {
           console.error('Error creating product:', err);
@@ -125,5 +142,9 @@ export class CreateProductModalComponent {
     } else {
       console.log('Form is not valid');
     }
+  }
+
+  onCancel(): void {
+    this.cancelCreate.emit();
   }
 }

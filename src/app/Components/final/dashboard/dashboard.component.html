@@ -1,9 +1,9 @@
 <div class="dashboard-wrapper" [@fadeInUp]>
-  <h1>Dashboard Overview</h1>
+  <h1 class="text-bg-dark p-3">Dashboard Overview</h1>
 
   <!-- Users Section -->
   <div class="section users-section">
-    <h2>Users Overview</h2>
+    <h2 class="main-title">Users Overview</h2>
 
     <div class="cards-container">
       <div class="info-card new-users" [@cardAnimation]>
@@ -30,136 +30,84 @@
         </div>
       </div>
     </div>
-    <div class="section orders-section">
+  </div>
+
+  <!-- Orders Section -->
+  <div class="section orders-section">
+    <h2 class="main-title">Orders Overview</h2>
+
+    <div class="cards-container orders-cards">
+      <div class="info-card pending-orders" [@cardAnimation]>
+        <i class="fas fa-clock"></i>
+        <div class="card-content">
+          <h3>{{ statistics.orders.pending }}</h3>
+          <p>Pending Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card processing-orders" [@cardAnimation]>
+        <i class="fas fa-cogs"></i>
+        <div class="card-content">
+          <h3>{{ statistics.orders.shipped }}</h3>
+          <p>Shipped Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card completed-orders" [@cardAnimation]>
+        <i class="fas fa-check-circle"></i>
+        <div class="card-content">
+          <h3>{{ statistics.orders.completed }}</h3>
+          <p>Completed Orders</p>
+        </div>
+      </div>
+
+      <div class="info-card cancelled-orders" [@cardAnimation]>
+        <i class="fas fa-times-circle"></i>
+        <div class="card-content">
+          <h3>{{ statistics.orders.cancelled }}</h3>
+          <p>Cancelled Orders</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
       <!-- Charts Users Section -->
-      <div class="charts-grid">
-        <!-- <div class="chart-card">
-          <h2>User Distribution</h2>
-          <ngx-charts-pie-chart
-            [results]="usersPieData"
-            [gradient]="chartOptions.gradient"
-            [animations]="true"
-            [scheme]="colorScheme"
-            [doughnut]="true"
-          >
-            <ng-template #tooltipTemplate let-model="model">
-              <div class="tooltip-container">
-                <div class="tooltip-header">
-                  <i class="fas fa-users"></i>
-                  <span>{{ model.name }}</span>
-                </div>
-                <div class="tooltip-content">
-                  <div class="tooltip-value">
-                    <span>Count:</span>
-                    <strong>{{ model.value }}</strong>
-                  </div>
-                  <div class="tooltip-percentage">
-                    <span>Percentage:</span>
-                    <strong>{{ calculatePercentage(model.value) }}%</strong>
-                  </div>
-                </div>
-              </div>
-            </ng-template>
-          </ngx-charts-pie-chart>
-        </div> -->
-
-        <!-- Orders Section -->
-        <h2>Orders Overview</h2>
-
-        <div class="cards-container">
-          <div class="info-card pending-orders" [@cardAnimation]>
-            <i class="fas fa-clock"></i>
-            <div class="card-content">
-              <h3>{{ statistics.orders.pending }}</h3>
-              <p>Pending Orders</p>
-            </div>
-          </div>
-
-          <div class="info-card processing-orders" [@cardAnimation]>
-            <i class="fas fa-cogs"></i>
-            <div class="card-content">
-              <h3>{{ statistics.orders.shipped }}</h3>
-              <p>Shipped Orders</p>
-            </div>
-          </div>
-
-          <div class="info-card completed-orders" [@cardAnimation]>
-            <i class="fas fa-check-circle"></i>
-            <div class="card-content">
-              <h3>{{ statistics.orders.completed }}</h3>
-              <p>Completed Orders</p>
-            </div>
-          </div>
-
-          <div class="info-card cancelled-orders" [@cardAnimation]>
-            <i class="fas fa-times-circle"></i>
-            <div class="card-content">
-              <h3>{{ statistics.orders.cancelled }}</h3>
-              <p>Cancelled Orders</p>
-            </div>
-          </div>
-        </div>
-        <!-- Orders Chart -->
-        <div class="chart-card">
-          <h2>Orders Status Distribution</h2>
-          <div class="chart-container">
-            <ngx-charts-bar-vertical
-              [results]="ordersBarData"
-              [scheme]="colorScheme"
-              [gradient]="true"
-              [xAxis]="true"
-              [yAxis]="true"
-              [legend]="true"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxisLabel]="'Status'"
-              [yAxisLabel]="'Count'"
-            >
-            </ngx-charts-bar-vertical>
-          </div>
-        </div>
-
-        <div class="chart-card">
-          <h2>Analytics Orders (Last 6 Months completed Or Cancelled)</h2>
-          <ngx-charts-line-chart
-            [results]="revenueLineData"
-            [gradient]="chartOptions.gradient"
-            [xAxis]="chartOptions.showXAxis"
-            [yAxis]="chartOptions.showYAxis"
-            [legend]="chartOptions.showLegend"
-            [showXAxisLabel]="chartOptions.showXAxisLabel"
-            [showYAxisLabel]="chartOptions.showYAxisLabel"
-            [timeline]="chartOptions.timeline"
-            [scheme]="colorScheme"
-          >
-          </ngx-charts-line-chart>
-        </div>
-
-        <!-- Categories Chart -->
-
-        <!-- <h2>Categories Overview</h2>
+      <div class="chart-card">
+        <h2 class="main-title">Orders Status Distribution</h2>
         <div class="chart-container">
-          <ngx-charts-pie-chart
-            [results]="categoriesChartData"
+          <ngx-charts-bar-vertical
+            [results]="ordersBarData"
             [scheme]="colorScheme"
             [gradient]="true"
+            [xAxis]="true"
+            [yAxis]="true"
             [legend]="true"
-            [labels]="true"
-            [doughnut]="true"
-            [view]="[700, 400]"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            [xAxisLabel]="'Status'"
+            [yAxisLabel]="'Count'"
           >
-            <ng-template #tooltipTemplate let-model="model">
-              <div class="tooltip-content">
-                <span class="tooltip-label">{{ model.name }}</span>
-                <span
-                  >{{ model.value }} Products ({{
-                    calculatePercentage(model.value)
-                  }}%)</span
-                >
-              </div>
-            </ng-template>
-          </ngx-charts-pie-chart>
-        </div> -->
+          </ngx-charts-bar-vertical>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h2 class="main-title">
+          Analytics Orders (Last 6 Months completed Or Cancelled)
+        </h2>
+        <ngx-charts-line-chart
+          [results]="revenueLineData"
+          [gradient]="chartOptions.gradient"
+          [xAxis]="chartOptions.showXAxis"
+          [yAxis]="chartOptions.showYAxis"
+          [legend]="chartOptions.showLegend"
+          [showXAxisLabel]="chartOptions.showXAxisLabel"
+          [showYAxisLabel]="chartOptions.showYAxisLabel"
+          [timeline]="chartOptions.timeline"
+          [scheme]="colorScheme"
+        >
+        </ngx-charts-line-chart>
       </div>
     </div>
   </div>

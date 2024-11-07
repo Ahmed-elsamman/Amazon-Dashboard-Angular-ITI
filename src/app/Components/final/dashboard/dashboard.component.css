@@ -7,6 +7,13 @@ a {
   text-decoration: none;
 }
 
+.main-title {
+  color: #fab403;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 600;
+  margin-top: 2%;
+}
+
 li {
   list-style: none;
 }
@@ -276,7 +283,7 @@ li {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: clamp(10px, 2vw, 20px);
   margin: 15px 0;
-  width: 100%;
+  width: 80%;
 }
 
 .info-card {
@@ -434,8 +441,22 @@ table {
 
 .chart-card {
   width: 100%;
-  min-height: 400px;
-  /* overflow: hidden; */
+  aspect-ratio: 16/9;
+  min-height: 300px;
+  max-height: 600px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Responsive Adjustments */
@@ -1132,4 +1153,186 @@ svg {
   .chart-container {
     height: 300px;
   }
+}
+
+/* تحديث الحاوية الرئيسية */
+.dashboard-wrapper {
+  max-width: 100%;
+  padding: 20px;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* تحديث قسم الطلبات */
+.orders-section {
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* تحديث حاوية البطاقات */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.info-card {
+  width: 100%;
+  min-height: 120px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+/* تحديث الاستجابة للشاشات المختلفة */
+@media (max-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .orders-section {
+    padding: 15px;
+  }
+
+  .chart-card {
+    min-height: 150px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .info-card {
+    width: 100%;
+    min-height: 100px;
+  }
+
+  .dashboard-wrapper {
+    padding: 10px;
+  }
+}
+
+.dashboard-wrapper {
+  max-width: 100%;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.section {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* تحسين تنسيق حاوية البطاقات */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* تخصيص لبطاقات الطلبات */
+.orders-cards {
+  margin: 20px 0;
+  width: 100%;
+}
+
+.info-card {
+  width: 100%;
+  min-height: 120px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* تحسين الاستجابة */
+@media (max-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding: 10px;
+  }
+
+  .section {
+    padding: 15px;
+  }
+
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .info-card {
+    min-height: 100px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    object-fit: contain;
+  }
+
+  .section {
+    padding: 10px;
+  }
+  .chart-card {
+    object-fit: contain;
+  }
+}
+
+/* تحسين تنسيق المخططات */
+.charts-grid {
+  margin-top: 30px;
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  object-fit: contain;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import { IOrder } from '../Models/order.model';
 import { environment } from 'src/environments/environment';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrdersService {
   private apiUrl = environment.API_URL + '/orders';
+  private previousOrderCount = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationsService: NotificationsService
+  ) {}
 
   // وظائف المسؤول
   createOrderByAdmin(orderData: any): Observable<IOrder> {
@@ -19,7 +24,14 @@ export class OrdersService {
       .post<IOrder>(`${this.apiUrl}/admin/create`, orderData)
       .pipe(
         map((response) => this.transformOrderResponse(response)),
-        catchError(this.handleError)
+        catchError(this.handleError),
+        tap(() => {
+          this.notificationsService.addNotification(
+            'Order Created Successfully',
+            'success',
+            'orders'
+          );
+        })
       );
   }
 
@@ -96,6 +108,25 @@ export class OrdersService {
     return this.http
       .delete<any>(`${this.apiUrl}/${orderId}`)
       .pipe(catchError(this.handleError));
+  }
+
+  getAllOrders(): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(this.apiUrl).pipe(
+      tap((orders) => {
+        if (
+          this.previousOrderCount &&
+          orders.length !== this.previousOrderCount
+        ) {
+          const diff = orders.length - this.previousOrderCount;
+          const message =
+            diff > 0
+              ? `Added ${diff} new orders`
+              : `Completed ${Math.abs(diff)} orders`;
+          this.notificationsService.notifyOrdersUpdate(message);
+        }
+        this.previousOrderCount = orders.length;
+      })
+    );
   }
 
   private transformOrderResponse(response: any): IOrder {

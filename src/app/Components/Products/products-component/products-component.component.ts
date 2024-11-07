@@ -163,7 +163,7 @@ export class ProductsComponentComponent implements OnInit, AfterViewInit {
   }
 
   loadProducts(): void {
-    this.productsService.getProducts().subscribe({
+    this.productsService.getAllProducts().subscribe({
       next: (response) => {
         this.products = response;
         this.unverifiedProducts = this.products.filter(
@@ -198,13 +198,17 @@ export class ProductsComponentComponent implements OnInit, AfterViewInit {
   openCreateProductModal(): void {
     const dialogRef = this.dialog.open(CreateProductModalComponent, {
       width: '700px',
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadProducts();
-        this.toastr.success('Product created successfully');
-      }
+    dialogRef.componentInstance.productCreated.subscribe(() => {
+      dialogRef.close();
+      this.loadProducts();
+      this.toastr.success('Product created successfully');
+    });
+
+    dialogRef.componentInstance.cancelCreate.subscribe(() => {
+      dialogRef.close();
     });
   }
 

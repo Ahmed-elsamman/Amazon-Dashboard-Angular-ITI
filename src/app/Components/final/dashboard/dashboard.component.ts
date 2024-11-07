@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
     try {
       const [categories, products] = await Promise.all([
         this.productsService.getCategories().toPromise(),
-        this.productsService.getProducts().toPromise(),
+        this.productsService.getAllProducts().toPromise(),
       ]);
 
       const categoryMap = new Map();

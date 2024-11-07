@@ -37,13 +37,13 @@
       <!-- Price -->
       <mat-form-field appearance="fill" class="full-width mb-3">
         <mat-label style="color: rgb(0, 0, 0)">Price</mat-label>
-        <input matInput formControlName="price" type="number" />
+        <input matInput formControlName="price" type="number" min="0.01" />
       </mat-form-field>
 
       <!-- Stock -->
       <mat-form-field appearance="fill" class="full-width mb-3">
         <mat-label style="color: rgb(0, 0, 0)">Stock</mat-label>
-        <input matInput formControlName="stock" type="number" />
+        <input matInput formControlName="stock" type="number" min="1" />
       </mat-form-field>
 
       <!-- Brand -->

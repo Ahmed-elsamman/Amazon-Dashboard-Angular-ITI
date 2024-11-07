@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { NotificationsService } from './notifications.service';
 
 export interface Product {
   _id: string;
@@ -49,12 +50,31 @@ export class ProductsService {
   private apiUrl = `${environment.API_URL}/products`;
   private apiCategoriesUrl = `${environment.API_URL}/categories`;
   private uploadUrl = `${environment.API_URL}/upload/image`;
+  private previousProductCount = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationsService: NotificationsService
+  ) {}
 
   // Fetch all products
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiUrl).pipe(
+      tap((products) => {
+        if (
+          this.previousProductCount &&
+          products.length !== this.previousProductCount
+        ) {
+          const diff = products.length - this.previousProductCount;
+          const message =
+            diff > 0
+              ? `Added ${diff} new products`
+              : `Deleted ${Math.abs(diff)} products`;
+          this.notificationsService.notifyProductsUpdate(message);
+        }
+        this.previousProductCount = products.length;
+      })
+    );
   }
 
   uploadImage(file: File): Observable<{ imageUrl: string }> {
@@ -80,9 +100,19 @@ export class ProductsService {
 
   // Add new product
   addProduct(product: any): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, product, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    });
+    return this.http
+      .post<Product>(this.apiUrl, product, {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      })
+      .pipe(
+        tap(() => {
+          this.notificationsService.addNotification(
+            'A new product has been added by Admin Dashboard',
+            'info',
+            'products'
+          );
+        })
+      );
   }
 
   // Update product
